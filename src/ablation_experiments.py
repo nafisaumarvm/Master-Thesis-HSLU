@@ -1,14 +1,6 @@
 """
 Ablation Experiments
 
-Tests the contribution of each modeling component:
-1. Contextual modifiers (time, weather, day-of-stay)
-2. Utility smoothing
-3. Awareness parameterization
-4. Placement visibility
-5. Segmentation quality
-6. Model complexity vs benefit analysis
-
 """
 
 import numpy as np
