@@ -1,0 +1,8 @@
+{
+  "/advertiser/campaigns/page": "app/advertiser/campaigns/page.js",
+  "/hotel/ads/page": "app/hotel/ads/page.js",
+  "/page": "app/page.js",
+  "/advertiser/create/page": "app/advertiser/create/page.js",
+  "/hotel/dashboard/page": "app/hotel/dashboard/page.js",
+  "/hotel/segments/page": "app/hotel/segments/page.js"
+}
