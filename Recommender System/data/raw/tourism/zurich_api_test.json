@@ -1,0 +1,1207 @@
+[
+  {
+    "id": 96,
+    "name": "«Der ungezähmte Horizont» by Yves Netzhammer",
+    "type": "CivicStructure",
+    "data": {
+      "@context": "https://schema.org/",
+      "@type": "CivicStructure",
+      "@customType": "ArtObject",
+      "identifier": "1012217",
+      "copyrightHolder": {
+        "de": "Zürich Tourismus www.zuerich.com",
+        "en": "Zurich Tourism www.zuerich.com",
+        "it": "Zürich Tourismo www.zuerich.com",
+        "fr": "Zürich Tourisme www.zuerich.com"
+      },
+      "license": "CC BY-SA",
+      "tomasBookingId": null,
+      "category": {
+        "Place": {
+          "swissId": ""
+        },
+        "Culture": {
+          "swissId": "sui_02"
+        },
+        "Museums": {
+          "swissId": ""
+        },
+        "Art": {
+          "swissId": "sui_0210"
+        },
+        "Attractions": {
+          "swissId": ""
+        },
+        "Works of Art": {
+          "swissId": ""
+        }
+      },
+      "name": {
+        "de": "«Der ungezähmte Horizont» von Yves Netzhammer",
+        "en": "«Der ungezähmte Horizont» by Yves Netzhammer",
+        "fr": "« Der ungezähmte Horizont » (« L’horizon indompté ») par Yves Netzhammer",
+        "it": "“Der ungezähmte Horizont” di Yves Netzhammer"
+      },
+      "disambiguatingDescription": {
+        "de": "Yves Netzhammers kinetische Skulptur im Zürcher Kreis 5 überrascht, bewegt und regt zum Nachdenken an.",
+        "en": "Yves Netzhammer’s thought-provoking kinetic sculpture in Zurich’s district 5 surprises and moves its viewers.",
+        "fr": "La sculpture cinétique d’Yves Netzhammer dans le 5e arrondissement de Zurich attire l’attention, surprend et incite à la réflexion.",
+        "it": "La scultura cinetica di Yves Netzhammer nel Kreis 5 di Zurigo sorprende, emoziona e invita a riflettere."
+      },
+      "description": {
+        "de": "<p>Wer mit offenen Augen durch Z&uuml;richs Westen geht, entdeckt vielerorts sogenannte Kunst im &ouml;ffentlichen Raum Ki&ouml;R.<p>Seit 2024 steht auf dem Dach eines Hochhauses die imposante Skulptur &laquo;Der ungez&auml;hmte Horizont&raquo; des bekannten Schweizer K&uuml;nstlers Yves Netzhammer. Das aus Metall gefertigte schwarze Pferd thront mal in aufgeb&auml;umter Haltung und mit gespannter Muskulatur ruhig und kraftvoll am Dachrand, mal sch&uuml;ttelt es den Kopf oder scharrt mit dem Vorderbein.</p><p>Was soll das? Die Skulptur erinnert an die Zeit, als Pferde das Hauptfortbewegungsmittel waren und schl&auml;gt eine Br&uuml;cke zur heutigen urbanen Mobilit&auml;t. Sie ist Teil des st&auml;dtischen Kunst-und-Bau-Programms und wurde von der Stadt Z&uuml;rich in Auftrag gegeben.</p><p>&laquo;Der ungez&auml;hmte Horizont&raquo;, 2025, Stahl, Kupferblech, Hydraulik, Livestream. Kunst und Bau Stadt Z&uuml;rich, Tramdepot und Wohnsiedlung Depot Hard, Foto: Stefan Altenburger Photography Zu&#776;rich</p></p>",
+        "en": "<p>Those who walk through Zurich West with eyes wide open discover fascinating art in public spaces.<p>In 2024 the famous Swiss artist Yves Netzhammer installed his imposing sculpture &ldquo;Der ungez&auml;hmte Horizont&rdquo; <em>Untamed Horizon </em>on the roof of a high-rise building. The black horse is standing dangerously close to the edge of the roof, sometimes rearing up with coiled muscles, sometimes moving its head or stamping with its hooves and then again poised with quiet strength.</p><p>What is this? The sculpture is reminiscent of the times when horses were the main means of transportation and creates a connection to modern times and urban mobility. The sculpture is part of the city&rsquo;s Art and Construction Project and was commissioned by the city of Zurich.</p><p>&laquo;Der ungez&auml;hmte Horizont&raquo;, 2025, steel, copper sheet, hydraulics, livestream. Art and Architecture, City of Zurich, Tram Depot and Housing Complex Depot Hard. Photo: Stefan Altenburger Photography Z&uuml;rich</p></p>",
+        "fr": "<p>En parcourant l&rsquo;ouest de Zurich les yeux grand ouvert, on d&eacute;couvre en de nombreux endroits ce que l&rsquo;on appelle l&rsquo;art dans l&rsquo;espace public.<p>Depuis 2024, l&rsquo;imposante sculpture &laquo;&#8239;Der ungez&auml;hmte Horizont&#8239;&raquo; du c&eacute;l&egrave;bre artiste suisse Yves Netzhammer se dresse sur le toit d&rsquo;un immeuble. Le cheval noir en m&eacute;tal tr&ocirc;ne tant&ocirc;t au bord du toit, dans une posture cabr&eacute;e, musculature tendue, calme et puissant, tant&ocirc;t secouant la t&ecirc;te ou piaffant.</p><p>Que repr&eacute;sente-t-elle ? La sculpture rappelle l&rsquo;&eacute;poque o&ugrave; les chevaux &eacute;taient le principal moyen de locomotion et jette un pont vers la mobilit&eacute; urbaine actuelle. Elle fait partie du programme &laquo;&#8239;Art et construction&#8239;&raquo; de la ville de Zurich, qui en a pass&eacute; commande.</p><p>&laquo;Der ungez&auml;hmte Horizont&raquo;, 2025, acier, t&ocirc;le de cuivre, hydraulique, livestream. Art et architecture, Ville de Zurich, d&eacute;p&ocirc;t de tram et lotissement Depot Hard. Photo : Stefan Altenburger Photography Z&uuml;rich</p></p>",
+        "it": "<p>Passeggiando con gli occhi bene aperti per il quartiere di Z&uuml;rich-West, in molti luoghi si scoprono esemplari della cosiddetta &ldquo;Arte negli spazi pubblici&rdquo;.<p>Dal 2024, sul tetto di un edificio si trova l&rsquo;imponente scultura &ldquo;Der ungez&auml;hmte Horizont&rdquo; (&ldquo;L&rsquo;orizzonte indomito&rdquo;) del famoso artista svizzero Yves Netzhammer. Realizzato in metallo e collocato sul bordo del tetto, il cavallo nero a volte troneggia calmo e possente, con il corpo impennato e la muscolatura tesa, altre scuote la testa, altre ancora raspa con le zampe anteriori.</p><p>Ma perch&eacute;? La scultura ricorda i tempi in cui i cavalli erano il mezzo di trasporto principale, allacciandosi all&rsquo;odierna mobilit&agrave; urbana. Fa parte del programma di arte e architettura di Zurigo ed &egrave; stata commissionata dalla citt&agrave;.</p><p>&laquo;Der ungez&auml;hmte Horizont&raquo;, 2025, acciaio, lamiera di rame, idraulica, livestream. Arte e architettura, Citt&agrave; di Zurigo, deposito dei tram e complesso residenziale Depot Hard. Foto: Stefan Altenburger Photography Z&uuml;rich</p></p>"
+      },
+      "titleTeaser": {
+        "de": "«Der ungezähmte Horizont» von Yves Netzhammer",
+        "en": "«Der ungezähmte Horizont» by Yves Netzhammer ",
+        "fr": "« Der ungezähmte Horizont » par Yves Netzhammer",
+        "it": "“Der ungezähmte Horizont” di Yves Netzhammer"
+      },
+      "textTeaser": {
+        "de": "Ein schwarzes Pferd auf einem Hochhausdach – Yves Netzhammers Skulptur im Kreis 5 überrascht und bewegt.",
+        "en": "A black horse on the roof of a high-rise building – Yves Netzhammer’s sculpture in Zurich’s district 5 surprises and moves. ",
+        "fr": "Un cheval noir sur le toit d’un immeuble : la sculpture d’Yves Netzhammer dans le 5e arrondissement surprend et interpelle.",
+        "it": "Un cavallo nero su un edificio: la scultura di Yves Netzhammer nel Kreis 5 sorprende ed emoziona."
+      },
+      "detailedInformation": {
+        "de": [
+          "Kunstwerk von Yves Netzhammer",
+          "Kinetisches Pferd auf Hochhaus",
+          "Kunst-und-Bau-Projekt Zürich"
+        ],
+        "en": [
+          "Art by Yves Netzhammer ",
+          "Kinetic horse on the roof of a high-rise building ",
+          "Art and Construction Project by the city of Zurich "
+        ],
+        "fr": [
+          "Œuvre d’art d’Yves Netzhammer",
+          "Cheval cinétique sur un gratte-ciel",
+          "Projet du programme « Art et construction » de la ville de Zurich"
+        ],
+        "it": [
+          "Opera di Yves Netzhammer",
+          "Cavallo cinetico su edificio",
+          "Progetto del programma di arte e architettura di Zurigo"
+        ]
+      },
+      "zurichCardDescription": null,
+      "zurichCard": false,
+      "osm_id": "",
+      "image": {
+        "url": "https://www.zuerich.com/sites/default/files/image/2025/web_zuerich_YvesNetzhammer_Pferd_04.jpg",
+        "caption": {
+          "de": "«Der ungezähmte Horizont»",
+          "en": null,
+          "fr": null,
+          "it": null
+        }
+      },
+      "price": {
+        "de": null,
+        "en": null,
+        "fr": null,
+        "it": null
+      },
+      "photo": [
+        {
+          "url": "https://www.zuerich.com/sites/default/files/image/2025/web_zuerich_YvesNetzhammer_Pferd_02.jpg",
+          "caption": {
+            "de": "«Der ungezähmte Horizont»",
+            "en": null,
+            "fr": null,
+            "it": null
+          }
+        },
+        {
+          "url": "https://www.zuerich.com/sites/default/files/image/2025/web_zuerich_YvesNetzhammer_Pferd_01.jpg",
+          "caption": {
+            "de": "«Der ungezähmte Horizont»",
+            "en": null,
+            "fr": null,
+            "it": null
+          }
+        },
+        {
+          "url": "https://www.zuerich.com/sites/default/files/image/2025/web_zuerich_YvesNetzhammer_Pferd_03.jpg",
+          "caption": {
+            "de": "«Der ungezähmte Horizont»",
+            "en": null,
+            "fr": null,
+            "it": null
+          }
+        }
+      ],
+      "dateModified": "2025-11-05T16:13",
+      "opens": null,
+      "openingHours": "",
+      "openingHoursSpecification": null,
+      "specialOpeningHoursSpecification": {
+        "de": "Rund um die Uhr geöffnet",
+        "en": "Open around the clock",
+        "it": "Aperti tutto il giorno",
+        "fr": "Ouvert 24 heures sur 24"
+      },
+      "address": {
+        "addressCountry": "CH",
+        "addressLocality": "Zürich",
+        "postalCode": "8005",
+        "streetAddress": "Hardturmstrasse 8",
+        "telephone": null,
+        "email": null,
+        "url": null
+      },
+      "geoCoordinates": {
+        "latitude": 47.391159,
+        "longitude": 8.521736
+      },
+      "place": [
+        "Outdoors"
+      ]
+    }
+  },
+  {
+    "id": 162,
+    "name": "The Penthouse ",
+    "type": "Restaurant",
+    "data": {
+      "@context": "https://schema.org/",
+      "@type": "Restaurant",
+      "@customType": null,
+      "identifier": "1012376",
+      "copyrightHolder": {
+        "de": "Zürich Tourismus www.zuerich.com",
+        "en": "Zurich Tourism www.zuerich.com",
+        "it": "Zürich Tourismo www.zuerich.com",
+        "fr": "Zürich Tourisme www.zuerich.com"
+      },
+      "license": "CC BY-SA",
+      "tomasBookingId": null,
+      "category": {
+        "Gastronomy": {
+          "swissId": ""
+        },
+        "Restaurants": {
+          "swissId": ""
+        },
+        "Cuisine": {
+          "swissId": ""
+        },
+        "Asian": {
+          "swissId": "culinary-asian"
+        },
+        "Sushi": {
+          "swissId": "culinary-japanese-sushi"
+        },
+        "Meal": {
+          "swissId": ""
+        },
+        "Lunch": {
+          "swissId": "culinary-lunch"
+        },
+        "Dinner": {
+          "swissId": "culinary-dinner"
+        },
+        "Nightlife": {
+          "swissId": ""
+        },
+        "Bars & Lounges": {
+          "swissId": ""
+        },
+        "Restaurant & Bar": {
+          "swissId": ""
+        },
+        "Cocktail Bar": {
+          "swissId": ""
+        },
+        "Music Bar / Live Music": {
+          "swissId": ""
+        },
+        "Clubs & Discos": {
+          "swissId": ""
+        },
+        "House / Techno / Electro": {
+          "swissId": ""
+        }
+      },
+      "name": {
+        "de": "The Penthouse ",
+        "en": "The Penthouse ",
+        "fr": "The Penthouse ",
+        "it": "The Penthouse "
+      },
+      "disambiguatingDescription": {
+        "de": "Tagsüber kulinarisch, abends Nightlife. Japanisch inspirierte Dinnermomente mit Skylineblick, Lounge und Nightclub. ",
+        "en": "Delicious food by day, nightlife after dark. Japanese-inspired dinner moments with a view of the skyline, plus a lounge and a nightclub. ",
+        "fr": "Cuisine raffinée en journée, vie nocturne animée en soirée. Dîners d’inspiration japonaise avec vue sur les toits, salon et boîte de nuit. ",
+        "it": "Cucina di giorno, nightlife di notte. Prelibatezze di ispirazione giapponese con vista sulla skyline, lounge e discoteca. "
+      },
+      "description": {
+        "de": "<p>Hoch &uuml;ber den D&auml;chern Z&uuml;richs, im obersten Stockwerk des Hotels FIVE, l&auml;dt The Penthouse zu einem kulinarischen Erlebnis der besonderen Art ein. Mit kunstvoll angerichteten japanischen Gerichten und internationalen Einfl&uuml;ssen &uuml;berzeugt das Restaurant durch raffinierte Kompositionen und edle Zutaten.<p>Abends verwandelt sich das stilvolle Rooftop in einen vibrierenden Nightclub. Internationale DJs, Drinks und die Energie eines Hotspots der Z&uuml;rcher Nacht.</p></p>",
+        "en": "<p>High above the rooftops of Zurich on the top floor of hotel FIVE, The Penthouse invites guests to enjoy a unique culinary experience. The restaurant&rsquo;s creatively presented Japanese dishes and international influences, refined compositions, and high-quality ingredients are sure to impress.<p>After dark, the stylish rooftop bar is transformed into a buzzing nightclub with international DJs, drinks, and the energy of a Zurich nighttime hotspot.</p></p>",
+        "fr": "<p>Au-dessus des toits de Zurich, au dernier &eacute;tage de l&rsquo;h&ocirc;tel FIVE, The Penthouse vous invite &agrave; vivre une exp&eacute;rience culinaire unique. Avec ses plats japonais artistiquement pr&eacute;sent&eacute;s et ses influences internationales, le restaurant s&eacute;duit par des compositions raffin&eacute;es et des ingr&eacute;dients de qualit&eacute;.<p>Le soir, l&rsquo;&eacute;l&eacute;gant toit-terrasse se transforme en un club de nuit anim&eacute; avec des DJ internationaux, des cocktails et le dynamisme d&rsquo;un lieu phare de la vie nocturne zurichoise.</p></p>",
+        "it": "<p>In alto sopra i tetti di Zurigo, all&rsquo;ultimo piano dell&rsquo;Hotel FIVE, il The Penthouse invita a vivere un&rsquo;esperienza gastronomica davvero speciale. Il ristorante convince grazie a creazioni raffinate e ingredienti di qualit&agrave;, che danno vita a piatti giapponesi con influenze internazionali presentati con un tocco artistico.<p>Di sera, l&rsquo;elegante rooftop si trasforma in una pulsante discoteca, con DJ internazionali, deliziosi drink e l&rsquo;energia di un hotspot della notte zurighese.&nbsp;</p></p>"
+      },
+      "titleTeaser": {
+        "de": "The Penthouse",
+        "en": "The Penthouse",
+        "fr": "The Penthouse",
+        "it": "The Penthouse"
+      },
+      "textTeaser": {
+        "de": "Japanische Küche mit Skylineblick, Lounge und Nightclub. ",
+        "en": "Japanese cooking with a view of the skyline, a lounge, and a nightclub.",
+        "fr": "Cuisine japonaise, vue sur les toits, salon et boîte de nuit. ",
+        "it": "Cucina giapponese con vista sulla skyline, lounge e discoteca. "
+      },
+      "detailedInformation": {
+        "de": [
+          "Dachterrasse ",
+          "Japanische Küche ",
+          "Bar, Lounge & Nightclub ",
+          "Im Hotel FIVE "
+        ],
+        "en": [
+          "Roof terrace",
+          "Japanese cuisine",
+          "Bar, lounge & nightclub",
+          "At hotel FIVE"
+        ],
+        "fr": [
+          "Terrasse sur le toit ",
+          "Cuisine japonaise ",
+          "Bar, salon et club de nuit ",
+          "À l’hôtel FIVE "
+        ],
+        "it": [
+          "Terrazza sul tetto ",
+          "Cucina giapponese ",
+          "Bar, lounge e discoteca ",
+          "Nell’Hotel FIVE "
+        ]
+      },
+      "zurichCardDescription": null,
+      "zurichCard": false,
+      "osm_id": "",
+      "image": {
+        "url": "https://www.zuerich.com/sites/default/files/image/2025/img_placeholder_test_mit_rahmen_grauer_hintergrund_1280x960.png",
+        "caption": {
+          "de": "Platzhalter Zürich Tourismus",
+          "en": "Platzhalter Zürich Tourismus",
+          "fr": "Platzhalter Zürich Tourismus",
+          "it": "Platzhalter Zürich Tourismus"
+        }
+      },
+      "price": {
+        "de": null,
+        "en": null,
+        "fr": null,
+        "it": null
+      },
+      "photo": [],
+      "dateModified": "2025-11-05T16:13",
+      "opens": [
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+        "Sunday"
+      ],
+      "openingHours": [
+        "We,Th 17:00:00-01:00:00",
+        "Fr 17:00:00-03:00:00",
+        "Sa 17:00:00-04:00:00",
+        "Su 17:00:00-00:00:00"
+      ],
+      "openingHoursSpecification": null,
+      "specialOpeningHoursSpecification": {
+        "de": null,
+        "en": null,
+        "fr": null,
+        "it": null
+      },
+      "address": {
+        "addressCountry": "CH",
+        "addressLocality": "Zürich",
+        "postalCode": "8055",
+        "streetAddress": "Döltschiweg 234",
+        "telephone": "+41 78 410 55 83",
+        "email": null,
+        "url": "https://thepenthouse.co/zurich/"
+      },
+      "geoCoordinates": {
+        "latitude": 47.36309,
+        "longitude": 8.495577
+      },
+      "place": []
+    }
+  },
+  {
+    "id": 97,
+    "name": "Sihl Adventure Trail – Hike from the Source of the River to the City ",
+    "type": "LocalBusiness",
+    "data": {
+      "@context": "https://schema.org/",
+      "@type": "LocalBusiness",
+      "@customType": null,
+      "identifier": "1012403",
+      "copyrightHolder": {
+        "de": "Zürich Tourismus www.zuerich.com",
+        "en": "Zurich Tourism www.zuerich.com",
+        "it": "Zürich Tourismo www.zuerich.com",
+        "fr": "Zürich Tourisme www.zuerich.com"
+      },
+      "license": "CC BY-SA",
+      "tomasBookingId": null,
+      "category": {
+        "Place": {
+          "swissId": ""
+        },
+        "Sport": {
+          "swissId": "sui_01"
+        },
+        "Hikes": {
+          "swissId": "sui_010112"
+        },
+        "Nature": {
+          "swissId": ""
+        },
+        "Mountains": {
+          "swissId": ""
+        },
+        "Water": {
+          "swissId": ""
+        }
+      },
+      "name": {
+        "de": "Sihl Erlebnisweg – Wanderung vom Ursprung bis zur Stadt",
+        "en": "Sihl Adventure Trail – Hike from the Source of the River to the City ",
+        "fr": "Sentier découverte de la Sihl – randonnée depuis la source jusqu’à la ville ",
+        "it": "“Sihl Erlebnisweg”: il sentiero della Sihl dalla sorgente alla città "
+      },
+      "disambiguatingDescription": {
+        "de": "In sieben Etappen mit der Sihl Richtung Zürich. ",
+        "en": "A walk in seven stages along the Sihl river toward Zurich.",
+        "fr": "Longer la Sihl jusqu’à Zurich en sept étapes. ",
+        "it": "Sette tappe in compagnia della Sihl alla volta di Zurigo. "
+      },
+      "description": {
+        "de": "<p>Der Sihl Erlebnisweg ist ein beeindruckender Fernwanderweg, der sich &uuml;ber sieben Etappen von Unteriberg in den Schwyzer Voralpen bis zum Platzspitzpark in Z&uuml;rich erstreckt. Auf rund 107 km verbindet er Moorlandschaften, Naturparke und kulturelle Highlights &ndash; ideal f&uuml;r Wandernde, die Natur, Wasser und Stadt miteinander erleben m&ouml;chten.<p>Die Route beginnt bei der Quelle der Sihl unterhalb des H&ouml;ch-Hunds im Chr&auml;loch und folgt dem Fluss durch Alpwiesen, das kulturlandschaftlich wertvolle Gebiet Schwantenau, den Naturerlebnispark Sihlwald und endet beim Zusammenfluss von Sihl und Limmat im Platzspitzpark Z&uuml;rich. Zwischendrin laden Orte wie das Kloster Einsiedeln, und die Etappenorte zur Einkehr ein.</p></p>",
+        "en": "<p>The Sihl Adventure Trail is a stunning long-distance hiking trail that stretches over seven stages from Unteriberg in the Schywz Prealps to Platzspitz Park in Zurich. It covers a distance of some 107&nbsp;km and combines moorlands, nature parks, and cultural highlights &ndash; ideal for walkers who want to experience nature, water, and the city in one hike.<p>The route begins at the source of the Sihl river below the H&ouml;ch Hund in Chr&auml;loch and follows the river through alpine meadows, the culturally important landscape of Schwantenau, and the Sihlwald Nature Discovery Park. It ends at the confluence of the Sihl and Limmat rivers in Platzspitz Park, Zurich. Along the way, various places such as Einsiedeln Abbey and the locations of the seven different stages invite visitors to stop and contemplate a while.</p></p>",
+        "fr": "<p>Le sentier d&eacute;couverte de la Sihl est un impressionnant chemin de grande randonn&eacute;e qui s&rsquo;&eacute;tend sur sept &eacute;tapes, d&rsquo;Unteriberg dans les Pr&eacute;alpes schwyzoises au Platzspitzpark &agrave; Zurich. Sur environ 107&nbsp;km, il relie des marais, des parcs naturels et des sites culturels, ce qui en fait un itin&eacute;raire id&eacute;al pour les randonneurs qui souhaitent d&eacute;couvrir &agrave; la fois les paysages naturels, aquatiques et urbains.<p>L&rsquo;itin&eacute;raire commence &agrave; la source de la Sihl, en contrebas du H&ouml;ch-Hund &agrave; Chr&auml;loch, et suit la rivi&egrave;re &agrave; travers les prairies alpines, la r&eacute;gion de Schwantenau, riche en paysages culturels, le parc naturel Sihlwald, pour se terminer au confluent de la Sihl et de la Limmat dans le parc Platzspitz &agrave; Zurich. En cours de route, des lieux tels que le monast&egrave;re d&rsquo;Einsiedeln et les &eacute;tapes du parcours invitent &agrave; faire une pause.</p></p>",
+        "it": "<p>Il sentiero escursionistico &ldquo;Sihl Erlebnisweg&rdquo; &egrave; un impressionante itinerario a lunga percorrenza che si estende su sette tappe da Unteriberg, nelle Prealpi di Svitto, fino al Platzspitzpark, a Zurigo. Con una lunghezza di circa 107 km, collega paesaggi palustri, parchi naturali e attrazioni culturali: l&rsquo;ideale per gli escursionisti che desiderano vivere natura, acqua e citt&agrave;.<p>Il percorso inizia alla sorgente della Sihl, sotto l&rsquo;H&ouml;ch-Hund, nel Chr&auml;loch, costeggia il fiume attraversando pascoli alpini, l&rsquo;area di importanza culturale e paesaggistica di Schwantenau e il parco naturale didattico Sihlwald, per poi terminare dove Sihl e Limmat si uniscono, nel Platzspitzpark di Zurigo. Lungo il percorso, luoghi come l&rsquo;Abbazia di Einsiedeln e le singole tappe invitano a fare una sosta.</p></p>"
+      },
+      "titleTeaser": {
+        "de": "Sihl Erlebnisweg – Wanderung vom Ursprung bis zur Stadt",
+        "en": "Sihl Adventure Trail – Hike from the Source of the River to the City ",
+        "fr": "Sentier découverte de la Sihl – randonnée depuis la source jusqu’à la ville",
+        "it": "“Sihl Erlebnisweg”: il sentiero della Sihl dalla sorgente alla città "
+      },
+      "textTeaser": {
+        "de": "In sieben Etappen mit der Sihl Richtung Zürich.",
+        "en": "A walk in seven stages along the Sihl river toward Zurich. ",
+        "fr": "Longer la Sihl jusqu’à Zurich en sept étapes.",
+        "it": "Sette tappe in compagnia della Sihl alla volta di Zurigo. "
+      },
+      "detailedInformation": {
+        "de": [
+          "Sihlquelle im Hochmoorgebiet",
+          "Kloster Einsiedeln",
+          "Naturerlebnispark Sihlwald",
+          "Moorlandschaften Schwantenau & Roblosen",
+          "Platzspitzpark Zürich"
+        ],
+        "en": [
+          "Source of the Sihl river in the high moorlands",
+          "Einsiedeln Abbey",
+          "Sihlwald Nature Discovery Park",
+          "Schwantenau & Roblosen moorlands",
+          "Zurich Platzspitz Park"
+        ],
+        "fr": [
+          "Source de la Sihl dans la région des hauts-marais",
+          "Monastère d’Einsiedeln",
+          "Parc naturel Sihlwald",
+          "Zones marécageuses de Schwantenau et Roblosen",
+          "Platzspitzpark Zurich"
+        ],
+        "it": [
+          "Sorgente della Sihl nella torbiera alta ",
+          "Abbazia di Einsiedeln ",
+          "Parco naturale didattico Sihlwald ",
+          "Brughiere di Schwantenau e Roblosen ",
+          "Platzspitzpark di Zurigo "
+        ]
+      },
+      "zurichCardDescription": null,
+      "zurichCard": false,
+      "osm_id": "",
+      "image": {
+        "url": "https://www.zuerich.com/sites/default/files/image/2025/web_zuerich_Sihl_Erlebnisweg_04.jpg",
+        "caption": {
+          "de": "Sihl Erlebnisweg",
+          "en": null,
+          "fr": null,
+          "it": null
+        }
+      },
+      "price": {
+        "de": null,
+        "en": null,
+        "fr": null,
+        "it": null
+      },
+      "photo": [
+        {
+          "url": "https://www.zuerich.com/sites/default/files/image/2025/web_zuerich_Sihl_Erlebnisweg_01.jpg",
+          "caption": {
+            "de": "Sihl Erlebnisweg",
+            "en": null,
+            "fr": null,
+            "it": null
+          }
+        },
+        {
+          "url": "https://www.zuerich.com/sites/default/files/image/2025/web_zuerich_Sihl_Erlebnisweg_02.jpg",
+          "caption": {
+            "de": "Sihl Erlebnisweg",
+            "en": null,
+            "fr": null,
+            "it": null
+          }
+        },
+        {
+          "url": "https://www.zuerich.com/sites/default/files/image/2025/web_zuerich_Sihl_Erlebnisweg_03.jpg",
+          "caption": {
+            "de": "Sihl Erlebnisweg",
+            "en": null,
+            "fr": null,
+            "it": null
+          }
+        },
+        {
+          "url": "https://www.zuerich.com/sites/default/files/image/2025/web_zuerich_Sihl_Erlebnisweg_05.jpg",
+          "caption": {
+            "de": "Sihl Erlebnisweg",
+            "en": null,
+            "fr": null,
+            "it": null
+          }
+        },
+        {
+          "url": "https://www.zuerich.com/sites/default/files/image/2025/web_zuerich_Sihl_Erlebnisweg_06.jpg",
+          "caption": {
+            "de": "Sihl Erlebnisweg",
+            "en": null,
+            "fr": null,
+            "it": null
+          }
+        }
+      ],
+      "dateModified": "2025-11-05T16:15",
+      "opens": [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+        "Sunday"
+      ],
+      "openingHours": "",
+      "openingHoursSpecification": null,
+      "specialOpeningHoursSpecification": {
+        "de": null,
+        "en": null,
+        "fr": null,
+        "it": null
+      },
+      "address": {
+        "addressCountry": "CH",
+        "addressLocality": "Unteriberg",
+        "postalCode": "8842",
+        "streetAddress": "Guggelstrasse",
+        "telephone": null,
+        "email": null,
+        "url": "https://www.outdooractive.com/de/route/fernwanderweg/einsiedeln-ybrig-zuerichsee/sihl-erlebnisweg-7-etappen-von-der-quelle-bis-zuerich/808703687/#dmdtab=oax-tab1"
+      },
+      "geoCoordinates": {
+        "latitude": 47.058056,
+        "longitude": 8.799311
+      },
+      "place": [
+        "Outdoors"
+      ]
+    }
+  },
+  {
+    "id": 98,
+    "name": "Keen Wellbeing",
+    "type": "DaySpa",
+    "data": {
+      "@context": "https://schema.org/",
+      "@type": "DaySpa",
+      "@customType": null,
+      "identifier": "1012336",
+      "copyrightHolder": {
+        "de": "Zürich Tourismus www.zuerich.com",
+        "en": "Zurich Tourism www.zuerich.com",
+        "it": "Zürich Tourismo www.zuerich.com",
+        "fr": "Zürich Tourisme www.zuerich.com"
+      },
+      "license": "CC BY-SA",
+      "tomasBookingId": null,
+      "category": {
+        "Place": {
+          "swissId": ""
+        },
+        "Wellness": {
+          "swissId": ""
+        }
+      },
+      "name": {
+        "de": "Keen Wellbeing",
+        "en": "Keen Wellbeing",
+        "fr": "Keen Wellbeing",
+        "it": "Keen Wellbeing"
+      },
+      "disambiguatingDescription": {
+        "de": "Europas erster «Active Recovery Club» vereint Regenration, Design und Wissenschaft. ",
+        "en": "Europe’s first “Active Recovery Club” combines regeneration, design, and expertise. ",
+        "fr": "Le premier « Active Recovery Club » d’Europe allie régénération, design et science.",
+        "it": "Il primo “Active Recovery Club” d’Europa fonde rigenerazione, design e scienza."
+      },
+      "description": {
+        "de": "<p>Keen bietet im Z&uuml;rcher Viadukt einen einzigartigen Ort f&uuml;r k&ouml;rperliche, mentale und emotionale Regeneration.<p>Die sogenannten &laquo;Recovery Experiences&raquo; vereint Sauna, Eisb&auml;der und Atemarbeit, erg&auml;nzt durch &laquo;Active Experiences&raquo; wie Dehnung und Atemtraining. Kein klassisches Workout, sondern bewusstes Erleben mit multisensorischen Erlebnissen aus Licht, Klang und Duft.</p><p>Das minimalistisch gestaltete Studio im Z&uuml;rcher Viadukt schafft mit nat&uuml;rlichen Materialien und stimmungsvoller Atmosph&auml;re einen R&uuml;ckzugsort der anderen Art.&nbsp;</p></p>",
+        "en": "<p>Located in Zurich&rsquo;s Viadukt mall, Keen is a unique venue for physical, mental, and emotional regeneration.<p>Here, &ldquo;Recovery Experiences&rdquo; combine a sauna, ice baths, and breathwork, and are complemented by &ldquo;Active Experiences&rdquo; such as stretching and breathing exercises. This isn&rsquo;t a conventional workout, but a mindful, multisensory experience with lights, sounds, and scents.</p><p>The studio in the Zurich Viadukt has a minimalist aesthetic and offers a different kind of retreat thanks to its natural materials and evocative atmosphere.</p></p>",
+        "fr": "<p>Keen offre un lieu unique pour la r&eacute;g&eacute;n&eacute;ration physique, mentale et &eacute;motionnelle au Viadukt de Zurich.<p>Les &laquo;&#8239;Recovery Experiences&#8239;&raquo; combinent sauna, bains de glace et travail respiratoire, compl&eacute;t&eacute;s par des &laquo;&#8239;Active Experiences&#8239;&raquo; telles que des &eacute;tirements et des exercices de respiration. Il ne s&rsquo;agit pas d&rsquo;un entra&icirc;nement classique, mais d&rsquo;une exp&eacute;rience consciente multisensorielle alliant lumi&egrave;re, sons et parfums.</p><p>Gr&acirc;ce &agrave; son am&eacute;nagement aux mat&eacute;riaux naturels et son ambiance r&eacute;confortante, le studio au design minimaliste situ&eacute; au Viadukt de Zurich est un lieu de retraite hors pair.</p></p>",
+        "it": "<p>All&rsquo;interno del Viadukt di Zurigo, Keen &egrave; un luogo unico per la rigenerazione fisica, mentale ed emotiva.<p>Le cosiddette &ldquo;Recovery Experiences&rdquo; combinano sauna, bagni di ghiaccio e respiro, completate da &ldquo;Active Experiences&rdquo; come stretching ed esercizi di respirazione. Al posto di un workout classico, un&rsquo;esperienza multisensoriale consapevole, fatta di luci, suoni e aromi.</p><p>Lo studio minimalista nel Viadukt zurighese &egrave; caratterizzato da materiali naturali e un&rsquo;atmosfera suggestiva, che danno vita a un&rsquo;oasi speciale.</p></p>"
+      },
+      "titleTeaser": {
+        "de": "Keen Wellbeing ",
+        "en": "Keen Wellbeing ",
+        "fr": "Keen Wellbeing ",
+        "it": "Keen Wellbeing "
+      },
+      "textTeaser": {
+        "de": "Regeneration neu gedacht – mit Eisbädern, Licht und Klang im Zürcher Viadukt.",
+        "en": "A new approach to regeneration – with ice baths, light, and sound in the Zurich Viadukt.",
+        "fr": "La régénération réinventée : avec des bains de glace, de la lumière et du son au Viadukt de Zurich.",
+        "it": "Rigenerazione reinterpretata: con bagni di ghiaccio, luci e suoni nel Viadukt di Zurigo."
+      },
+      "detailedInformation": {
+        "de": [
+          "Active Recovery Club",
+          "Eisbäder, Sauna & Atemtraining",
+          "Viadukt Zürich"
+        ],
+        "en": [
+          "Active Recovery Club",
+          "Ice baths, sauna & breathwork",
+          "Viadukt Zurich"
+        ],
+        "fr": [
+          "Active Recovery Club",
+          "Bains de glace, sauna et exercices respiratoires",
+          "Viadukt de Zurich"
+        ],
+        "it": [
+          "Active Recovery Club",
+          "Bagni di ghiaccio, sauna, esercizi di respirazione",
+          "Viadukt, Zurigo"
+        ]
+      },
+      "zurichCardDescription": null,
+      "zurichCard": false,
+      "osm_id": "",
+      "image": {
+        "url": "https://www.zuerich.com/sites/default/files/image/2025/web_zuerich_Keen_Wellbeing_1280x960px_03.jpg",
+        "caption": {
+          "de": "KEEN",
+          "en": null,
+          "fr": null,
+          "it": null
+        }
+      },
+      "price": {
+        "de": null,
+        "en": null,
+        "fr": null,
+        "it": null
+      },
+      "photo": [
+        {
+          "url": "https://www.zuerich.com/sites/default/files/image/2025/web_zuerich_Keen_Wellbeing_1280x960px_04.jpg",
+          "caption": {
+            "de": "KEEN",
+            "en": null,
+            "fr": null,
+            "it": null
+          }
+        },
+        {
+          "url": "https://www.zuerich.com/sites/default/files/image/2025/web_zuerich_Keen_Wellbeing_1280x960px_06.jpg",
+          "caption": {
+            "de": "KEEN",
+            "en": null,
+            "fr": null,
+            "it": null
+          }
+        },
+        {
+          "url": "https://www.zuerich.com/sites/default/files/image/2025/web_zuerich_Keen_Wellbeing_1280x960px_01.jpg",
+          "caption": {
+            "de": "KEEN",
+            "en": null,
+            "fr": null,
+            "it": null
+          }
+        },
+        {
+          "url": "https://www.zuerich.com/sites/default/files/image/2025/web_zuerich_Keen_Wellbeing_1280x960px_05.jpg",
+          "caption": {
+            "de": "KEEN",
+            "en": null,
+            "fr": null,
+            "it": null
+          }
+        },
+        {
+          "url": "https://www.zuerich.com/sites/default/files/image/2025/web_zuerich_Keen_Wellbeing_1280x960px_02.jpg",
+          "caption": {
+            "de": "KEEN",
+            "en": null,
+            "fr": null,
+            "it": null
+          }
+        },
+        {
+          "url": "https://www.zuerich.com/sites/default/files/image/2025/KEEN_1280x960.jpg",
+          "caption": {
+            "de": null,
+            "en": "KEEN Active Recovery",
+            "fr": null,
+            "it": null
+          }
+        }
+      ],
+      "dateModified": "2025-11-05T16:12",
+      "opens": [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+        "Sunday"
+      ],
+      "openingHours": [
+        "Mo,Tu 12:00:00-21:00:00",
+        "We,Th,Fr 07:00:00-21:00:00",
+        "Sa 09:00:00-19:00:00",
+        "Su 09:00:00-21:00:00"
+      ],
+      "openingHoursSpecification": null,
+      "specialOpeningHoursSpecification": {
+        "de": null,
+        "en": null,
+        "fr": null,
+        "it": null
+      },
+      "address": {
+        "addressCountry": "CH",
+        "addressLocality": "Zürich",
+        "postalCode": "8005",
+        "streetAddress": "Viaduktstrasse 25",
+        "telephone": "+41 44 515 22 51",
+        "email": null,
+        "url": "https://www.keenwellbeing.com/"
+      },
+      "geoCoordinates": {
+        "latitude": 47.387262,
+        "longitude": 8.525083
+      },
+      "place": [
+        "Indoors"
+      ]
+    }
+  },
+  {
+    "id": 95,
+    "name": "Studio Melograno",
+    "type": "FurnitureStore",
+    "data": {
+      "@context": "https://schema.org/",
+      "@type": "FurnitureStore",
+      "@customType": null,
+      "identifier": "1012339",
+      "copyrightHolder": {
+        "de": "Zürich Tourismus www.zuerich.com",
+        "en": "Zurich Tourism www.zuerich.com",
+        "it": "Zürich Tourismo www.zuerich.com",
+        "fr": "Zürich Tourisme www.zuerich.com"
+      },
+      "license": "CC BY-SA",
+      "tomasBookingId": null,
+      "category": {
+        "Place": {
+          "swissId": ""
+        },
+        "Products": {
+          "swissId": ""
+        },
+        "Shopping": {
+          "swissId": ""
+        },
+        "Fashion & Accessoires": {
+          "swissId": "sui_0505"
+        }
+      },
+      "name": {
+        "de": "Studio Melograno",
+        "en": "Studio Melograno",
+        "fr": "Studio Melograno",
+        "it": "Studio Melograno"
+      },
+      "disambiguatingDescription": {
+        "de": "Design trifft Gefühl: Raum für zeitgenössisches Design, handverlesene Objekte und kreative Inspiration. ",
+        "en": "Design meets emotion: a space for contemporary design, handpicked objects, and creative inspiration. ",
+        "fr": "Quand le design rencontre l’émotion : un espace dédié au design contemporain, aux objets sélectionnés avec soin et à l’inspiration créative. ",
+        "it": "Il design incontra l’emozione: uno spazio dedicato a design contemporaneo, oggetti attentamente selezionati e spunti creativi."
+      },
+      "description": {
+        "de": "<p>Umgeben von Galerien, Start-ups, kleinen Boutiquen und kulinarischen Hotspots, bringt Studio Melograno eine kuratierte Auswahl an Dingen, die das Leben sch&ouml;ner machen. Handgefertigte Keramik, besondere Papeterie, poetische B&uuml;cher oder durchdachte Wohnaccessoires &ndash; jedes St&uuml;ck erz&auml;hlt eine Geschichte.<p>Studio Melograno kombiniert Design mit Emotion, &Auml;sthetik mit Alltagstauglichkeit. Die Produkte stammen von kleinen Manufakturen und unabh&auml;ngigen Labels aus der Schweiz und Europa. Wer der Concept Store betritt, merkt schnell: Hier geht es nicht um Masse, sondern um Bedeutung.</p></p>",
+        "en": "<p>Surrounded by galleries, start-ups, little boutiques, and gourmet hotspots, Studio Melograno offers a curated collection of objects to make life more beautiful. Handmade ceramics, special stationery, poetic books, or thoughtfully designed accessories for the home &ndash; every piece tells a story.<p>Studio Melograno combines design with emotion, and aesthetics with everyday practicality. The products come from small artisan workshops and independent labels in Switzerland and Europe. Visitors to this concept store quickly realize that it isn&rsquo;t about quantity here, it&rsquo;s about meaningfulness.</p></p>",
+        "fr": "<p>Entre galeries, start-ups, petites boutiques et lieux culinaires branch&eacute;s, le Studio Melograno propose une s&eacute;lection d&rsquo;objets qui embellissent la vie. C&eacute;ramiques artisanales, papeterie originale, livres po&eacute;tiques ou accessoires d'int&eacute;rieur bien pens&eacute;s, chaque pi&egrave;ce raconte une histoire.<p>Studio Melograno allie design et &eacute;motion, esth&eacute;tique et fonctionnalit&eacute;. Les produits proviennent de petites manufactures et de marques ind&eacute;pendantes de Suisse et d&rsquo;Europe. En entrant dans le concept store, on comprend imm&eacute;diatement que ce n&rsquo;est pas la quantit&eacute; qui prime ici, mais la qualit&eacute;.</p></p>",
+        "it": "<p>Circondato da gallerie, start-up, piccole boutique e hotspot culinari, Studio Melograno presenta un&rsquo;attenta selezione di cose che rendono la vita pi&ugrave; bella. Ceramiche fatte a mano, cartoleria speciale, libri poetici o complementi d&rsquo;arredo mirati: ogni pezzo racconta una storia.<p>Studio Melograno combina design ed emozioni, estetica e praticit&agrave;. I prodotti provengono da piccole manifatture e brand indipendenti svizzeri ed europei. Chi entra in questo concept store capisce in fretta che qui non si pone l&rsquo;accento sulla massa, ma sul significato.</p></p>"
+      },
+      "titleTeaser": {
+        "de": "Studio Melograno ",
+        "en": "Studio Melograno ",
+        "fr": "Studio Melograno ",
+        "it": "Studio Melograno "
+      },
+      "textTeaser": {
+        "de": "Ein Ort für feinsinnige Entdeckungen mit Stil und Seele.",
+        "en": "A place for exquisite discoveries with style and soul. ",
+        "fr": "Un espace propice aux découvertes raffinées, empreint de style et d’âme.",
+        "it": "Un luogo per scoperte profonde con stile e anima. "
+      },
+      "detailedInformation": {
+        "de": [
+          "Design & Wohnaccessoires ",
+          "Geschenkideen ",
+          "Kleine Labels & Manufakturen "
+        ],
+        "en": [
+          "Design & home accessories ",
+          "Gift ideas ",
+          "Small labels & artisans "
+        ],
+        "fr": [
+          "Design et accessoires d’intérieur",
+          "Idées cadeaux",
+          "Petites marques et manufactures"
+        ],
+        "it": [
+          "Design e complementi d’arredo ",
+          "Idee regalo",
+          "Piccole marche e manifatture"
+        ]
+      },
+      "zurichCardDescription": null,
+      "zurichCard": false,
+      "osm_id": "",
+      "image": {
+        "url": "https://www.zuerich.com/sites/default/files/image/2025/web_zuerich_Studio_Melograno_1280x960px_02.jpg",
+        "caption": {
+          "de": "Studio Melograno",
+          "en": null,
+          "fr": null,
+          "it": null
+        }
+      },
+      "price": {
+        "de": null,
+        "en": null,
+        "fr": null,
+        "it": null
+      },
+      "photo": [
+        {
+          "url": "https://www.zuerich.com/sites/default/files/image/2025/web_zuerich_Studio_Melograno_1280x960px_03.jpg",
+          "caption": {
+            "de": "Studio Melograno",
+            "en": null,
+            "fr": null,
+            "it": null
+          }
+        },
+        {
+          "url": "https://www.zuerich.com/sites/default/files/image/2025/web_zuerich_Studio_Melograno_1280x960px_04.jpg",
+          "caption": {
+            "de": "Studio Melograno",
+            "en": null,
+            "fr": null,
+            "it": null
+          }
+        },
+        {
+          "url": "https://www.zuerich.com/sites/default/files/image/2025/web_zuerich_Studio_Melograno_1280x960px_01.jpg",
+          "caption": {
+            "de": "Studio Melograno",
+            "en": null,
+            "fr": null,
+            "it": null
+          }
+        }
+      ],
+      "dateModified": "2025-11-05T16:15",
+      "opens": [],
+      "openingHours": [
+        "Tu,We,Th,Fr 11:00:00-18:30:00",
+        "Sa 10:00:00-17:00:00"
+      ],
+      "openingHoursSpecification": null,
+      "specialOpeningHoursSpecification": {
+        "de": null,
+        "en": null,
+        "fr": null,
+        "it": null
+      },
+      "address": {
+        "addressCountry": "CH",
+        "addressLocality": "Zürich",
+        "postalCode": "8004",
+        "streetAddress": "Hohlstrasse 9",
+        "telephone": "+41 44 240 00 22",
+        "email": null,
+        "url": "http://www.studiomelograno.ch/"
+      },
+      "geoCoordinates": {
+        "latitude": 47.376818,
+        "longitude": 8.528149
+      },
+      "place": [
+        "Indoors"
+      ]
+    }
+  },
+  {
+    "id": 71,
+    "name": "Mama Shelter",
+    "type": "Hotel",
+    "data": {
+      "@context": "https://schema.org/",
+      "@type": "Hotel",
+      "@customType": null,
+      "identifier": "1012365",
+      "copyrightHolder": {
+        "de": "Zürich Tourismus www.zuerich.com",
+        "en": "Zurich Tourism www.zuerich.com",
+        "it": "Zürich Tourismo www.zuerich.com",
+        "fr": "Zürich Tourisme www.zuerich.com"
+      },
+      "license": "CC BY-SA",
+      "category": {
+        "Hotels": {
+          "swissId": ""
+        }
+      },
+      "name": {
+        "de": "Mama Shelter",
+        "en": "Mama Shelter",
+        "fr": "Mama Shelter",
+        "it": "Mama Shelter"
+      },
+      "disambiguatingDescription": {
+        "de": "Ein frischer Hotspot in Zürich-Oerlikon: Designerzimmer, Rooftop-Garten, kulinarisches Angebot und Eventflächen. ",
+        "en": "A fresh hotspot in Zurich’s Oerlikon district: designer rooms, a rooftop garden, a delicious menu, and event spaces. ",
+        "fr": "Nouveau lieu branché à Zurich-Oerlikon, avec chambres design, terrasse sur le toit, offre culinaire et espaces événementiels.",
+        "it": "Un nuovo hotspot a Zürich-Oerlikon: camere di design, giardino sul tetto, cucina e spazi per eventi."
+      },
+      "description": {
+        "de": "<p>Das Hotel bietet insgesamt&#8239;178 individuell gestaltete Zimmer mit hohem Komfort &ndash; darunter auch barrierefreie Familienzimmer mit 5-Sterne-Betten, kostenfreiem WLAN, Unterhaltungsangeboten und Bio-Amenities.<p>Mama Shelter Zurich ist das erste Haus der globalen Lifestyle-Marke in der Schweiz &ndash; zentral gelegen in Z&uuml;rich-Oerlikon, nahe Bahnhof und Tramanschluss. Das Design verbindet spielerische Elemente mit Schweizer Inspiration: von alpinen Farbt&ouml;nen und Uhrenmotiven bis zu kubistischen Fresken.</p><p>Ein hauseigenes Restaurant mit offener K&uuml;che, eine Rooftop-Bar mit Ausblick sowie Meetingr&auml;ume f&uuml;r Workshops oder Events machen das Haus zum vielseitigen Treffpunkt. Freizeitangebote wie Tischtennis, Flipper oder Boule unterstreichen den verspielten Charakter.&nbsp;</p></p>",
+        "en": "<p>The hotel offers 178 individually designed rooms with an emphasis on comfort &ndash; including accessible family rooms with 5-star beds, free WLAN internet, entertainment options, and organic toiletries.<p>Mama Shelter Zurich is the global lifestyle brand&rsquo;s first hotel in Switzerland. It is centrally located in Zurich Oerlikon, near the train station and convenient for tram connections. The design combines playful elements with Swiss inspiration, from alpine colour palettes and clock motifs to Cubist-style frescoes.</p><p>An on-site restaurant with an open kitchen, a rooftop bar with a view, and meeting rooms for workshops or events make this a truly versatile venue. Fun amenities such as table tennis, pinball tables, and boules highlight the hotel&rsquo;s playful character.</p></p>",
+        "fr": "<p>L&rsquo;h&ocirc;tel propose au total 178 chambres au design individuel et au confort &eacute;lev&eacute;, dont des chambres familiales accessibles &agrave; toutes et &agrave; tous avec des lits 5 &eacute;toiles, une connexion Wi-Fi gratuite, des offres de divertissement et des produits de toilette bio.<p>Situ&eacute; au centre de Zurich-Oerlikon, pr&egrave;s de la gare et de la station de tramway, Mama Shelter Zurich est le premier &eacute;tablissement de la marque mondiale de lifestyle en Suisse. Le design allie des &eacute;l&eacute;ments ludiques &agrave; des subtils clins d&rsquo;oeil &agrave; la Suisse&nbsp;: des couleurs alpines et des motifs horlogers aux fresques cubistes.</p><p>Lieu de rencontre polyvalent, l&rsquo;h&ocirc;tel dispose de son propre restaurant avec cuisine ouverte, d&rsquo;un bar sur le toit avec vue panoramique et de salles de r&eacute;union pour des ateliers ou des &eacute;v&eacute;nements. Son caract&egrave;re ludique s&rsquo;exprime &eacute;galement &agrave; travers les activit&eacute;s propos&eacute;es, telles que le tennis de table, le flipper ou la p&eacute;tanque.</p></p>",
+        "it": "<p>L&rsquo;hotel propone in tutto 178 camere individuali e molto confortevoli, tra cui anche stanze per famiglie prive di barriere architettoniche con letti a 5 stelle, Wi-Fi gratuito, intrattenimento e prodotti bio.<p>Mama Shelter Zurich &egrave; il primo albergo del brand globale in Svizzera e occupa una posizione centrale a Z&uuml;rich-Oerlikon, vicino alla stazione e alla fermata del tram. Il design combina elementi giocosi e ispirazione svizzera: da colori e orologi alpini ad affreschi cubisti.</p><p>Il ristorante della casa con cucina aperta, il bar sul tetto con vista e le sale riunioni per workshop o eventi rendono la struttura molto versatile. Le proposte per il tempo libero come ping pong, flipper e bocce ne sottolineano il carattere spensierato.</p></p>"
+      },
+      "titleTeaser": {
+        "de": "Mama Shelter Zurich",
+        "en": "Mama Shelter Zurich",
+        "fr": "Mama Shelter Zurich",
+        "it": "Mama Shelter Zurich"
+      },
+      "textTeaser": {
+        "de": "Designerzimmer, Rooftop-Garten, kulinarisches Angebot und Eventflächen. ",
+        "en": "Designer rooms, a rooftop garden, a delicious menu, and event spaces. ",
+        "fr": "Chambres design, terrasse sur le toit, offre culinaire et espaces événementiels.",
+        "it": "Camere di design, giardino sul tetto, cucina e spazi per eventi."
+      },
+      "osm_id": "",
+      "image": {
+        "url": "https://www.zuerich.com/sites/default/files/image/2025/web_zuerich_Hotel_Mama_Shelter_wide_02.jpg",
+        "caption": {
+          "de": "Mama Shelter",
+          "en": null,
+          "fr": null,
+          "it": null
+        }
+      },
+      "photo": [
+        {
+          "url": "https://www.zuerich.com/sites/default/files/image/2025/web_zuerich_Hotel_Mama_Shelter_wide_06.jpg",
+          "caption": {
+            "de": "Mama Shelter",
+            "en": null,
+            "fr": null,
+            "it": null
+          }
+        },
+        {
+          "url": "https://www.zuerich.com/sites/default/files/image/2025/web_zuerich_Hotel_Mama_Shelter_wide_01.jpg",
+          "caption": {
+            "de": "Mama Shelter",
+            "en": null,
+            "fr": null,
+            "it": null
+          }
+        },
+        {
+          "url": "https://www.zuerich.com/sites/default/files/image/2025/web_zuerich_Hotel_Mama_Shelter_wide_05.jpg",
+          "caption": {
+            "de": "Mama Shelter",
+            "en": null,
+            "fr": null,
+            "it": null
+          }
+        },
+        {
+          "url": "https://www.zuerich.com/sites/default/files/image/2025/web_zuerich_Hotel_Mama_Shelter_wide_03.jpg",
+          "caption": {
+            "de": "Mama Shelter",
+            "en": null,
+            "fr": null,
+            "it": null
+          }
+        },
+        {
+          "url": "https://www.zuerich.com/sites/default/files/image/2025/web_zuerich_Hotel_Mama_Shelter_wide_04.jpg",
+          "caption": {
+            "de": "Mama Shelter",
+            "en": null,
+            "fr": null,
+            "it": null
+          }
+        },
+        {
+          "url": "https://www.zuerich.com/sites/default/files/image/2025/web_zuerich_Hotel_Mama_Shelter_wide_07.jpg",
+          "caption": {
+            "de": "Mama Shelter",
+            "en": null,
+            "fr": null,
+            "it": null
+          }
+        },
+        {
+          "url": "https://www.zuerich.com/sites/default/files/image/2025/web_zuerich_Hotel_Mama_Shelter_wide_08.jpg",
+          "caption": {
+            "de": "Mama Shelter",
+            "en": null,
+            "fr": null,
+            "it": null
+          }
+        }
+      ],
+      "dateModified": "2025-11-05T16:14",
+      "address": {
+        "addressCountry": "CH",
+        "addressLocality": "Zürich",
+        "postalCode": "8050",
+        "streetAddress": "Schulstrasse 44",
+        "telephone": "+41 44 442 41 40",
+        "email": "zurich@mamashelter.com",
+        "url": "https://mamashelter.com/zurich"
+      },
+      "geoCoordinates": {
+        "latitude": 47.410819,
+        "longitude": 8.543954
+      },
+      "amenityFeature": [
+        "Air conditioning",
+        "Exercise gym",
+        "Free high speed internet connection",
+        "Non-smoking rooms",
+        "Pets allowed",
+        "Restaurant"
+      ]
+    }
+  },
+  {
+    "id": 72,
+    "name": "«Der ungezähmte Horizont» by Yves Netzhammer",
+    "type": "CivicStructure",
+    "data": {
+      "@context": "https://schema.org/",
+      "@type": "CivicStructure",
+      "@customType": "ArtObject",
+      "identifier": "1012217",
+      "copyrightHolder": {
+        "de": "Zürich Tourismus www.zuerich.com",
+        "en": "Zurich Tourism www.zuerich.com",
+        "it": "Zürich Tourismo www.zuerich.com",
+        "fr": "Zürich Tourisme www.zuerich.com"
+      },
+      "license": "CC BY-SA",
+      "tomasBookingId": null,
+      "category": {
+        "Place": {
+          "swissId": ""
+        },
+        "Culture": {
+          "swissId": "sui_02"
+        },
+        "Museums": {
+          "swissId": ""
+        },
+        "Art": {
+          "swissId": "sui_0210"
+        },
+        "Attractions": {
+          "swissId": ""
+        },
+        "Works of Art": {
+          "swissId": ""
+        }
+      },
+      "name": {
+        "de": "«Der ungezähmte Horizont» von Yves Netzhammer",
+        "en": "«Der ungezähmte Horizont» by Yves Netzhammer",
+        "fr": "« Der ungezähmte Horizont » (« L’horizon indompté ») par Yves Netzhammer",
+        "it": "“Der ungezähmte Horizont” di Yves Netzhammer"
+      },
+      "disambiguatingDescription": {
+        "de": "Yves Netzhammers kinetische Skulptur im Zürcher Kreis 5 überrascht, bewegt und regt zum Nachdenken an.",
+        "en": "Yves Netzhammer’s thought-provoking kinetic sculpture in Zurich’s district 5 surprises and moves its viewers.",
+        "fr": "La sculpture cinétique d’Yves Netzhammer dans le 5e arrondissement de Zurich attire l’attention, surprend et incite à la réflexion.",
+        "it": "La scultura cinetica di Yves Netzhammer nel Kreis 5 di Zurigo sorprende, emoziona e invita a riflettere."
+      },
+      "description": {
+        "de": "<p>Wer mit offenen Augen durch Z&uuml;richs Westen geht, entdeckt vielerorts sogenannte Kunst im &ouml;ffentlichen Raum Ki&ouml;R.<p>Seit 2024 steht auf dem Dach eines Hochhauses die imposante Skulptur &laquo;Der ungez&auml;hmte Horizont&raquo; des bekannten Schweizer K&uuml;nstlers Yves Netzhammer. Das aus Metall gefertigte schwarze Pferd thront mal in aufgeb&auml;umter Haltung und mit gespannter Muskulatur ruhig und kraftvoll am Dachrand, mal sch&uuml;ttelt es den Kopf oder scharrt mit dem Vorderbein.</p><p>Was soll das? Die Skulptur erinnert an die Zeit, als Pferde das Hauptfortbewegungsmittel waren und schl&auml;gt eine Br&uuml;cke zur heutigen urbanen Mobilit&auml;t. Sie ist Teil des st&auml;dtischen Kunst-und-Bau-Programms und wurde von der Stadt Z&uuml;rich in Auftrag gegeben.</p><p>&laquo;Der ungez&auml;hmte Horizont&raquo;, 2025, Stahl, Kupferblech, Hydraulik, Livestream. Kunst und Bau Stadt Z&uuml;rich, Tramdepot und Wohnsiedlung Depot Hard, Foto: Stefan Altenburger Photography Zu&#776;rich</p></p>",
+        "en": "<p>Those who walk through Zurich West with eyes wide open discover fascinating art in public spaces.<p>In 2024 the famous Swiss artist Yves Netzhammer installed his imposing sculpture &ldquo;Der ungez&auml;hmte Horizont&rdquo; <em>Untamed Horizon </em>on the roof of a high-rise building. The black horse is standing dangerously close to the edge of the roof, sometimes rearing up with coiled muscles, sometimes moving its head or stamping with its hooves and then again poised with quiet strength.</p><p>What is this? The sculpture is reminiscent of the times when horses were the main means of transportation and creates a connection to modern times and urban mobility. The sculpture is part of the city&rsquo;s Art and Construction Project and was commissioned by the city of Zurich.</p><p>&laquo;Der ungez&auml;hmte Horizont&raquo;, 2025, steel, copper sheet, hydraulics, livestream. Art and Architecture, City of Zurich, Tram Depot and Housing Complex Depot Hard. Photo: Stefan Altenburger Photography Z&uuml;rich</p></p>",
+        "fr": "<p>En parcourant l&rsquo;ouest de Zurich les yeux grand ouvert, on d&eacute;couvre en de nombreux endroits ce que l&rsquo;on appelle l&rsquo;art dans l&rsquo;espace public.<p>Depuis 2024, l&rsquo;imposante sculpture &laquo;&#8239;Der ungez&auml;hmte Horizont&#8239;&raquo; du c&eacute;l&egrave;bre artiste suisse Yves Netzhammer se dresse sur le toit d&rsquo;un immeuble. Le cheval noir en m&eacute;tal tr&ocirc;ne tant&ocirc;t au bord du toit, dans une posture cabr&eacute;e, musculature tendue, calme et puissant, tant&ocirc;t secouant la t&ecirc;te ou piaffant.</p><p>Que repr&eacute;sente-t-elle ? La sculpture rappelle l&rsquo;&eacute;poque o&ugrave; les chevaux &eacute;taient le principal moyen de locomotion et jette un pont vers la mobilit&eacute; urbaine actuelle. Elle fait partie du programme &laquo;&#8239;Art et construction&#8239;&raquo; de la ville de Zurich, qui en a pass&eacute; commande.</p><p>&laquo;Der ungez&auml;hmte Horizont&raquo;, 2025, acier, t&ocirc;le de cuivre, hydraulique, livestream. Art et architecture, Ville de Zurich, d&eacute;p&ocirc;t de tram et lotissement Depot Hard. Photo : Stefan Altenburger Photography Z&uuml;rich</p></p>",
+        "it": "<p>Passeggiando con gli occhi bene aperti per il quartiere di Z&uuml;rich-West, in molti luoghi si scoprono esemplari della cosiddetta &ldquo;Arte negli spazi pubblici&rdquo;.<p>Dal 2024, sul tetto di un edificio si trova l&rsquo;imponente scultura &ldquo;Der ungez&auml;hmte Horizont&rdquo; (&ldquo;L&rsquo;orizzonte indomito&rdquo;) del famoso artista svizzero Yves Netzhammer. Realizzato in metallo e collocato sul bordo del tetto, il cavallo nero a volte troneggia calmo e possente, con il corpo impennato e la muscolatura tesa, altre scuote la testa, altre ancora raspa con le zampe anteriori.</p><p>Ma perch&eacute;? La scultura ricorda i tempi in cui i cavalli erano il mezzo di trasporto principale, allacciandosi all&rsquo;odierna mobilit&agrave; urbana. Fa parte del programma di arte e architettura di Zurigo ed &egrave; stata commissionata dalla citt&agrave;.</p><p>&laquo;Der ungez&auml;hmte Horizont&raquo;, 2025, acciaio, lamiera di rame, idraulica, livestream. Arte e architettura, Citt&agrave; di Zurigo, deposito dei tram e complesso residenziale Depot Hard. Foto: Stefan Altenburger Photography Z&uuml;rich</p></p>"
+      },
+      "titleTeaser": {
+        "de": "«Der ungezähmte Horizont» von Yves Netzhammer",
+        "en": "«Der ungezähmte Horizont» by Yves Netzhammer ",
+        "fr": "« Der ungezähmte Horizont » par Yves Netzhammer",
+        "it": "“Der ungezähmte Horizont” di Yves Netzhammer"
+      },
+      "textTeaser": {
+        "de": "Ein schwarzes Pferd auf einem Hochhausdach – Yves Netzhammers Skulptur im Kreis 5 überrascht und bewegt.",
+        "en": "A black horse on the roof of a high-rise building – Yves Netzhammer’s sculpture in Zurich’s district 5 surprises and moves. ",
+        "fr": "Un cheval noir sur le toit d’un immeuble : la sculpture d’Yves Netzhammer dans le 5e arrondissement surprend et interpelle.",
+        "it": "Un cavallo nero su un edificio: la scultura di Yves Netzhammer nel Kreis 5 sorprende ed emoziona."
+      },
+      "detailedInformation": {
+        "de": [
+          "Kunstwerk von Yves Netzhammer",
+          "Kinetisches Pferd auf Hochhaus",
+          "Kunst-und-Bau-Projekt Zürich"
+        ],
+        "en": [
+          "Art by Yves Netzhammer ",
+          "Kinetic horse on the roof of a high-rise building ",
+          "Art and Construction Project by the city of Zurich "
+        ],
+        "fr": [
+          "Œuvre d’art d’Yves Netzhammer",
+          "Cheval cinétique sur un gratte-ciel",
+          "Projet du programme « Art et construction » de la ville de Zurich"
+        ],
+        "it": [
+          "Opera di Yves Netzhammer",
+          "Cavallo cinetico su edificio",
+          "Progetto del programma di arte e architettura di Zurigo"
+        ]
+      },
+      "zurichCardDescription": null,
+      "zurichCard": false,
+      "osm_id": "",
+      "image": {
+        "url": "https://www.zuerich.com/sites/default/files/image/2025/web_zuerich_YvesNetzhammer_Pferd_04.jpg",
+        "caption": {
+          "de": "«Der ungezähmte Horizont»",
+          "en": null,
+          "fr": null,
+          "it": null
+        }
+      },
+      "price": {
+        "de": null,
+        "en": null,
+        "fr": null,
+        "it": null
+      },
+      "photo": [
+        {
+          "url": "https://www.zuerich.com/sites/default/files/image/2025/web_zuerich_YvesNetzhammer_Pferd_02.jpg",
+          "caption": {
+            "de": "«Der ungezähmte Horizont»",
+            "en": null,
+            "fr": null,
+            "it": null
+          }
+        },
+        {
+          "url": "https://www.zuerich.com/sites/default/files/image/2025/web_zuerich_YvesNetzhammer_Pferd_01.jpg",
+          "caption": {
+            "de": "«Der ungezähmte Horizont»",
+            "en": null,
+            "fr": null,
+            "it": null
+          }
+        },
+        {
+          "url": "https://www.zuerich.com/sites/default/files/image/2025/web_zuerich_YvesNetzhammer_Pferd_03.jpg",
+          "caption": {
+            "de": "«Der ungezähmte Horizont»",
+            "en": null,
+            "fr": null,
+            "it": null
+          }
+        }
+      ],
+      "dateModified": "2025-11-05T16:13",
+      "opens": null,
+      "openingHours": "",
+      "openingHoursSpecification": null,
+      "specialOpeningHoursSpecification": {
+        "de": "Rund um die Uhr geöffnet",
+        "en": "Open around the clock",
+        "it": "Aperti tutto il giorno",
+        "fr": "Ouvert 24 heures sur 24"
+      },
+      "address": {
+        "addressCountry": "CH",
+        "addressLocality": "Zürich",
+        "postalCode": "8005",
+        "streetAddress": "Hardturmstrasse 8",
+        "telephone": null,
+        "email": null,
+        "url": null
+      },
+      "geoCoordinates": {
+        "latitude": 47.391159,
+        "longitude": 8.521736
+      },
+      "place": [
+        "Outdoors"
+      ]
+    }
+  }
+]
