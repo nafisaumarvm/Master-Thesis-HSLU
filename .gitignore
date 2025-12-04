@@ -71,6 +71,10 @@ tmp/
 temp/
 .cache/
 
+# Large data files (too large for GitHub >100MB limit)
+*.gz
+day_*.gz
+
 
 
 
