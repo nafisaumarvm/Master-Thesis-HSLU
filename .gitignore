@@ -35,3 +35,12 @@ lerna-debug.log*
 # OS files
 Thumbs.db
 
+# Large media files
+*.mp4
+*.mov
+*.avi
+*.mkv
+# Keep small images, but exclude very large ones (>5MB)
+*.png
+!tv-welcome/public/vite.svg
+
