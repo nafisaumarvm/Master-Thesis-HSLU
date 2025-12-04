@@ -1,15 +1,6 @@
 """
 Causal Analysis Module for In-Room TV Advertising
 
-Implements:
-1. Endogeneity analysis and instrumental variables
-2. Formal popularity baseline definition
-3. ATE (Average Treatment Effect) estimation
-4. Dose-response curve estimation
-5. Propensity-weighted exposure effects
-6. G-computation structural models
-
-Following van Leeuwen (2024) causal identification framework.
 """
 
 import numpy as np
@@ -22,9 +13,7 @@ import warnings
 warnings.filterwarnings('ignore')
 
 
-# =============================================================================
-# 1. FORMAL BASELINE DEFINITIONS
-# =============================================================================
+# Formal Baseline
 
 class PopularityBaseline:
     """
@@ -92,9 +81,7 @@ class PopularityBaseline:
         return pd.DataFrame(self.baselines)
 
 
-# =============================================================================
-# 2. ENDOGENEITY ANALYSIS
-# =============================================================================
+# Endogeneity Analysis
 
 class EndogeneityAnalyzer:
     """
@@ -217,9 +204,7 @@ class EndogeneityAnalyzer:
         return comparison
 
 
-# =============================================================================
-# 3. CAUSAL EFFECT ESTIMATION
-# =============================================================================
+# Causal Effect Estimation
 
 class CausalEffectEstimator:
     """
@@ -433,9 +418,7 @@ class CausalEffectEstimator:
         return result
 
 
-# =============================================================================
-# 4. ROBUSTNESS AND SENSITIVITY ANALYSIS
-# =============================================================================
+# Robustness & Sensitivity Analysis
 
 class RobustnessAnalyzer:
     """
@@ -629,9 +612,7 @@ class RobustnessAnalyzer:
         return result_df
 
 
-# =============================================================================
-# 5. FAIRNESS ANALYSIS
-# =============================================================================
+# Fairness Analysis
 
 class FairnessAnalyzer:
     """
@@ -749,15 +730,8 @@ class FairnessAnalyzer:
         return self.results['advertiser_fairness']
 
 
-# =============================================================================
-# MAIN EXECUTION
-# =============================================================================
-
 def run_causal_analysis_demo():
     """Run demonstration of causal analysis components."""
-    print("="*80)
-    print("CAUSAL ANALYSIS FOR IN-ROOM TV ADVERTISING")
-    print("="*80)
     
     # Generate synthetic data for demonstration
     np.random.seed(42)
@@ -776,8 +750,6 @@ def run_causal_analysis_demo():
     })
     
     # 1. Popularity Baseline
-    print("\n📊 1. POPULARITY BASELINES")
-    print("-" * 40)
     baseline = PopularityBaseline(data)
     impression_pop = baseline.compute_impression_popularity()
     engagement_pop = baseline.compute_engagement_popularity()
@@ -787,8 +759,6 @@ def run_causal_analysis_demo():
     print(engagement_pop)
     
     # 2. Endogeneity Analysis
-    print("\n📊 2. ENDOGENEITY ANALYSIS")
-    print("-" * 40)
     endogeneity = EndogeneityAnalyzer(data)
     randomness = endogeneity.test_exposure_randomness()
     instruments = endogeneity.identify_instruments()
@@ -799,8 +769,6 @@ def run_causal_analysis_demo():
     print(comparison.to_string())
     
     # 3. Causal Effects
-    print("\n📊 3. CAUSAL EFFECT ESTIMATION")
-    print("-" * 40)
     causal = CausalEffectEstimator(data)
     ate_naive = causal.estimate_ATE_naive()
     propensity = causal.estimate_propensity_scores()
@@ -813,8 +781,6 @@ def run_causal_analysis_demo():
     print(f"\nAwareness Effect: {awareness_effect['interpretation']}")
     
     # 4. Robustness Analysis
-    print("\n📊 4. ROBUSTNESS ANALYSIS")
-    print("-" * 40)
     robustness = RobustnessAnalyzer()
     sensitivity = robustness.sensitivity_analysis(n_steps=5, n_simulations=50)
     noise_robust = robustness.noise_robustness(n_simulations=50)
@@ -828,8 +794,6 @@ def run_causal_analysis_demo():
     print(identifiability)
     
     # 5. Fairness Analysis
-    print("\n📊 5. FAIRNESS ANALYSIS")
-    print("-" * 40)
     fairness = FairnessAnalyzer(data)
     segment_balance = fairness.segment_exposure_balance()
     advertiser_fair = fairness.advertiser_fairness()
@@ -838,10 +802,6 @@ def run_causal_analysis_demo():
     print(segment_balance)
     print(f"\nSegment Gini: {fairness.results['segment_balance']['gini_coefficient']:.3f}")
     print(f"Advertiser Jain's Index: {advertiser_fair['jains_index']:.3f}")
-    
-    print("\n" + "="*80)
-    print("✅ CAUSAL ANALYSIS COMPLETE")
-    print("="*80)
     
     return {
         'baseline': baseline,
