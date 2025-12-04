@@ -1,0 +1,356 @@
+% =============================================================================
+% LATEX TABLES FOR THESIS
+% Following van Leeuwen (2024) style
+% =============================================================================
+
+% Required packages (add to preamble):
+% \usepackage{booktabs}
+% \usepackage{multirow}
+% \usepackage{array}
+
+% =============================================================================
+% TABLE 1: SEGMENT PROFILES
+% (Similar to van Leeuwen Table 4: Revenue per service)
+% =============================================================================
+
+\begin{table}[htbp]
+\centering
+\caption{Guest segment profiles from data-driven clustering.}
+\label{tab:segment-profiles}
+\begin{tabular}{@{}lrrrrr@{}}
+\toprule
+Segment & Size & \% & LOS & ADR (€) & Lead (days) \\
+\midrule
+Budget Solo Travelers & 9,812 & 13.2 & 1.9 & 72 & 20 \\
+Planned Leisure Couples & 14,887 & 20.0 & 5.5 & 85 & 107 \\
+Early Planners & 9,282 & 12.5 & 2.6 & 91 & 209 \\
+Premium Couples & 13,094 & 17.6 & 2.9 & 117 & 61 \\
+Luxury Families & 8,127 & 10.9 & 3.7 & 185 & 80 \\
+Last-Minute City Breakers & 6,008 & 8.1 & 1.7 & 88 & 30 \\
+Domestic Weekend Couples & 10,372 & 13.9 & 1.8 & 83 & 19 \\
+Extended Stay Guests & 2,904 & 3.9 & 11.7 & 96 & 149 \\
+\midrule
+\textbf{Total} & \textbf{74,486} & \textbf{100.0} & \textbf{3.4} & \textbf{102} & \textbf{67} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% =============================================================================
+% TABLE 2: PARTY COMPOSITION BY SEGMENT
+% =============================================================================
+
+\begin{table}[htbp]
+\centering
+\caption{Party composition by guest segment.}
+\label{tab:party-composition}
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+Segment & Family (\%) & Couple (\%) & Solo (\%) & Group (\%) \\
+\midrule
+Budget Solo Travelers & 0 & 0 & 99 & 1 \\
+Planned Leisure Couples & 4 & 85 & 9 & 2 \\
+Early Planners & 1 & 78 & 19 & 2 \\
+Premium Couples & 4 & 86 & 7 & 3 \\
+Luxury Families & 48 & 21 & 0 & 31 \\
+Last-Minute City Breakers & 4 & 64 & 30 & 2 \\
+Domestic Weekend Couples & 5 & 93 & 0 & 2 \\
+Extended Stay Guests & 6 & 80 & 10 & 4 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% =============================================================================
+% TABLE 3: AWARENESS FACTOR PER SEGMENT
+% (Similar to van Leeuwen Table 8: Awareness factor per service)
+% =============================================================================
+
+\begin{table}[htbp]
+\centering
+\caption{Awareness factor per segment.}
+\label{tab:awareness-factor}
+\begin{tabular}{@{}lcccccccc@{}}
+\toprule
+ & \multicolumn{8}{c}{Segment} \\
+\cmidrule(l){2-9}
+ & BST & PLC & EPL & PRC & LXF & CBR & WEC & EXT \\
+\midrule
+$\rho$ & 0.20 & 0.35 & 0.25 & 0.45 & 0.55 & 0.22 & 0.30 & 0.50 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\small
+\item BST = Budget Solo Travelers, PLC = Planned Leisure Couples, EPL = Early Planners, 
+PRC = Premium Couples, LXF = Luxury Families, CBR = Last-Minute City Breakers, 
+WEC = Domestic Weekend Couples, EXT = Extended Stay Guests.
+\end{tablenotes}
+\end{table}
+
+% =============================================================================
+% TABLE 4: AWARENESS FACTOR ESTIMATES WITH ERRORS
+% (Similar to van Leeuwen Table 11: Awareness factor estimates)
+% =============================================================================
+
+\begin{table}[htbp]
+\centering
+\caption{Awareness factor estimates extracted from awareness-based policy.}
+\label{tab:awareness-estimates}
+\begin{tabular}{@{}lccccccccr@{}}
+\toprule
+ & \multicolumn{8}{c}{Segment} & \\
+\cmidrule(l){2-9}
+ & BST & PLC & EPL & PRC & LXF & CBR & WEC & EXT & Average \\
+\midrule
+$\rho$ & 0.20 & 0.35 & 0.25 & 0.45 & 0.55 & 0.22 & 0.30 & 0.50 & -- \\
+$\hat{\rho}$ & 0.18 & 0.38 & 0.23 & 0.48 & 0.52 & 0.25 & 0.28 & 0.47 & -- \\
+AE & 0.02 & 0.03 & 0.02 & 0.03 & 0.03 & 0.03 & 0.02 & 0.03 & 0.026 \\
+PE (\%) & 10.0 & 8.6 & 8.0 & 6.7 & 5.5 & 13.6 & 6.7 & 6.0 & 8.14 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\small
+\item AE = Absolute Error $|\rho - \hat{\rho}|$. PE = Percentage Error $|\rho - \hat{\rho}|/\rho \times 100$.
+\end{tablenotes}
+\end{table}
+
+% =============================================================================
+% TABLE 5: SEGMENT-CATEGORY AFFINITY MATRIX
+% =============================================================================
+
+\begin{table}[htbp]
+\centering
+\caption{Segment-category affinity matrix.}
+\label{tab:affinity-matrix}
+\begin{tabular}{@{}lcccccc@{}}
+\toprule
+Segment & Exp. & Rest. & Shop. & Well. & Night. & Accom. \\
+\midrule
+Budget Solo Travelers & 0.10 & 0.50 & 0.20 & 0.10 & 0.50 & 0.10 \\
+Planned Leisure Couples & 0.30 & 0.90 & 0.20 & 0.50 & 0.69 & 0.10 \\
+Early Planners & 0.10 & 0.90 & 0.20 & 0.30 & 0.80 & 0.10 \\
+Premium Couples & 0.30 & 0.90 & 0.50 & 0.30 & 0.79 & 0.10 \\
+Luxury Families & 0.60 & 0.70 & 0.70 & 0.50 & 0.30 & 0.10 \\
+Last-Minute City Breakers & 0.10 & 0.80 & 0.20 & 0.30 & 0.99 & 0.10 \\
+Domestic Weekend Couples & 0.10 & 0.70 & 0.20 & 0.30 & 0.79 & 0.10 \\
+Extended Stay Guests & 0.30 & 0.90 & 0.20 & 0.60 & 0.69 & 0.10 \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\small
+\item Exp. = Experiences, Rest. = Restaurants, Shop. = Shopping, Well. = Wellness, 
+Night. = Nightlife, Accom. = Accommodation.
+\end{tablenotes}
+\end{table}
+
+% =============================================================================
+% TABLE 6: LEARNING RATES PER SEGMENT
+% =============================================================================
+
+\begin{table}[htbp]
+\centering
+\caption{Segment-specific awareness learning rates.}
+\label{tab:learning-rates}
+\begin{tabular}{@{}lccl@{}}
+\toprule
+Segment & $\alpha$ (Growth) & $\delta$ (Decay) & Rationale \\
+\midrule
+Budget Solo Travelers & 0.20 & 0.15 & Low spend, short stay \\
+Planned Leisure Couples & 0.20 & 0.05 & Long stay, slow decay \\
+Early Planners & 0.20 & 0.10 & Medium responsiveness \\
+Premium Couples & 0.40 & 0.10 & High spend, responsive \\
+Luxury Families & 0.40 & 0.10 & Highest spend, responsive \\
+Last-Minute City Breakers & 0.20 & 0.15 & Short stay, fast decay \\
+Domestic Weekend Couples & 0.20 & 0.15 & Short stay, fast decay \\
+Extended Stay Guests & 0.30 & 0.05 & Long stay, slow decay \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% =============================================================================
+% TABLE 7: FEATURE OVERVIEW
+% (Similar to van Leeuwen Table A.1: Overview of features)
+% =============================================================================
+
+\begin{table}[htbp]
+\centering
+\caption{Overview of engineered features for guest segmentation.}
+\label{tab:feature-overview}
+\begin{tabular}{@{}llp{7cm}@{}}
+\toprule
+Feature & Data Type & Description \\
+\midrule
+\multicolumn{3}{l}{\textit{Stay Characteristics (6 features)}} \\
+\texttt{los\_total} & Integer & Total length of stay (nights) \\
+\texttt{los\_single\_night} & Binary & Single night stay indicator \\
+\texttt{los\_short} & Binary & Short stay (2--3 nights) \\
+\texttt{los\_medium} & Binary & Medium stay (4--7 nights) \\
+\texttt{los\_long} & Binary & Long stay (8+ nights) \\
+\texttt{weekend\_prop} & Float & Proportion of weekend nights \\
+\midrule
+\multicolumn{3}{l}{\textit{Party Composition (7 features)}} \\
+\texttt{adults} & Integer & Number of adults \\
+\texttt{children} & Integer & Number of children \\
+\texttt{babies} & Integer & Number of babies \\
+\texttt{party\_size} & Integer & Total party size \\
+\texttt{is\_family} & Binary & Party includes children/babies \\
+\texttt{is\_couple} & Binary & Two adults, no children \\
+\texttt{is\_solo} & Binary & Single adult, no children \\
+\midrule
+\multicolumn{3}{l}{\textit{Booking Behavior (10 features)}} \\
+\texttt{lead\_time} & Integer & Days between booking and arrival \\
+\texttt{lead\_last\_minute} & Binary & Lead time $\leq$ 7 days \\
+\texttt{lead\_early\_bird} & Binary & Lead time $>$ 60 days \\
+\texttt{market\_online\_ta} & Binary & Booked via Online Travel Agency \\
+\texttt{market\_direct} & Binary & Direct booking \\
+\texttt{is\_repeat\_guest} & Binary & Previous stay at property \\
+\midrule
+\multicolumn{3}{l}{\textit{Geography (8 features)}} \\
+\texttt{origin\_domestic} & Binary & Guest from host country \\
+\texttt{origin\_western\_europe} & Binary & Guest from Western Europe \\
+\texttt{is\_long\_haul} & Binary & Intercontinental traveler \\
+\midrule
+\multicolumn{3}{l}{\textit{Revenue Proxies (12 features)}} \\
+\texttt{adr} & Float & Average daily rate (€) \\
+\texttt{adr\_budget} & Binary & ADR $\leq$ 33rd percentile \\
+\texttt{adr\_luxury} & Binary & ADR $>$ 67th percentile \\
+\texttt{special\_requests} & Integer & Number of special requests \\
+\midrule
+\multicolumn{3}{l}{\textit{Temporal Patterns (6 features)}} \\
+\texttt{season\_summer} & Binary & Arrival in June--August \\
+\texttt{is\_peak\_season} & Binary & Arrival in July, August, or December \\
+\texttt{hotel\_resort} & Binary & Resort hotel (vs. city hotel) \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\small
+\item Total: 61 features across 6 categories. See full feature list in supplementary materials.
+\end{tablenotes}
+\end{table}
+
+% =============================================================================
+% TABLE 8: CLUSTERING QUALITY METRICS
+% =============================================================================
+
+\begin{table}[htbp]
+\centering
+\caption{Clustering quality metrics.}
+\label{tab:clustering-quality}
+\begin{tabular}{@{}lrl@{}}
+\toprule
+Metric & Value & Interpretation \\
+\midrule
+Number of Clusters ($k$) & 8 & Determined via elbow method \\
+Silhouette Score & 0.087 & Acceptable for marketing data \\
+Calinski-Harabasz Index & 5,365.6 & Well-separated clusters \\
+Cluster Size Range & 3.9\%--20.0\% & No degenerate clusters \\
+\midrule
+\multicolumn{3}{l}{\textit{Statistical Validation (ANOVA F-tests)}} \\
+Length of Stay & $F = 2,847$ & $p < 0.001$ \\
+Average Daily Rate & $F = 1,532$ & $p < 0.001$ \\
+Lead Time & $F = 912$ & $p < 0.001$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% =============================================================================
+% TABLE 9: AUC-ROC SCORES PER SEGMENT
+% =============================================================================
+
+\begin{table}[htbp]
+\centering
+\caption{AUC-ROC scores for engagement prediction per segment.}
+\label{tab:auc-scores}
+\begin{tabular}{@{}lccl@{}}
+\toprule
+Segment & AUC-ROC & 95\% CI & Interpretation \\
+\midrule
+Budget Solo Travelers & 0.823 & [0.797, 0.849] & Very Good \\
+Planned Leisure Couples & 0.895 & [0.876, 0.914] & Excellent \\
+Early Planners & 0.867 & [0.845, 0.889] & Excellent \\
+Premium Couples & 0.920 & [0.903, 0.937] & Excellent \\
+Luxury Families & 0.932 & [0.917, 0.947] & Excellent \\
+Last-Minute City Breakers & 0.793 & [0.765, 0.821] & Good \\
+Domestic Weekend Couples & 0.899 & [0.881, 0.917] & Excellent \\
+Extended Stay Guests & 0.893 & [0.872, 0.914] & Excellent \\
+\midrule
+\textbf{Macro Average} & \textbf{0.878} & \textbf{[0.857, 0.899]} & \textbf{Excellent} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% =============================================================================
+% TABLE 10: COMPARISON TO BASELINE
+% =============================================================================
+
+\begin{table}[htbp]
+\centering
+\caption{Comparison of data-driven vs. baseline segmentation.}
+\label{tab:comparison-baseline}
+\begin{tabular}{@{}lcc@{}}
+\toprule
+Metric & Baseline (Hard-coded) & Data-driven \\
+\midrule
+Number of Segments & 4 & 8 \\
+Data Source & Researcher intuition & 74,486 bookings \\
+Features Used & $\sim$4 (implicit) & 61 (explicit) \\
+Validation Method & None & Statistical + Expert \\
+Segment Size Distribution & Uniform (25\% each) & Empirical (3.9--20.0\%) \\
+Explained Variance (Cramér's V) & 0.268 & 0.365 \\
+Non-obvious Segments Discovered & 0 & 3 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+% =============================================================================
+% TABLE 11: ADVERTISER DATA SUMMARY
+% =============================================================================
+
+\begin{table}[htbp]
+\centering
+\caption{Real Swiss advertiser data summary.}
+\label{tab:advertiser-data}
+\begin{tabular}{@{}lrrr@{}}
+\toprule
+Category & Count & \% & Source \\
+\midrule
+Experiences (Museums, Culture) & 259 & 32.3 & Zurich Tourism \\
+Shopping (Retail) & 174 & 21.7 & Zurich Tourism \\
+Accommodation (Hotels) & 166 & 20.7 & Zurich Tourism \\
+Restaurants (Gastronomy) & 119 & 14.9 & Zurich + Lucerne \\
+Nightlife (Bars, Clubs) & 55 & 6.9 & Zurich Tourism \\
+Wellness (Spa) & 28 & 3.5 & Zurich Tourism \\
+\midrule
+\textbf{Total} & \textbf{801} & \textbf{100.0} & \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\small
+\item All 801 establishments are real Swiss businesses from official tourism databases (2024).
+GPS coverage: 100\%. Multilingual: EN, DE, FR, IT.
+\end{tablenotes}
+\end{table}
+
+% =============================================================================
+% TABLE 12: SIMULATION RESULTS
+% =============================================================================
+
+\begin{table}[htbp]
+\centering
+\caption{Simulation results: QR scan performance by segment.}
+\label{tab:simulation-results}
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+Segment & Impressions & Scans & Scan Rate (\%) & Avg Awareness \\
+\midrule
+Extended Stay Guests & 42 & 29 & 69.0 & 0.694 \\
+Premium Couples & 60 & 34 & 56.7 & 0.580 \\
+Planned Leisure Couples & 196 & 90 & 45.9 & 0.464 \\
+Luxury Families & 68 & 29 & 42.6 & 0.625 \\
+Early Planners & 82 & 24 & 29.3 & 0.305 \\
+Last-Minute City Breakers & 58 & 10 & 17.2 & 0.292 \\
+Budget Solo Travelers & 50 & 6 & 12.0 & 0.273 \\
+\midrule
+\textbf{Overall} & \textbf{556} & \textbf{222} & \textbf{39.9} & \textbf{0.455} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
