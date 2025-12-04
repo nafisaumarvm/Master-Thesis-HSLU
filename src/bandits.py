@@ -262,9 +262,7 @@ class LinUCB:
             guest_price = guest_context.get('price_per_night', 100)
             # Normalized guest price
             features[:, 4] = guest_price / 200.0
-        
-        # Additional features can be added
-        
+                
         return features
 
 
@@ -365,7 +363,6 @@ class ThompsonSamplingLogistic:
         """
         mu_a, Sigma_a = self._get_or_init_params(ad_id)
         
-        # Simplified update: online logistic regression approximation
         # Predict current
         p = sigmoid(mu_a @ context_feature)
         
