@@ -1,5 +1,5 @@
 """
-Synthetic local advertiser catalogue and guest-ad preference generation.
+Synthetic local advertiser catalogue and guest-ad preference generation (in case real advertiser data isn't loaded)
 """
 
 import pandas as pd
