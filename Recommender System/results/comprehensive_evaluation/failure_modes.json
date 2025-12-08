@@ -1,0 +1,14 @@
+{
+  "cold_start_guests": {
+    "n_cold_start_guests": 8587,
+    "n_warm_start_guests": 34500,
+    "cold_start_pct": 19.825605849807488,
+    "cold_start_scan_rate": 0.010322317421460628,
+    "warm_start_scan_rate": 0.010169696725115519,
+    "cold_start_degradation_pct": -1.5007398988427116
+  },
+  "cold_start_segments": {},
+  "adversarial_gaming": {},
+  "privacy_leakage": {},
+  "privacy_risk_score": 0.0
+}
