@@ -1,15 +1,4 @@
-"""
-Ablation Experiments
-
-Tests the contribution of each modeling component:
-1. Contextual modifiers (time, weather, day-of-stay)
-2. Utility smoothing
-3. Awareness parameterization
-4. Placement visibility
-5. Segmentation quality
-6. Model complexity vs benefit analysis
-
-"""
+## Ablation Experiments
 
 import numpy as np
 import pandas as pd
@@ -22,14 +11,8 @@ warnings.filterwarnings('ignore')
 
 
 class AblationExperiment:
-    """
-    Ablation experiments to test contribution of each modeling component.
-    
-    For each component, we compare:
-    - Full model (with component)
-    - Ablated model (without component)
-    - Improvement from component
-    """
+
+    # Ablation experiments to test contribution of each modeling component
     
     def __init__(self, base_scan_rate: float = 0.15):
         self.base_scan_rate = base_scan_rate
@@ -41,7 +24,7 @@ class AblationExperiment:
         n_days: int = 7,
         seed: int = 42
     ) -> pd.DataFrame:
-        """Generate baseline simulation data."""
+        # Generate baseline simulation data
         np.random.seed(seed)
         
         data = []
@@ -72,13 +55,7 @@ class AblationExperiment:
         self,
         data: pd.DataFrame
     ) -> Dict:
-        """
-        Ablation 1: Remove contextual modifiers (time, weather, day-of-stay).
-        
-        Compares:
-        - Full model: utility = base + time_effect + weather_effect + day_effect
-        - Ablated: utility = base only
-        """
+        # Ablation 1: Remove contextual modifiers (time, weather, day-of-stay)
         # Full model with context
         def full_model(row):
             base = 0.3
@@ -134,13 +111,7 @@ class AblationExperiment:
         self,
         data: pd.DataFrame
     ) -> Dict:
-        """
-        Ablation 2: Remove awareness dynamics.
-        
-        Compares:
-        - Full model: utility = base + β * awareness
-        - Ablated: utility = base only (no awareness effect)
-        """
+        # Ablation 2: Remove awareness dynamics
         # Simulate awareness accumulation
         awareness_by_guest = {}
         
@@ -186,13 +157,7 @@ class AblationExperiment:
         self,
         data: pd.DataFrame
     ) -> Dict:
-        """
-        Ablation 3: Remove segmentation (treat all guests equally).
-        
-        Compares:
-        - Full model: segment-specific preferences
-        - Ablated: population-average preferences
-        """
+        # Ablation 3: Remove segmentation (treat all guests equally)
         # Segment-specific affinity (example)
         segment_affinity = {
             0: {'Restaurants': 0.5, 'Experiences': 0.3, 'Shopping': 0.2, 'Wellness': 0.1, 'Nightlife': 0.5},
@@ -239,13 +204,7 @@ class AblationExperiment:
         self,
         data: pd.DataFrame
     ) -> Dict:
-        """
-        Ablation 4: Remove placement visibility model.
-        
-        Compares:
-        - Full model: utility adjusted by placement visibility
-        - Ablated: uniform visibility assumption
-        """
+        # Ablation 4: Remove placement visibility model
         # Simulate placement types
         placements = ['full_screen', 'channel_guide', 'banner', 'corner']
         visibility = {'full_screen': 1.0, 'channel_guide': 0.8, 'banner': 0.6, 'corner': 0.3}
@@ -279,7 +238,7 @@ class AblationExperiment:
         n_guests: int = 1000,
         n_days: int = 7
     ) -> pd.DataFrame:
-        """Run all ablation experiments and summarize results."""
+        # Run all ablation experiments and summarize results
         
         data = self.simulate_baseline(n_guests, n_days)
         
@@ -301,10 +260,7 @@ class AblationExperiment:
 
 
 class ModelComplexityAnalyzer:
-    """
-    Analyzes model complexity vs benefit tradeoff.
-
-    """
+    # Analyzes model complexity vs benefit tradeoff
     
     def __init__(self):
         self.results = {}
@@ -314,17 +270,7 @@ class ModelComplexityAnalyzer:
         n_samples: int = 5000,
         seed: int = 42
     ) -> pd.DataFrame:
-        """
-        Compare models of increasing complexity.
-        
-        Levels:
-        1. Random baseline
-        2. Popularity-based
-        3. Logistic Regression
-        4. XGBoost
-        5. Awareness-based policy
-        6. Full system (awareness + context + segment)
-        """
+        # Compare models of increasing complexity
         np.random.seed(seed)
         
         # Generate synthetic data
@@ -435,9 +381,7 @@ class ModelComplexityAnalyzer:
         return result_df
     
     def marginal_benefit_analysis(self) -> pd.DataFrame:
-        """
-        Calculate marginal benefit of each component.
-        """
+        # Calculate marginal benefit of each component
         if 'complexity_comparison' not in self.results:
             self.compare_model_complexity()
         
@@ -455,15 +399,7 @@ class ModelComplexityAnalyzer:
 
 
 class TimingPolicyAnalyzer:
-    """
-    Analyze robustness of exposure timing policies.
-    
-    Compares:
-    - Room entry (current)
-    - Mid-viewing
-    - Pre-bedtime
-    - Morning
-    """
+    # Analyze robustness of exposure timing policies
     
     def __init__(self):
         self.results = {}
@@ -474,9 +410,7 @@ class TimingPolicyAnalyzer:
         n_days: int = 7,
         seed: int = 42
     ) -> pd.DataFrame:
-        """
-        Simulate different timing policies and compare awareness gains.
-        """
+        # Simulate different timing policies and compare awareness gains
         np.random.seed(seed)
         
         policies = {
@@ -534,7 +468,7 @@ class TimingPolicyAnalyzer:
 
 
 def run_ablation_demo():
-    """Run all ablation experiments."""
+    # Run all ablation experiments
     
     # 1. Ablation experiments
     ablation = AblationExperiment()
