@@ -1,9 +1,4 @@
-"""
-CTR Logs Loader for compressed ad click-through rate datasets.
-
-Processes .gz files containing ad impression and click logs to create
-realistic advertiser profiles with actual performance metrics.
-"""
+# CTR Logs Loader
 
 import pandas as pd
 import numpy as np
@@ -21,17 +16,8 @@ def load_ctr_gz_file(
     n_rows: Optional[int] = None,
     chunksize: int = 100000
 ) -> pd.DataFrame:
-    """
-    Load a .gz compressed CTR log file.
-    
-    Args:
-        gz_path: Path to .gz file
-        n_rows: Number of rows to load (None = all)
-        chunksize: Chunk size for reading large files
-        
-    Returns:
-        Dataframe with CTR log data
-    """
+    # Load a .gz compressed CTR log file
+
     print(f"Loading {os.path.basename(gz_path)}...")
     
     try:
@@ -50,29 +36,17 @@ def load_ctr_gz_file(
             if n_rows:
                 df = df.head(n_rows)
         
-        print(f"  ✓ Loaded {len(df)} records")
+        print(f"Loaded {len(df)} records")
         return df
         
     except Exception as e:
-        print(f"  ✗ Error loading file: {e}")
+        print(f"Error loading file: {e}")
         return pd.DataFrame()
 
 
 def infer_ctr_schema(df: pd.DataFrame) -> pd.DataFrame:
-    """
-    Infer schema for CTR log files (Criteo-style format).
-    
-    Typical format:
-    - Column 0: Label (0=no click, 1=click)
-    - Columns 1-13: Integer features (I1-I13)
-    - Columns 14-39: Categorical features (C1-C26)
-    
-    Args:
-        df: Raw dataframe from .gz file
-        
-    Returns:
-        Dataframe with named columns
-    """
+    # Infer schema for CTR log files (Criteo-style format)
+
     # Standard Criteo format
     if df.shape[1] == 40:  # 1 label + 13 int + 26 cat
         col_names = ['Label'] + \
@@ -94,19 +68,9 @@ def load_multiple_ctr_logs(
     sample_per_file: int = 50000,
     seed: int = 42
 ) -> pd.DataFrame:
-    """
-    Load multiple CTR log files and combine.
-    
-    Args:
-        log_paths: List of paths to .gz files
-        sample_per_file: Number of records to sample per file
-        seed: Random seed
-        
-    Returns:
-        Combined dataframe
-    """
+    # Load multiple CTR log files and combine
+
     print(f"\nLoading {len(log_paths)} CTR log files...")
-    print("="*70)
     
     all_data = []
     
@@ -122,12 +86,12 @@ def load_multiple_ctr_logs(
             all_data.append(df)
     
     if not all_data:
-        print("⚠ No data loaded from CTR logs")
+        print("No data loaded from CTR logs")
         return pd.DataFrame()
     
     combined = pd.concat(all_data, ignore_index=True)
-    print(f"\n✓ Combined: {len(combined)} total records")
-    print(f"  Click rate: {combined['Label'].mean():.4f}")
+    print(f"\n Combined: {len(combined)} total records")
+    print(f"Click rate: {combined['Label'].mean():.4f}")
     
     return combined
 
@@ -137,19 +101,8 @@ def create_advertisers_from_ctr_logs(
     n_advertisers: int = 500,
     seed: int = 42
 ) -> pd.DataFrame:
-    """
-    Create advertiser catalogue from CTR logs.
-    
-    Uses actual click-through data to build realistic advertiser profiles.
-    
-    Args:
-        ctr_logs: CTR log dataframe
-        n_advertisers: Number of advertisers to generate
-        seed: Random seed
-        
-    Returns:
-        Advertiser catalogue dataframe
-    """
+    # Create advertiser catalogue from CTR logs
+
     print(f"\nCreating {n_advertisers} advertisers from CTR logs...")
     
     rng = set_random_seed(seed)
@@ -259,16 +212,16 @@ def create_advertisers_from_ctr_logs(
     
     ads_df = pd.DataFrame(advertisers)
     
-    print(f"✓ Created {len(ads_df)} advertisers")
-    print(f"  CTR range: {ads_df['estimated_ctr'].min():.4f} - {ads_df['estimated_ctr'].max():.4f}")
-    print(f"  Mean CTR: {ads_df['estimated_ctr'].mean():.4f}")
-    print(f"  Expected revenue range: ${ads_df['expected_revenue'].min():.2f} - ${ads_df['expected_revenue'].max():.2f}")
+    print(f"Created {len(ads_df)} advertisers")
+    print(f"CTR range: {ads_df['estimated_ctr'].min():.4f} - {ads_df['estimated_ctr'].max():.4f}")
+    print(f"Mean CTR: {ads_df['estimated_ctr'].mean():.4f}")
+    print(f"Expected revenue range: ${ads_df['expected_revenue'].min():.2f} - ${ads_df['expected_revenue'].max():.2f}")
     
     return ads_df
 
 
 def _get_type_tags(adv_type: str) -> List[str]:
-    """Get tags for advertiser type."""
+    # Get tags for advertiser type
     type_tag_map = {
         'restaurant': ['foodie', 'local'],
         'bar': ['nightlife', 'trendy'],
@@ -285,7 +238,7 @@ def _get_type_tags(adv_type: str) -> List[str]:
 
 
 def _compute_revenue(adv_type: str, price_level: str, rng: np.random.Generator) -> float:
-    """Compute revenue per conversion."""
+    # Compute revenue per conversion
     base_revenue = {
         'restaurant': 50, 'bar': 30, 'cafe': 15, 'museum': 25,
         'gallery': 20, 'spa': 80, 'tour': 60, 'attraction': 40,
@@ -303,15 +256,8 @@ def _compute_revenue(adv_type: str, price_level: str, rng: np.random.Generator) 
 
 
 def analyze_ctr_logs(ctr_logs: pd.DataFrame) -> Dict:
-    """
-    Analyze CTR logs to understand patterns.
-    
-    Args:
-        ctr_logs: CTR log dataframe
-        
-    Returns:
-        Dict with analysis results
-    """
+    # Analyze CTR logs to understand patterns
+
     if len(ctr_logs) == 0:
         return {}
     
@@ -351,20 +297,6 @@ def load_your_ctr_logs(
     sample_per_file: int = 50000,
     seed: int = 42
 ) -> Tuple[pd.DataFrame, pd.DataFrame]:
-    """
-    Load your specific CTR log files (day_0.gz, day_1.gz, etc.)
-    
-    Args:
-        base_dir: Base directory containing the .gz files
-        sample_per_file: Samples per file
-        seed: Random seed
-        
-    Returns:
-        (ctr_logs_df, advertisers_df) tuple
-    """
-    print("="*70)
-    print("LOADING YOUR CTR LOG FILES")
-    print("="*70)
     
     # Your CTR log files
     log_files = [
@@ -383,37 +315,29 @@ def load_your_ctr_logs(
         print(f"  {status} {os.path.basename(f)}")
     
     if not existing_files:
-        print("\n⚠ No CTR log files found")
+        print("\n No CTR log files found")
         return pd.DataFrame(), pd.DataFrame()
     
     # Load all files
     ctr_logs = load_multiple_ctr_logs(existing_files, sample_per_file, seed)
     
     if len(ctr_logs) == 0:
-        print("\n⚠ No data loaded from CTR logs")
+        print("\n No data loaded from CTR logs")
         return pd.DataFrame(), pd.DataFrame()
     
-    # Analyze
-    print("\n" + "="*70)
-    print("CTR LOG ANALYSIS")
-    print("="*70)
     
     analysis = analyze_ctr_logs(ctr_logs)
     
     print(f"\nOverall Statistics:")
-    print(f"  Total impressions: {analysis['total_impressions']:,}")
-    print(f"  Total clicks: {analysis['total_clicks']:,}")
-    print(f"  Overall CTR: {analysis['overall_ctr']:.4f} ({analysis['overall_ctr']*100:.2f}%)")
+    print(f"Total impressions: {analysis['total_impressions']:,}")
+    print(f"Total clicks: {analysis['total_clicks']:,}")
+    print(f"Overall CTR: {analysis['overall_ctr']:.4f} ({analysis['overall_ctr']*100:.2f}%)")
     
     if analysis['ctr_by_day']:
         print(f"\nCTR by Day:")
         for day, ctr in sorted(analysis['ctr_by_day'].items()):
             print(f"  {day:15s}: {ctr:.4f} ({ctr*100:.2f}%)")
     
-    # Create advertisers
-    print("\n" + "="*70)
-    print("CREATING ADVERTISERS FROM CTR DATA")
-    print("="*70)
     
     ads_df = create_advertisers_from_ctr_logs(ctr_logs, n_advertisers=500, seed=seed)
     
