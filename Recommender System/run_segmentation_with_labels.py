@@ -1,16 +1,10 @@
-"""
-Run complete guest segmentation pipeline with business label assignment.
-"""
+# Run complete guest segmentation pipeline with business label assignment
 
 from src.guest_segmentation import (
     run_guest_segmentation_pipeline,
     SegmentAdAffinityMapper
 )
 import pandas as pd
-
-print("="*80)
-print("COMPLETE GUEST SEGMENTATION + LABELING")
-print("="*80)
 
 # Run segmentation
 data_path = "/Users/nafisaumar/Documents/Master Thesis/Recommender System NEW/hotel_booking 2.csv"
@@ -22,10 +16,6 @@ model, features, results = run_guest_segmentation_pipeline(
 )
 
 # Assign business labels based on cluster characteristics
-print("\n" + "="*80)
-print("ASSIGNING BUSINESS LABELS")
-print("="*80)
-
 # Analyze each cluster to assign meaningful labels
 profiles = model.cluster_profiles
 
@@ -70,16 +60,12 @@ for i in range(len(profiles)):
 
 label_map = model.assign_business_labels(labels)
 
-# Generate segment-category affinities
-print("\n" + "="*80)
-print("GENERATING SEGMENT-CATEGORY AFFINITIES")
-print("="*80)
-
+# Generate segment-category affinities  
 mapper = SegmentAdAffinityMapper(model.cluster_profiles)
 affinity_matrix = mapper.generate_expert_affinities()
 
 # Save everything
-print("\n💾 Saving results...")
+print("\nSaving results...")
 
 # Save cluster profiles with labels
 profiles_with_labels = model.cluster_profiles.copy()
@@ -88,15 +74,13 @@ profiles_with_labels.to_csv("results/cluster_profiles.csv", index=False)
 affinity_matrix.to_csv("results/segment_category_affinities.csv")
 
 # Create a summary report
-print("\n" + "="*80)
-print("SEGMENT SUMMARY REPORT")
-print("="*80)
+print("\nSegment summary report")
 
 for i in range(len(profiles)):
     prof = profiles_with_labels.loc[i]
     label = prof['business_label']
     
-    print(f"\n🏷️  {label}")
+    print(f"\n{label}")
     print(f"   {'='*70}")
     print(f"   Size: {prof['size']:,} guests ({prof['proportion']*100:.1f}% of total)")
     print(f"   Length of Stay: {prof['los_mean']:.1f} nights (median: {prof['los_median']:.1f})")
@@ -117,12 +101,7 @@ for i in range(len(profiles)):
         bar = '█' * int(score * 20)
         print(f"      {cat:15s}: {score:.2f} {bar}")
 
-print("\n" + "="*80)
-print("✅ SEGMENTATION COMPLETE - FILES SAVED:")
-print("   - results/guest_clusters.csv")
-print("   - results/cluster_profiles.csv")
-print("   - results/segment_category_affinities.csv")
-print("="*80)
+print("\nSegmentation complete - Files saved:")
 
 
 

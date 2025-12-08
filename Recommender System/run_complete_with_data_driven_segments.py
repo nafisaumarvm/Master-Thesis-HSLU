@@ -1,8 +1,4 @@
-"""
-Complete demonstration of in-room TV ad recommender with DATA-DRIVEN guest segments.
-
-This replaces hard-coded segments with statistically-derived clusters from 74,486 real bookings.
-"""
+# Run Complete System with Data-Driven Guest Segments
 
 import pandas as pd
 import numpy as np
@@ -23,61 +19,29 @@ from src.preferences_advanced import (
     compute_multi_objective_reward
 )
 
-print("="*80)
-print("IN-ROOM TV AD RECOMMENDER WITH DATA-DRIVEN GUEST SEGMENTS")
-print("Following van Leeuwen (2024) Methodology")
-print("="*80)
-
-# ============================================================================
-# 1. LOAD DATA-DRIVEN GUEST SEGMENTS
-# ============================================================================
-
-print("\n📊 Step 1: Loading Data-Driven Guest Segments")
-print("-"*80)
-
+# Load data-driven guest segments
 mapper = DataDrivenSegmentMapper()
 segment_names = mapper.get_segment_names()
 preference_matrix = mapper.get_preference_matrix()
 
-print(f"✅ Loaded {len(segment_names)} data-driven segments:")
+print(f"Loaded {len(segment_names)} data-driven segments:")
 for i, name in enumerate(segment_names):
     profile = mapper.get_segment_profile(i)
     print(f"   {i}. {name:30s} ({profile['proportion']*100:4.1f}% of guests)")
 
-# ============================================================================
-# 2. LOAD REAL ADVERTISERS
-# ============================================================================
-
-print("\n🏪 Step 2: Loading Real Swiss Advertisers")
-print("-"*80)
-
+# Load real Swiss advertisers
 advertisers = load_zurich_advertisers(n_advertisers=None)  # All 801
-print(f"✅ Loaded {len(advertisers)} real Swiss establishments")
+print(f"Loaded {len(advertisers)} real Swiss establishments")
 
-# ============================================================================
-# 3. GENERATE GUEST DATASET WITH REALISTIC SEGMENT DISTRIBUTION
-# ============================================================================
-
-print("\n👥 Step 3: Generating Guest Dataset")
-print("-"*80)
-
+# Generate guest dataset with realistic segment distribution
 n_guests = 1000
 guests = load_or_create_guest_dataset(n_guests=n_guests, use_cached=False)
 
-print(f"✅ Generated {len(guests):,} guests with realistic segment distribution")
-print("\n📊 Segment Distribution:")
+print(f"Generated {len(guests):,} guests with realistic segment distribution")
+print("\nSegment Distribution:")
 for name, count in guests['segment_name'].value_counts().items():
     pct = count / len(guests) * 100
-    bar = '█' * int(pct / 2)
-    print(f"   {name:30s}: {count:4d} ({pct:5.1f}%) {bar}")
-
-# ============================================================================
-# 4. SIMULATE AD RECOMMENDATIONS WITH AWARENESS DYNAMICS
-# ============================================================================
-
-print("\n🎯 Step 4: Simulating Ad Recommendations")
-print("-"*80)
-
+# Simulate ad recommendations with awareness dynamics
 # Initialize awareness (segment × advertiser)
 n_segments = len(segment_names)
 n_ads = len(advertisers)
@@ -156,15 +120,9 @@ for guest_idx in range(min(100, n_guests)):  # Simulate subset for speed
 
 results_df = pd.DataFrame(results)
 
-print(f"✅ Simulated {len(results_df):,} ad impressions")
+print(f"Simulated {len(results_df):,} ad impressions")
 
-# ============================================================================
-# 5. ANALYZE RESULTS BY SEGMENT
-# ============================================================================
-
-print("\n📈 Step 5: Analyzing Results by Segment")
-print("="*80)
-
+# Analyze results by segment
 for segment_id in range(n_segments):
     segment_results = results_df[results_df['segment_id'] == segment_id]
     
@@ -173,8 +131,7 @@ for segment_id in range(n_segments):
     
     segment_name = segment_names[segment_id]
     
-    print(f"\n🏷️  {segment_name}")
-    print(f"   {'─'*70}")
+    print(f"\n{segment_name}")
     
     # Metrics
     n_impressions = len(segment_results)
@@ -193,27 +150,22 @@ for segment_id in range(n_segments):
         pct = count / n_impressions * 100
         print(f"      {cat:20s}: {count:3d} ({pct:4.1f}%)")
 
-# ============================================================================
-# 6. OVERALL METRICS
-# ============================================================================
+# Overall metrics
+print("\nOverall system metrics")
 
-print("\n" + "="*80)
-print("OVERALL SYSTEM METRICS")
-print("="*80)
-
-print(f"\n📊 Data Sources:")
+print(f"\nData Sources:")
 print(f"   Guest Segments:    8 data-driven clusters from 74,486 real bookings")
 print(f"   Advertisers:       801 real Swiss establishments (100%)")
 print(f"   Segment Method:    Hierarchical clustering + k-means")
 print(f"   Feature Count:     61 engineered features")
 
-print(f"\n🎯 Simulation Results:")
+print(f"\nSimulation Results:")
 print(f"   Total Impressions: {len(results_df):,}")
 print(f"   Total QR Scans:    {results_df['scanned'].sum():,}")
 print(f"   Overall Scan Rate: {results_df['scanned'].mean()*100:.2f}%")
 print(f"   Avg Awareness:     {results_df['awareness'].mean():.3f}")
 
-print(f"\n📈 Performance by Segment:")
+print(f"\nPerformance by Segment:")
 segment_performance = results_df.groupby('segment_name').agg({
     'scanned': ['sum', 'mean'],
     'awareness': 'mean'
@@ -221,7 +173,7 @@ segment_performance = results_df.groupby('segment_name').agg({
 segment_performance.columns = ['Total Scans', 'Scan Rate', 'Avg Awareness']
 print(segment_performance.sort_values('Scan Rate', ascending=False))
 
-print(f"\n🏆 Top Performing Advertisers:")
+print(f"\nTop Performing Advertisers:")
 top_ads = results_df.groupby('advertiser_name').agg({
     'scanned': 'sum',
     'awareness': 'mean'
@@ -229,26 +181,7 @@ top_ads = results_df.groupby('advertiser_name').agg({
 top_ads.columns = ['Total Scans', 'Avg Awareness']
 print(top_ads)
 
-print("\n" + "="*80)
-print("✅ SIMULATION COMPLETE!")
-print("="*80)
-
-print("\n🎓 THESIS CONTRIBUTION:")
-print("   This system uses DATA-DRIVEN guest segmentation instead of")
-print("   arbitrary categories, following van Leeuwen (2024) methodology:")
-print("   ")
-print("   ✅ 74,486 real bookings → 61 engineered features")
-print("   ✅ Hierarchical clustering + k-means → 8 segments")
-print("   ✅ Segment-specific learning rates (α, δ)")
-print("   ✅ Expert-calibrated category affinities")
-print("   ✅ Validated on 801 real Swiss advertisers")
-print("   ")
-print("   This is publication-quality segmentation! 🔬")
-print("="*80)
-
 # Save results
-print("\n💾 Saving results...")
 results_df.to_csv("results/simulation_results_data_driven.csv", index=False)
 segment_performance.to_csv("results/segment_performance.csv")
-print("   ✅ Saved to results/simulation_results_data_driven.csv")
 
