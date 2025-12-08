@@ -1,16 +1,5 @@
-"""
-Causal Analysis Module for In-Room TV Advertising
+# Causal Analysis Module for In-Room TV Advertising
 
-Implements:
-1. Endogeneity analysis and instrumental variables
-2. Formal popularity baseline definition
-3. ATE (Average Treatment Effect) estimation
-4. Dose-response curve estimation
-5. Propensity-weighted exposure effects
-6. G-computation structural models
-
-Following van Leeuwen (2024) causal identification framework.
-"""
 
 import numpy as np
 import pandas as pd
@@ -22,44 +11,24 @@ import warnings
 warnings.filterwarnings('ignore')
 
 
-# =============================================================================
-# 1. FORMAL BASELINE DEFINITIONS
-# =============================================================================
-
+# Formal definition of popularity baseline
 class PopularityBaseline:
-    """
-    Formal definition of popularity baseline.
-    
-    Van Leeuwen criticizes naive popularity as biased by exposure.
-    We define both observed and corrected versions.
-    """
+    # Formal definition of popularity baseline
     
     def __init__(self, impressions: pd.DataFrame):
-        """
-        Args:
-            impressions: DataFrame with columns ['category', 'scanned', 'exposed', ...]
-        """
         self.impressions = impressions
         self.baselines = {}
         
     def compute_impression_popularity(self) -> pd.Series:
-        """
+        # Naive popularity: proportion of total impressions
         U_pop(c) = Impressions(c) / Σ_c' Impressions(c')
-        
-        Naive popularity: proportion of total impressions.
-        WARNING: Biased by exposure allocation, not true preference.
-        """
         category_counts = self.impressions['category'].value_counts()
         self.baselines['impression_popularity'] = category_counts / category_counts.sum()
         return self.baselines['impression_popularity']
     
     def compute_engagement_popularity(self) -> pd.Series:
-        """
+        # Observed scan rate per category
         U_pop(c) = E[scan_i | c] = (Scans in c) / (Impressions in c)
-        
-        Observed scan rate per category.
-        Still biased: categories shown to high-affinity guests appear better.
-        """
         category_engagement = self.impressions.groupby('category').agg({
             'scanned': ['sum', 'count']
         })
@@ -69,12 +38,8 @@ class PopularityBaseline:
         return self.baselines['engagement_popularity']
     
     def compute_corrected_popularity(self, propensity_weights: pd.Series) -> pd.Series:
-        """
+        # Inverse propensity weighted popularity
         U_pop_IPW(c) = Σ_i (w_i * scan_i * 1[c_i = c]) / Σ_i (w_i * 1[c_i = c])
-        
-        Inverse propensity weighted (IPW) popularity.
-        Corrects for non-random exposure allocation.
-        """
         df = self.impressions.copy()
         df['weight'] = propensity_weights
         df['weighted_scan'] = df['scanned'] * df['weight']
@@ -88,41 +53,19 @@ class PopularityBaseline:
         return self.baselines['corrected_popularity']
     
     def get_baseline_comparison(self) -> pd.DataFrame:
-        """Return comparison of all computed baselines."""
+        # Return comparison of all computed baselines
         return pd.DataFrame(self.baselines)
 
 
-# =============================================================================
-# 2. ENDOGENEITY ANALYSIS
-# =============================================================================
-
+# Endogeneity analysis
 class EndogeneityAnalyzer:
-    """
-    Analyzes exposure endogeneity in in-room TV advertising.
-    
-    Key insight from van Leeuwen:
-    - Web advertising: severe endogeneity (algorithmic sorting)
-    - In-room TV: weaker endogeneity (semi-random entry times)
-    
-    We use instrumental variables (IV) to address residual endogeneity.
-    """
-    
+
     def __init__(self, data: pd.DataFrame):
-        """
-        Args:
-            data: DataFrame with impressions, outcomes, and potential instruments
-        """
         self.data = data
         self.endogeneity_results = {}
     
     def test_exposure_randomness(self) -> Dict:
-        """
-        Test whether exposure is quasi-random.
-        
-        Under random exposure:
-        - Exposed vs non-exposed should have similar covariates
-        - Exposure should not correlate with unobserved confounders
-        """
+        # Test whether exposure is quasi-random
         results = {}
         
         # Test 1: Balance check on observed covariates
@@ -147,18 +90,7 @@ class EndogeneityAnalyzer:
         return results
     
     def identify_instruments(self) -> List[str]:
-        """
-        Identify valid instrumental variables for exposure.
-        
-        Valid IV must:
-        1. Affect exposure (relevance)
-        2. Not affect outcome except through exposure (exclusion)
-        
-        In-room TV context:
-        - Time-of-entry: Random arrival time affects TV-on probability
-        - Weather: Affects in-room time, not directly ad engagement
-        - Day-of-week: Affects usage patterns, not ad response
-        """
+        # Identify valid instrumental variables for exposure
         instruments = []
         
         # Time-of-entry as IV
@@ -181,9 +113,7 @@ class EndogeneityAnalyzer:
         return instruments
     
     def compare_endogeneity_sources(self) -> pd.DataFrame:
-        """
-        Compare endogeneity in web vs. in-room TV advertising.
-        """
+        # Compare endogeneity in web vs. in-room TV advertising
         comparison = pd.DataFrame({
             'Source': [
                 'Algorithmic selection',
@@ -216,27 +146,13 @@ class EndogeneityAnalyzer:
         })
         return comparison
 
-
-# =============================================================================
-# 3. CAUSAL EFFECT ESTIMATION
-# =============================================================================
+# Causal effect estimator
 
 class CausalEffectEstimator:
-    """
-    Estimates causal effects of exposure on awareness and engagement.
-    
-    Implements:
-    - ATE (Average Treatment Effect)
-    - Dose-response curves
-    - IPW (Inverse Propensity Weighting)
-    - Doubly Robust estimation
-    """
-    
+    # Estimates causal effects of exposure on awareness and engagement
+
     def __init__(self, data: pd.DataFrame):
-        """
-        Args:
-            data: DataFrame with exposure, outcome, and covariates
-        """
+        # Estimates causal effects of exposure on awareness and engagement
         self.data = data
         self.results = {}
     
@@ -245,11 +161,7 @@ class CausalEffectEstimator:
         treatment_col: str = 'exposed',
         covariates: List[str] = None
     ) -> pd.Series:
-        """
-        Estimate propensity scores P(exposed | X).
-        
-        Used for IPW correction.
-        """
+        # Estimate propensity scores P(exposed | X)
         if covariates is None:
             covariates = ['segment_id', 'day_of_stay', 'hour']
         
@@ -279,11 +191,8 @@ class CausalEffectEstimator:
         treatment_col: str = 'exposed',
         outcome_col: str = 'scanned'
     ) -> Dict:
-        """
-        Naive ATE: E[Y|T=1] - E[Y|T=0]
+        # Naive ATE: E[Y|T=1] - E[Y|T=0]
         
-        WARNING: Biased if treatment is not random.
-        """
         treated = self.data[self.data[treatment_col] == 1][outcome_col]
         control = self.data[self.data[treatment_col] == 0][outcome_col]
         
@@ -313,13 +222,8 @@ class CausalEffectEstimator:
         outcome_col: str = 'scanned',
         propensity_scores: pd.Series = None
     ) -> Dict:
-        """
-        IPW-corrected ATE.
-        
-        ATE_IPW = (1/n) Σ [Y*T/e(X) - Y*(1-T)/(1-e(X))]
-        
-        Corrects for selection bias if propensity model is correct.
-        """
+        # IPW-corrected ATE
+
         if propensity_scores is None:
             propensity_scores = self.estimate_propensity_scores(treatment_col)
         
@@ -360,11 +264,7 @@ class CausalEffectEstimator:
         outcome_col: str = 'scanned',
         max_exposure: int = 10
     ) -> pd.DataFrame:
-        """
-        Estimate dose-response curve: E[Y | Exposure = k]
-        
-        Shows how outcome changes with exposure count.
-        """
+        # Estimate dose-response curve: E[Y | Exposure = k]
         dose_response = []
         
         for k in range(max_exposure + 1):
@@ -396,11 +296,8 @@ class CausalEffectEstimator:
         awareness_col: str = 'awareness',
         outcome_col: str = 'scanned'
     ) -> Dict:
-        """
-        Estimate causal effect of awareness on engagement.
-        
-        Model: scan ~ awareness + covariates
-        """
+        # Estimate causal effect of awareness on engagement.
+
         if awareness_col not in self.data.columns:
             return {'error': 'Awareness column not found'}
         
@@ -433,21 +330,11 @@ class CausalEffectEstimator:
         return result
 
 
-# =============================================================================
-# 4. ROBUSTNESS AND SENSITIVITY ANALYSIS
-# =============================================================================
+# Robustness and sensitivity analysis
 
 class RobustnessAnalyzer:
-    """
-    Robustness checks for awareness parameters.
-    
-    Implements:
-    - Sensitivity analysis for α (growth) and δ (decay)
-    - Parameter identifiability tests
-    - Noise robustness analysis
-    - Policy stability under perturbation
-    """
-    
+    # Robustness checks for awareness parameters
+
     def __init__(self, base_alpha: float = 0.30, base_delta: float = 0.10):
         self.base_alpha = base_alpha
         self.base_delta = base_delta
@@ -460,11 +347,8 @@ class RobustnessAnalyzer:
         n_steps: int = 10,
         n_simulations: int = 100
     ) -> pd.DataFrame:
-        """
-        Sensitivity analysis across parameter grid.
-        
-        Shows how outcomes change with α and δ.
-        """
+        # Sensitivity analysis across parameter grid
+
         alphas = np.linspace(alpha_range[0], alpha_range[1], n_steps)
         deltas = np.linspace(delta_range[0], delta_range[1], n_steps)
         
@@ -494,7 +378,7 @@ class RobustnessAnalyzer:
         delta: float, 
         n_simulations: int
     ) -> Dict:
-        """Simulate outcomes for given parameters."""
+        # Simulate outcomes for given parameters
         np.random.seed(42)
         
         final_awareness_list = []
@@ -542,11 +426,8 @@ class RobustnessAnalyzer:
         noise_levels: List[float] = [0.0, 0.01, 0.02, 0.05, 0.10],
         n_simulations: int = 100
     ) -> pd.DataFrame:
-        """
-        Test robustness to noise in awareness updates.
-        
-        ρ_{t+1} = (1 - δ)ρ_t + α(1 - ρ_t)·1_exposed + ε_t
-        """
+        # Test robustness to noise in awareness updates
+
         results = []
         
         for noise_level in noise_levels:
@@ -582,9 +463,8 @@ class RobustnessAnalyzer:
         true_delta: float = 0.10,
         n_observations: List[int] = [50, 100, 200, 500, 1000]
     ) -> pd.DataFrame:
-        """
-        Test parameter identifiability: can we recover true α, δ from data?
-        """
+        # Test parameter identifiability: can we recover true α, δ from data?
+
         results = []
         
         for n_obs in n_observations:
@@ -629,31 +509,18 @@ class RobustnessAnalyzer:
         return result_df
 
 
-# =============================================================================
-# 5. FAIRNESS ANALYSIS
-# =============================================================================
+# Fairness analysis
 
 class FairnessAnalyzer:
-    """
-    Counterfactual fairness analysis for ad exposure.
-    
-    Van Leeuwen stresses fairness in exposure allocation.
-    We evaluate:
-    - Demographic parity of exposure
-    - Segment exposure balance
-    - Advertiser-side fairness
-    """
+    # Counterfactual fairness analysis for ad exposure.
     
     def __init__(self, impressions: pd.DataFrame):
         self.impressions = impressions
         self.results = {}
     
     def segment_exposure_balance(self) -> pd.DataFrame:
-        """
-        Measure balance of exposure across segments.
-        
-        Gini coefficient: 0 = perfect equality, 1 = perfect inequality
-        """
+        # Measure balance of exposure across segments.
+
         if 'segment_id' not in self.impressions.columns:
             return pd.DataFrame()
         
@@ -686,11 +553,8 @@ class FairnessAnalyzer:
         return result
     
     def category_exposure_fairness(self) -> pd.DataFrame:
-        """
-        Measure fairness of category exposure across segments.
-        
-        Do all segments get similar category distributions?
-        """
+        # Measure fairness of category exposure across segments.
+
         if 'segment_id' not in self.impressions.columns or 'category' not in self.impressions.columns:
             return pd.DataFrame()
         
@@ -716,12 +580,8 @@ class FairnessAnalyzer:
         return cross_tab
     
     def advertiser_fairness(self) -> Dict:
-        """
-        Measure fairness from advertiser perspective.
-        
-        Jain's fairness index: J = (Σx)² / (n × Σx²)
-        J = 1: perfect fairness, J = 1/n: maximum unfairness
-        """
+        # Measure fairness from advertiser perspective.
+
         if 'advertiser_id' not in self.impressions.columns:
             return {}
         
@@ -749,17 +609,10 @@ class FairnessAnalyzer:
         return self.results['advertiser_fairness']
 
 
-# =============================================================================
-# MAIN EXECUTION
-# =============================================================================
+# Main execution
 
 def run_causal_analysis_demo():
-    """Run demonstration of causal analysis components."""
-    print("="*80)
-    print("CAUSAL ANALYSIS FOR IN-ROOM TV ADVERTISING")
-    print("="*80)
-    
-    # Generate synthetic data for demonstration
+  # Generate synthetic data for demonstration
     np.random.seed(42)
     n_impressions = 5000
     
@@ -776,8 +629,6 @@ def run_causal_analysis_demo():
     })
     
     # 1. Popularity Baseline
-    print("\n📊 1. POPULARITY BASELINES")
-    print("-" * 40)
     baseline = PopularityBaseline(data)
     impression_pop = baseline.compute_impression_popularity()
     engagement_pop = baseline.compute_engagement_popularity()
@@ -787,8 +638,6 @@ def run_causal_analysis_demo():
     print(engagement_pop)
     
     # 2. Endogeneity Analysis
-    print("\n📊 2. ENDOGENEITY ANALYSIS")
-    print("-" * 40)
     endogeneity = EndogeneityAnalyzer(data)
     randomness = endogeneity.test_exposure_randomness()
     instruments = endogeneity.identify_instruments()
@@ -799,8 +648,6 @@ def run_causal_analysis_demo():
     print(comparison.to_string())
     
     # 3. Causal Effects
-    print("\n📊 3. CAUSAL EFFECT ESTIMATION")
-    print("-" * 40)
     causal = CausalEffectEstimator(data)
     ate_naive = causal.estimate_ATE_naive()
     propensity = causal.estimate_propensity_scores()
@@ -813,8 +660,6 @@ def run_causal_analysis_demo():
     print(f"\nAwareness Effect: {awareness_effect['interpretation']}")
     
     # 4. Robustness Analysis
-    print("\n📊 4. ROBUSTNESS ANALYSIS")
-    print("-" * 40)
     robustness = RobustnessAnalyzer()
     sensitivity = robustness.sensitivity_analysis(n_steps=5, n_simulations=50)
     noise_robust = robustness.noise_robustness(n_simulations=50)
@@ -828,8 +673,6 @@ def run_causal_analysis_demo():
     print(identifiability)
     
     # 5. Fairness Analysis
-    print("\n📊 5. FAIRNESS ANALYSIS")
-    print("-" * 40)
     fairness = FairnessAnalyzer(data)
     segment_balance = fairness.segment_exposure_balance()
     advertiser_fair = fairness.advertiser_fairness()
@@ -838,10 +681,6 @@ def run_causal_analysis_demo():
     print(segment_balance)
     print(f"\nSegment Gini: {fairness.results['segment_balance']['gini_coefficient']:.3f}")
     print(f"Advertiser Jain's Index: {advertiser_fair['jains_index']:.3f}")
-    
-    print("\n" + "="*80)
-    print("✅ CAUSAL ANALYSIS COMPLETE")
-    print("="*80)
     
     return {
         'baseline': baseline,
