@@ -107,6 +107,20 @@ const Timer = styled.div`
   border-radius: 8px;
 `
 
+const SponsoredLabel = styled.div`
+  position: absolute;
+  top: 24px;
+  left: 24px;
+  z-index: 3;
+  color: white;
+  font-size: 1rem;
+  background: rgba(0,0,0,0.7);
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+`
+
 type Props = {
   onComplete: () => void
 }
@@ -165,6 +179,8 @@ export function UberAd({ onComplete }: Props) {
         onEnded={handleVideoEnded}
       />
       
+      <SponsoredLabel>Sponsored Content</SponsoredLabel>
+      
       <LeftRail>
         <span>⌕</span>
         <span>▦</span>
@@ -200,3 +216,4 @@ export function UberAd({ onComplete }: Props) {
 }
 
 export default UberAd
+export { UberAd as Ad }
