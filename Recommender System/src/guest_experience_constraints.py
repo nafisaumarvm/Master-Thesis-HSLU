@@ -94,6 +94,11 @@ class GuestExperienceConstraints:
             'restaurants', 'experiences', 'shopping', 'wellness',
             'tours', 'culture', 'museums', 'attractions', 'transportation'
         }
+        
+        # Prohibited categories (hotels shouldn't show competitor hotels)
+        self.prohibited_categories = {
+            'accommodation', 'hotels', 'lodging', 'hotel'
+        }
     
     def can_show_ad(
         self,
@@ -210,8 +215,12 @@ class GuestExperienceConstraints:
                 if brand in text:
                     return 0.0  # Competitor
             
-            # Check if category is safe
+            # Check if category is prohibited (e.g., Accommodation - hotels shouldn't show competitor hotels)
             category = str(row.get('category', '')).lower()
+            if any(prohibited in category for prohibited in self.prohibited_categories):
+                return 0.0  # Prohibited
+            
+            # Check if category is safe
             if any(safe in category for safe in self.safe_categories):
                 return 1.0  # Safe
             

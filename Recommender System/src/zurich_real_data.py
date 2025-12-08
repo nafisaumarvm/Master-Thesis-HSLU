@@ -1,13 +1,13 @@
 """
 Zurich Real Data Loader
 
-Loads and parses real Zurich data from JSON files (701 entries total):
-- Hotels (185)
+Loads and parses real Zurich data from JSON files (616 entries total, hotels excluded):
 - Tourist Attractions (107)
 - Shopping (177)
 - Spa & Wellness (28)
 - Nightlife (69)
 - Cultural Activities (135)
+- Restaurants (100 from Lucerne)
 
 This replaces synthetic advertiser data with 100% real data!
 """
@@ -37,8 +37,9 @@ class ZurichDataLoader:
         self.data_dir = Path(data_dir)
         
         # JSON file mapping
+        # NOTE: Hotels excluded - hotels shouldn't show competitor hotel ads
         self.json_files = {
-            'hotels': 'Hotels Zurich.json',
+            # 'hotels': 'Hotels Zurich.json',  # EXCLUDED: Hotels shouldn't advertise competing hotels
             'attractions': 'Tourist Attractions Zurich.json',
             'shopping': 'Shopping Zurich.json',
             'spa_wellness': 'Spa & Wellness Zurich.json',
@@ -434,13 +435,16 @@ def load_zurich_advertisers(
     """
     Load real Swiss advertisers for recommendation system.
     
+    NOTE: Hotels are excluded - hotels shouldn't show competitor hotel ads.
+    Total available: 616 advertisers (Zurich: 516, Lucerne restaurants: 100)
+    
     Args:
-        n_advertisers: Number of advertisers to load (None = all 801)
+        n_advertisers: Number of advertisers to load (None = all 616)
         data_dir: Directory containing JSON files
         seed: Random seed for sampling
     
     Returns:
-        DataFrame with n_advertisers real Swiss establishments (all 801 if n_advertisers=None)
+        DataFrame with n_advertisers real Swiss establishments (all 616 if n_advertisers=None)
     """
     loader = ZurichDataLoader(data_dir)
     
@@ -463,7 +467,8 @@ def load_zurich_advertisers(
     df['advertiser_idx'] = range(len(df))
     
     print(f"\n✅ Final dataset: {len(df)} real Swiss advertisers")
-    print(f"   Source: Zurich (701) + Lucerne (100) = 801 total")
+    print(f"   Source: Zurich (616, hotels excluded) + Lucerne (100) = {len(df)} total")
+    print(f"   Note: Hotels excluded - hotels shouldn't show competitor hotel ads")
     print(f"   100% real data, 0% synthetic!")
     
     return df

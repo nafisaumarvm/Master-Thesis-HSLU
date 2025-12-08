@@ -1,6 +1,4 @@
-"""
-Contextual bandit policies for ad selection.
-"""
+# Contextual bandit policies for ad selection.
 
 import pandas as pd
 import numpy as np
@@ -11,16 +9,10 @@ from .utils import set_random_seed
 
 
 class EpsilonGreedyBandit:
-    """
-    Epsilon-greedy contextual bandit with per-ad Beta priors.
-    """
+    # Epsilon-greedy contextual bandit with per-ad Beta priors
     
     def __init__(self, epsilon: float = 0.1, seed: int = 42):
-        """
-        Args:
-            epsilon: Exploration probability
-            seed: Random seed
-        """
+        # Epsilon-greedy contextual bandit with per-ad Beta priors
         self.epsilon = epsilon
         self.rng = set_random_seed(seed)
         
@@ -34,17 +26,7 @@ class EpsilonGreedyBandit:
         candidate_ads: pd.DataFrame,
         k: int = 3
     ) -> List[str]:
-        """
-        Select k ads using epsilon-greedy policy.
-        
-        Args:
-            guest_context: Guest information (unused in this simple version)
-            candidate_ads: Candidate ads dataframe
-            k: Number of ads to select
-            
-        Returns:
-            List of selected ad_ids
-        """
+        # Select k ads using epsilon-greedy policy
         if len(candidate_ads) == 0:
             return []
         
@@ -78,13 +60,7 @@ class EpsilonGreedyBandit:
             return candidate_ads.iloc[top_k_indices]['ad_id'].tolist()
     
     def update(self, ad_id: str, reward: float):
-        """
-        Update Beta parameters based on observed reward.
-        
-        Args:
-            ad_id: Ad identifier
-            reward: Binary reward (0 or 1)
-        """
+        # Update Beta parameters based on observed reward
         if ad_id not in self.ad_alpha:
             self.ad_alpha[ad_id] = 1.0
             self.ad_beta[ad_id] = 1.0
@@ -95,15 +71,7 @@ class EpsilonGreedyBandit:
             self.ad_beta[ad_id] += 1
     
     def get_ad_stats(self, ad_id: str) -> Tuple[float, float]:
-        """
-        Get current posterior mean and std for an ad.
-        
-        Args:
-            ad_id: Ad identifier
-            
-        Returns:
-            (mean, std) of Beta posterior
-        """
+        # Get current posterior mean and std for an ad
         alpha = self.ad_alpha.get(ad_id, 1.0)
         beta = self.ad_beta.get(ad_id, 1.0)
         
@@ -115,9 +83,8 @@ class EpsilonGreedyBandit:
 
 
 class LinUCB:
-    """
-    Linear Upper Confidence Bound (LinUCB) contextual bandit.
-    """
+    # Linear Upper Confidence Bound (LinUCB) contextual bandit
+
     
     def __init__(
         self,
@@ -125,12 +92,8 @@ class LinUCB:
         alpha: float = 1.0,
         seed: int = 42
     ):
-        """
-        Args:
-            feature_dim: Dimension of context features
-            alpha: Exploration parameter
-            seed: Random seed
-        """
+        # Linear Upper Confidence Bound (LinUCB) contextual bandit
+
         self.feature_dim = feature_dim
         self.alpha = alpha
         self.rng = set_random_seed(seed)
@@ -140,7 +103,7 @@ class LinUCB:
         self.b = {}  # Response vector b_a = D^T c
         
     def _get_or_init_params(self, ad_id: str):
-        """Get or initialize parameters for an ad."""
+        # Get or initialize parameters for an ad
         if ad_id not in self.A:
             self.A[ad_id] = np.eye(self.feature_dim)
             self.b[ad_id] = np.zeros(self.feature_dim)
@@ -154,18 +117,7 @@ class LinUCB:
         k: int = 3,
         context_features: Optional[np.ndarray] = None
     ) -> List[str]:
-        """
-        Select k ads using LinUCB.
-        
-        Args:
-            guest_context: Guest information
-            candidate_ads: Candidate ads dataframe
-            k: Number of ads to select
-            context_features: Pre-computed context features (optional)
-            
-        Returns:
-            List of selected ad_ids
-        """
+        # Select k ads using LinUCB
         if len(candidate_ads) == 0:
             return []
         
@@ -207,14 +159,7 @@ class LinUCB:
         context_feature: np.ndarray,
         reward: float
     ):
-        """
-        Update LinUCB parameters.
-        
-        Args:
-            ad_id: Ad identifier
-            context_feature: Context feature vector
-            reward: Observed reward
-        """
+        # Update LinUCB parameters
         A_a, b_a = self._get_or_init_params(ad_id)
         
         # Update
@@ -226,16 +171,8 @@ class LinUCB:
         guest_context: pd.Series,
         candidate_ads: pd.DataFrame
     ) -> np.ndarray:
-        """
-        Build simple context features from guest and ads.
-        
-        Args:
-            guest_context: Guest information
-            candidate_ads: Candidate ads
-            
-        Returns:
-            Feature matrix (n_ads, feature_dim)
-        """
+        # Build simple context features from guest and ads
+
         n_ads = len(candidate_ads)
         features = np.zeros((n_ads, self.feature_dim))
         
@@ -263,15 +200,11 @@ class LinUCB:
             # Normalized guest price
             features[:, 4] = guest_price / 200.0
         
-        # Additional features can be added
-        
         return features
 
 
 class ThompsonSamplingLogistic:
-    """
-    Thompson Sampling with logistic reward model.
-    """
+    # Thompson Sampling with logistic reward model
     
     def __init__(
         self,
@@ -279,12 +212,8 @@ class ThompsonSamplingLogistic:
         prior_variance: float = 1.0,
         seed: int = 42
     ):
-        """
-        Args:
-            feature_dim: Dimension of context features
-            prior_variance: Prior variance for Gaussian approximation
-            seed: Random seed
-        """
+        # Thompson Sampling with logistic reward model
+
         self.feature_dim = feature_dim
         self.prior_variance = prior_variance
         self.rng = set_random_seed(seed)
@@ -294,7 +223,7 @@ class ThompsonSamplingLogistic:
         self.Sigma = {}  # Covariance
         
     def _get_or_init_params(self, ad_id: str):
-        """Get or initialize parameters for an ad."""
+        # Get or initialize parameters for an ad
         if ad_id not in self.mu:
             self.mu[ad_id] = np.zeros(self.feature_dim)
             self.Sigma[ad_id] = self.prior_variance * np.eye(self.feature_dim)
@@ -308,18 +237,8 @@ class ThompsonSamplingLogistic:
         k: int = 3,
         context_features: Optional[np.ndarray] = None
     ) -> List[str]:
-        """
-        Select k ads using Thompson Sampling.
-        
-        Args:
-            guest_context: Guest information
-            candidate_ads: Candidate ads dataframe
-            k: Number of ads to select
-            context_features: Pre-computed context features
-            
-        Returns:
-            List of selected ad_ids
-        """
+        # Select k ads using Thompson Sampling
+
         if len(candidate_ads) == 0:
             return []
         
@@ -355,14 +274,7 @@ class ThompsonSamplingLogistic:
         context_feature: np.ndarray,
         reward: float
     ):
-        """
-        Update posterior using Laplace approximation.
-        
-        Args:
-            ad_id: Ad identifier
-            context_feature: Context feature vector
-            reward: Observed reward (0 or 1)
-        """
+        # Update posterior using Laplace approximation
         mu_a, Sigma_a = self._get_or_init_params(ad_id)
         
         # Simplified update: online logistic regression approximation
@@ -390,7 +302,7 @@ class ThompsonSamplingLogistic:
         guest_context: pd.Series,
         candidate_ads: pd.DataFrame
     ) -> np.ndarray:
-        """Build simple context features."""
+        # Build simple context features
         n_ads = len(candidate_ads)
         features = np.zeros((n_ads, self.feature_dim))
         
