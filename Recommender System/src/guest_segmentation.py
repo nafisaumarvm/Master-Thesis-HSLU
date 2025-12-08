@@ -1,11 +1,4 @@
-"""
-Data-Driven Guest Segmentation for In-Room TV Advertising
-Following van Leeuwen (2024) methodology:
-1. Feature engineering from booking data
-2. Hierarchical clustering + k-means
-3. Business interpretation and labeling
-4. Mapping to ad category affinities
-"""
+# Guest Segmentation Module
 
 import pandas as pd
 import numpy as np
@@ -15,7 +8,7 @@ import os
 import warnings
 warnings.filterwarnings('ignore')
 
-# Workaround for threadpoolctl issue on macOS
+# Workaround for threadpoolctl
 os.environ['OMP_NUM_THREADS'] = '1'
 os.environ['OPENBLAS_NUM_THREADS'] = '1'
 os.environ['MKL_NUM_THREADS'] = '1'
@@ -34,7 +27,6 @@ try:
                 return result.stdout.decode('utf-8', errors='ignore') if result.returncode == 0 else ''
             except:
                 return ''
-        # This is a workaround - we'll catch the error in k-means instead
         pass
 except ImportError:
     pass
@@ -54,50 +46,37 @@ except ImportError:
 
 
 class GuestFeatureEngineer:
-    """
-    Engineers guest-level features from raw booking data.
-    
-    Following van Leeuwen's "golden profile" approach:
-    - Stay characteristics (LOS, timing, seasonality)
-    - Party composition (adults, children, families)
-    - Booking behavior (channel, lead time, previous bookings)
-    - Geography (origin, distance)
-    - Revenue proxies (market segment, rate type)
-    """
-    
+    # Engineers guest-level features from raw booking data
     def __init__(self, booking_data: pd.DataFrame):
-        """
-        Args:
-            booking_data: Raw hotel booking dataset
-        """
+        # Initialize guest feature engineer
         self.df = booking_data.copy()
         self._preprocess_raw_data()
     
     def _preprocess_raw_data(self):
-        """Clean and prepare raw booking data."""
-        print("\n🔧 Preprocessing raw booking data...")
+        # Clean and prepare raw booking data
+        print("Preprocessing raw booking data...")
         
         # Remove cancellations
         if 'is_canceled' in self.df.columns:
             n_before = len(self.df)
             self.df = self.df[self.df['is_canceled'] == 0].copy()
-            print(f"   Removed {n_before - len(self.df):,} cancellations")
+            print(f"Removed {n_before - len(self.df):,} cancellations")
         
         # Remove anomalous stays (0 nights or >365 nights)
         if 'stays_in_weekend_nights' in self.df.columns and 'stays_in_week_nights' in self.df.columns:
             self.df['total_nights'] = self.df['stays_in_weekend_nights'] + self.df['stays_in_week_nights']
             n_before = len(self.df)
             self.df = self.df[(self.df['total_nights'] > 0) & (self.df['total_nights'] <= 365)].copy()
-            print(f"   Removed {n_before - len(self.df):,} anomalous stays")
+            print(f"Removed {n_before - len(self.df):,} anomalous stays")
         
         # Create date columns if needed
         if 'arrival_date_year' in self.df.columns:
             self._create_date_columns()
         
-        print(f"   ✅ Clean dataset: {len(self.df):,} valid bookings")
+        print(f"Clean dataset: {len(self.df):,} valid bookings")
     
     def _create_date_columns(self):
-        """Create proper date columns from year/month/day."""
+        # Create proper date columns from year/month/day
         month_map = {
             'January': 1, 'February': 2, 'March': 3, 'April': 4,
             'May': 5, 'June': 6, 'July': 7, 'August': 8,
@@ -113,13 +92,8 @@ class GuestFeatureEngineer:
         )
     
     def engineer_features(self) -> pd.DataFrame:
-        """
-        Engineer comprehensive guest-level features.
-        
-        Returns:
-            DataFrame with engineered features (one row per stay)
-        """
-        print("\n📊 Engineering guest features...")
+        # Engineer comprehensive guest-level features
+        print("Engineering guest features...")
         
         features = pd.DataFrame(index=self.df.index)
         
@@ -141,12 +115,12 @@ class GuestFeatureEngineer:
         # 6. TEMPORAL PATTERNS
         features = self._add_temporal_features(features)
         
-        print(f"   ✅ Engineered {len(features.columns)} features for {len(features):,} stays")
+        print(f"Engineered {len(features.columns)} features for {len(features):,} stays")
         
         return features
     
     def _add_stay_features(self, features: pd.DataFrame) -> pd.DataFrame:
-        """Add length-of-stay and stay pattern features."""
+        # Add length-of-stay and stay pattern features
         # Total nights
         if 'total_nights' in self.df.columns:
             features['los_total'] = self.df['total_nights']
@@ -168,7 +142,7 @@ class GuestFeatureEngineer:
         return features
     
     def _add_party_features(self, features: pd.DataFrame) -> pd.DataFrame:
-        """Add party composition features."""
+        # Add party composition features
         features['adults'] = self.df['adults'].fillna(2)
         features['children'] = self.df['children'].fillna(0)
         features['babies'] = self.df['babies'].fillna(0)
@@ -185,7 +159,7 @@ class GuestFeatureEngineer:
         return features
     
     def _add_booking_features(self, features: pd.DataFrame) -> pd.DataFrame:
-        """Add booking channel and behavior features."""
+        # Add booking channel and behavior features
         # Lead time (days between booking and arrival)
         if 'lead_time' in self.df.columns:
             features['lead_time'] = self.df['lead_time'].fillna(self.df['lead_time'].median())
@@ -219,7 +193,7 @@ class GuestFeatureEngineer:
         return features
     
     def _add_geography_features(self, features: pd.DataFrame) -> pd.DataFrame:
-        """Add country and geographic features."""
+        # Add country and geographic features
         if 'country' not in self.df.columns:
             return features
         
@@ -254,7 +228,7 @@ class GuestFeatureEngineer:
         return features
     
     def _add_revenue_features(self, features: pd.DataFrame) -> pd.DataFrame:
-        """Add revenue and spend-potential proxies."""
+        # Add revenue and spend-potential proxies
         # ADR (Average Daily Rate) if available
         if 'adr' in self.df.columns:
             features['adr'] = self.df['adr'].fillna(self.df['adr'].median())
@@ -292,7 +266,7 @@ class GuestFeatureEngineer:
         return features
     
     def _add_temporal_features(self, features: pd.DataFrame) -> pd.DataFrame:
-        """Add seasonality and temporal pattern features."""
+        # Add seasonality and temporal pattern features
         # Season
         if 'arrival_month_num' in self.df.columns:
             month = self.df['arrival_month_num']
@@ -313,17 +287,11 @@ class GuestFeatureEngineer:
 
 
 class GuestSegmentationModel:
-    """
-    Performs data-driven guest segmentation using hierarchical clustering + k-means.
-    Following van Leeuwen (2024) methodology.
-    """
+    # Performs data-driven guest segmentation using hierarchical clustering + k-means
     
     def __init__(self, n_clusters: int = 8, random_state: int = 42):
-        """
-        Args:
-            n_clusters: Number of guest segments to create
-            random_state: Random seed for reproducibility
-        """
+        # Initialize guest segmentation model
+
         self.n_clusters = n_clusters
         self.random_state = random_state
         self.scaler = RobustScaler()  # Robust to outliers
@@ -333,17 +301,9 @@ class GuestSegmentationModel:
         self.feature_names = None
     
     def fit(self, features: pd.DataFrame, sample_size: int = 10000) -> 'GuestSegmentationModel':
-        """
-        Fit segmentation model using hierarchical clustering + k-means.
-        
-        Args:
-            features: Engineered feature DataFrame
-            sample_size: Size of sample for initial hierarchical clustering
-        
-        Returns:
-            self (fitted model)
-        """
-        print(f"\n🎯 Fitting Guest Segmentation Model (k={self.n_clusters})...")
+        # Fit segmentation model using hierarchical clustering + k-means
+
+        print(f"Fitting Guest Segmentation Model (k={self.n_clusters})...")
         
         # Store feature names
         self.feature_names = features.columns.tolist()
@@ -352,12 +312,12 @@ class GuestSegmentationModel:
         features_clean = features.fillna(features.median())
         
         # Scale features
-        print("   Scaling features...")
+        print("Scaling features...") 
         X_scaled = self.scaler.fit_transform(features_clean)
         X_scaled_df = pd.DataFrame(X_scaled, columns=features.columns, index=features.index)
         
         # Step 1: Hierarchical clustering on sample to explore structure
-        print(f"   Running hierarchical clustering on {sample_size:,} sample...")
+        print(f"Running hierarchical clustering on {sample_size:,} sample...")
         if len(features_clean) > sample_size:
             sample_idx = features_clean.sample(n=sample_size, random_state=self.random_state).index
             X_sample = X_scaled_df.loc[sample_idx]
@@ -373,7 +333,7 @@ class GuestSegmentationModel:
         sample_labels = hierarchical.fit_predict(X_sample)
         
         # Step 2: K-means on full dataset, initialized from hierarchical solution
-        print(f"   Running k-means on full dataset ({len(features_clean):,} stays)...")
+        print(f"Running k-means on full dataset ({len(features_clean):,} stays)...")
         
         # Get cluster centers from hierarchical solution
         initial_centers = np.array([
@@ -382,7 +342,6 @@ class GuestSegmentationModel:
         ])
         
         # K-means with hierarchical initialization
-        # Workaround for threadpoolctl issue on macOS - use hierarchical clustering as fallback
         try:
             self.kmeans = KMeans(
                 n_clusters=self.n_clusters,
@@ -396,7 +355,7 @@ class GuestSegmentationModel:
             error_str = str(e)
             if "'NoneType' object has no attribute 'split'" in error_str or "threadpoolctl" in error_str.lower():
                 # Fallback: Use hierarchical clustering on full dataset
-                print("   ⚠️  K-means failed due to threading issue, using hierarchical clustering on full dataset...")
+                print("K-means failed due to threading issue, using hierarchical clustering on full dataset...")
                 hierarchical_full = AgglomerativeClustering(
                     n_clusters=self.n_clusters,
                     linkage='ward',
@@ -427,9 +386,8 @@ class GuestSegmentationModel:
         silhouette = silhouette_score(X_scaled, cluster_labels, sample_size=min(10000, len(X_scaled)))
         calinski = calinski_harabasz_score(X_scaled, cluster_labels)
         
-        print(f"   ✅ Segmentation complete!")
-        print(f"      Silhouette Score: {silhouette:.3f}")
-        print(f"      Calinski-Harabasz: {calinski:.1f}")
+        print(f"Silhouette Score: {silhouette:.3f}")
+        print(f"Calinski-Harabasz: {calinski:.1f}")
         
         # Store cluster labels
         self.cluster_labels = cluster_labels
@@ -440,8 +398,7 @@ class GuestSegmentationModel:
         return self
     
     def _generate_cluster_profiles(self, features: pd.DataFrame, labels: np.ndarray):
-        """Generate interpretable profiles for each cluster."""
-        print("\n📋 Generating cluster profiles...")
+        # Generate interpretable profiles for each cluster
         
         profiles = []
         
@@ -488,13 +445,10 @@ class GuestSegmentationModel:
         self.cluster_profiles = pd.DataFrame(profiles)
         
         # Display profiles
-        print("\n" + "="*80)
-        print("CLUSTER PROFILES")
-        print("="*80)
         for i, row in self.cluster_profiles.iterrows():
-            print(f"\n📊 Cluster {i} (n={row['size']:,}, {row['proportion']*100:.1f}%):")
-            print(f"   LOS: {row['los_mean']:.1f} nights (median: {row['los_median']:.1f})")
-            print(f"   Party: {row['party_size_mean']:.1f} people (Family: {row['pct_family']:.0f}%, Couple: {row['pct_couple']:.0f}%, Solo: {row['pct_solo']:.0f}%)")
+            print(f"Cluster {i} (n={row['size']:,}, {row['proportion']*100:.1f}%):")
+            print(f"LOS: {row['los_mean']:.1f} nights (median: {row['los_median']:.1f})")
+            print(f"Party: {row['party_size_mean']:.1f} people (Family: {row['pct_family']:.0f}%, Couple: {row['pct_couple']:.0f}%, Solo: {row['pct_solo']:.0f}%)")
             if not np.isnan(row['adr_mean']):
                 print(f"   ADR: €{row['adr_mean']:.0f} (Luxury: {row['pct_luxury']:.0f}%)")
             if not np.isnan(row['lead_time_mean']):
@@ -503,15 +457,7 @@ class GuestSegmentationModel:
                 print(f"   Origin: Domestic {row['pct_domestic']:.0f}%, Long-haul {row['pct_long_haul']:.0f}%")
     
     def predict(self, features: pd.DataFrame) -> np.ndarray:
-        """
-        Predict cluster labels for new data.
-        
-        Args:
-            features: Feature DataFrame
-        
-        Returns:
-            Cluster labels
-        """
+        # Predict cluster labels for new data
         if self.kmeans is None:
             raise ValueError("Model not fitted yet!")
         
@@ -520,22 +466,14 @@ class GuestSegmentationModel:
         return self.kmeans.predict(X_scaled)
     
     def assign_business_labels(self, labels: List[str]) -> Dict[int, str]:
-        """
-        Assign human-readable business labels to clusters.
-        
-        Args:
-            labels: List of business labels (one per cluster)
-        
-        Returns:
-            Dictionary mapping cluster_id to label
-        """
+        # Assign human-readable business labels to clusters
         if len(labels) != self.n_clusters:
             raise ValueError(f"Need exactly {self.n_clusters} labels, got {len(labels)}")
         
         label_map = {i: label for i, label in enumerate(labels)}
         self.cluster_profiles['business_label'] = self.cluster_profiles['cluster_id'].map(label_map)
         
-        print("\n✅ Business labels assigned:")
+        print("Business labels assigned:")
         for i, label in label_map.items():
             size = self.cluster_profiles.loc[i, 'size']
             pct = self.cluster_profiles.loc[i, 'proportion'] * 100
@@ -545,16 +483,10 @@ class GuestSegmentationModel:
 
 
 class SegmentAdAffinityMapper:
-    """
-    Maps guest segments to advertiser category affinities.
-    Implements the "segment → category preference" translation for the recommender.
-    """
+    # Maps guest segments to advertiser category affinities
     
     def __init__(self, cluster_profiles: pd.DataFrame):
-        """
-        Args:
-            cluster_profiles: Cluster profile DataFrame from segmentation model
-        """
+        # Initialize segment ad affinity mapper
         self.profiles = cluster_profiles
         self.affinity_matrix = None
         self.categories = [
@@ -567,13 +499,8 @@ class SegmentAdAffinityMapper:
         ]
     
     def generate_expert_affinities(self) -> pd.DataFrame:
-        """
-        Generate expert-based segment-category affinity matrix.
-        
-        Returns:
-            DataFrame: segments × categories, values = base utility [0-1]
-        """
-        print("\n🎯 Generating segment-category affinities...")
+        # Generate expert-based segment-category affinity matrix
+        print("Generating segment-category affinities...")
         
         n_clusters = len(self.profiles)
         affinities = pd.DataFrame(
@@ -644,18 +571,13 @@ class SegmentAdAffinityMapper:
         self.affinity_matrix = affinities.astype(float)
         
         # Display
-        print("\n📊 Segment-Category Affinity Matrix:")
+        print("Segment-Category Affinity Matrix:")
         print(self.affinity_matrix.round(2))
         
         return self.affinity_matrix
     
     def get_preference_matrix(self) -> pd.DataFrame:
-        """
-        Get preference matrix in format expected by recommender system.
-        
-        Returns:
-            DataFrame: segments × categories affinity scores
-        """
+        # Get preference matrix in format expected by recommender system
         if self.affinity_matrix is None:
             self.generate_expert_affinities()
         
@@ -668,27 +590,12 @@ def run_guest_segmentation_pipeline(
     sample_size: int = 10000,
     random_state: int = 42
 ) -> Tuple[GuestSegmentationModel, pd.DataFrame, pd.DataFrame]:
-    """
-    Complete pipeline: load data → engineer features → cluster → profile.
-    
-    Args:
-        booking_data_path: Path to hotel booking CSV
-        n_clusters: Number of segments to create
-        sample_size: Sample size for hierarchical clustering
-        random_state: Random seed
-    
-    Returns:
-        Tuple of (segmentation_model, features_df, cluster_labels_df)
-    """
-    print("="*80)
-    print("DATA-DRIVEN GUEST SEGMENTATION PIPELINE")
-    print("Following van Leeuwen (2024) Methodology")
-    print("="*80)
+    # Complete pipeline: load data → engineer features → cluster → profile
     
     # 1. Load booking data
-    print(f"\n📂 Loading booking data from {booking_data_path}...")
+    print(f"Loading booking data from {booking_data_path}...")
     df = pd.read_csv(booking_data_path, low_memory=False)
-    print(f"   Loaded {len(df):,} bookings")
+    print(f"Loaded {len(df):,} bookings")
     
     # 2. Engineer features
     engineer = GuestFeatureEngineer(df)
@@ -702,11 +609,7 @@ def run_guest_segmentation_pipeline(
     results = pd.DataFrame({
         'cluster_id': model.cluster_labels
     }, index=features.index)
-    
-    print("\n" + "="*80)
-    print("✅ SEGMENTATION PIPELINE COMPLETE!")
-    print("="*80)
-    
+        
     return model, features, results
 
 
@@ -720,9 +623,6 @@ if __name__ == "__main__":
         sample_size=10000
     )
     
-    print("\n💾 Saving results...")
     results.to_csv("results/guest_clusters.csv", index=False)
     model.cluster_profiles.to_csv("results/cluster_profiles.csv", index=False)
     
-    print("\n✅ Results saved to results/ directory")
-

@@ -1,6 +1,4 @@
-"""
-CTR prediction models and ranking algorithms.
-"""
+# CTR prediction models and ranking algorithms
 
 import pandas as pd
 import numpy as np
@@ -26,13 +24,10 @@ from .utils import parse_tags_string
 
 
 class FeatureBuilder:
-    """Build training features from exposure log and metadata."""
+    # Build training features from exposure log and metadata
     
     def __init__(self, categorical_encoding: str = 'label'):
-        """
-        Args:
-            categorical_encoding: 'label' or 'onehot'
-        """
+        # Initialize feature builder
         self.categorical_encoding = categorical_encoding
         self.label_encoders = {}
         self.scaler = StandardScaler()
@@ -44,17 +39,7 @@ class FeatureBuilder:
         guests_df: pd.DataFrame,
         ads_df: pd.DataFrame
     ) -> Tuple[pd.DataFrame, pd.Series]:
-        """
-        Build training features from exposure log.
-        
-        Args:
-            exposure_log: Exposure log with clicks
-            guests_df: Guest metadata
-            ads_df: Advertiser metadata
-            
-        Returns:
-            (X, y): Features and labels
-        """
+        # Build training features from exposure log
         # Merge guest features (only include columns that exist)
         guest_cols = ['guest_id']
         optional_guest_cols = [
@@ -201,26 +186,21 @@ class FeatureBuilder:
         return features, y
     
     def transform(self, features: pd.DataFrame) -> pd.DataFrame:
-        """Transform features (e.g., scaling)."""
-        # For now, no scaling to keep interpretability
-        # Can add if needed for neural models
+        # Transform features (e.g., scaling)
+
         return features
 
 
 class PopularityRanker:
-    """Rank ads by global CTR (popularity baseline)."""
+    # Rank ads by global CTR (popularity baseline)
     
     def __init__(self):
         self.ad_ctr = {}
         self.global_ctr = 0.0
         
     def fit(self, exposure_log: pd.DataFrame):
-        """
-        Fit popularity model.
-        
-        Args:
-            exposure_log: Historical exposure log with clicks
-        """
+        # Fit popularity model
+
         # Compute CTR per ad
         ad_stats = exposure_log.groupby('ad_id').agg({
             'click': ['sum', 'count']
@@ -233,42 +213,24 @@ class PopularityRanker:
         self.global_ctr = exposure_log['click'].mean()
     
     def predict_proba(self, ad_ids: List[str]) -> np.ndarray:
-        """
-        Predict click probabilities.
-        
-        Args:
-            ad_ids: List of ad IDs
-            
-        Returns:
-            Array of click probabilities
-        """
+    # Predict click probabilities
+
         probs = [self.ad_ctr.get(ad_id, self.global_ctr) for ad_id in ad_ids]
         return np.array(probs)
     
     def rank(self, ad_ids: List[str], k: int = 3) -> List[str]:
-        """
-        Rank ads by predicted CTR.
-        
-        Args:
-            ad_ids: Candidate ad IDs
-            k: Number to return
-            
-        Returns:
-            Top-k ad IDs
-        """
+        # Rank ads by predicted CTR
+
         probs = self.predict_proba(ad_ids)
         top_k_indices = np.argsort(probs)[::-1][:k]
         return [ad_ids[i] for i in top_k_indices]
 
 
 class LogisticRegressionRanker:
-    """Logistic regression CTR model."""
+    # Logistic regression CTR model
     
     def __init__(self, **kwargs):
-        """
-        Args:
-            **kwargs: Arguments for sklearn LogisticRegression
-        """
+
         self.model = LogisticRegression(max_iter=1000, **kwargs)
         self.feature_builder = FeatureBuilder(categorical_encoding='label')
         
@@ -278,14 +240,8 @@ class LogisticRegressionRanker:
         guests_df: pd.DataFrame,
         ads_df: pd.DataFrame
     ):
-        """
-        Fit logistic regression model.
-        
-        Args:
-            exposure_log: Exposure log with clicks
-            guests_df: Guest metadata
-            ads_df: Advertiser metadata
-        """
+        # Fit logistic regression model
+
         X, y = self.feature_builder.build_training_frame(
             exposure_log, guests_df, ads_df
         )
@@ -299,18 +255,8 @@ class LogisticRegressionRanker:
         time_of_day: str = 'afternoon',
         day_of_stay: int = 1
     ) -> np.ndarray:
-        """
-        Predict click probabilities for candidate ads.
-        
-        Args:
-            guest_context: Guest information (single row)
-            candidate_ads: Candidate ads dataframe
-            time_of_day: Time of day
-            day_of_stay: Day of stay
-            
-        Returns:
-            Click probabilities
-        """
+        # Predict click probabilities for candidate ads
+
         # Build feature matrix
         features = self._build_prediction_features(
             guest_context, candidate_ads, time_of_day, day_of_stay
@@ -327,7 +273,7 @@ class LogisticRegressionRanker:
         time_of_day: str = 'afternoon',
         day_of_stay: int = 1
     ) -> List[str]:
-        """Rank candidate ads for a guest."""
+        # Rank candidate ads for a guest
         probs = self.predict_proba(
             guest_context, candidate_ads, time_of_day, day_of_stay
         )
@@ -342,7 +288,7 @@ class LogisticRegressionRanker:
         time_of_day: str,
         day_of_stay: int
     ) -> pd.DataFrame:
-        """Build features for prediction."""
+        # Build features for prediction
         n = len(candidate_ads)
         
         features = pd.DataFrame()
@@ -421,14 +367,10 @@ class LogisticRegressionRanker:
 
 
 class GradientBoostingRanker:
-    """Gradient boosting (XGBoost or LightGBM) CTR model."""
+    # Gradient boosting (XGBoost or LightGBM) CTR model
     
     def __init__(self, use_xgboost: bool = True, **kwargs):
-        """
-        Args:
-            use_xgboost: Use XGBoost if True, else LightGBM
-            **kwargs: Model hyperparameters
-        """
+        # Initialize gradient boosting model
         self.use_xgboost = use_xgboost
         
         if use_xgboost and not HAS_XGB:
@@ -448,7 +390,7 @@ class GradientBoostingRanker:
         guests_df: pd.DataFrame,
         ads_df: pd.DataFrame
     ):
-        """Fit gradient boosting model."""
+        # Fit gradient boosting model
         X, y = self.feature_builder.build_training_frame(
             exposure_log, guests_df, ads_df
         )
@@ -484,7 +426,7 @@ class GradientBoostingRanker:
         time_of_day: str = 'afternoon',
         day_of_stay: int = 1
     ) -> np.ndarray:
-        """Predict click probabilities."""
+        # Predict click probabilities
         features = self._build_prediction_features(
             guest_context, candidate_ads, time_of_day, day_of_stay
         )
@@ -500,7 +442,7 @@ class GradientBoostingRanker:
         time_of_day: str = 'afternoon',
         day_of_stay: int = 1
     ) -> List[str]:
-        """Rank candidate ads."""
+        # Rank candidate ads
         probs = self.predict_proba(
             guest_context, candidate_ads, time_of_day, day_of_stay
         )
@@ -515,7 +457,7 @@ class GradientBoostingRanker:
         time_of_day: str,
         day_of_stay: int
     ) -> pd.DataFrame:
-        """Build features for prediction (same as LogisticRegressionRanker)."""
+        # Build features for prediction (same as LogisticRegressionRanker)
         n = len(candidate_ads)
         
         features = pd.DataFrame()

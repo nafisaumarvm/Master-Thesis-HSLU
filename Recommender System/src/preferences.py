@@ -1,11 +1,4 @@
-"""
-Guest-Advertiser Preference Matrix & Utility Model
-
-Following van Leeuwen (2024) methodology:
-- Segment-based latent utilities
-- Category affinities
-- Contextual preference modeling
-"""
+# Guest-Advertiser Preference Matrix & Utility Model
 
 import pandas as pd
 import numpy as np
@@ -14,7 +7,7 @@ from typing import Dict, List, Tuple, Optional
 from .utils import set_random_seed
 
 
-# Segment-Category Affinity Matrix (van Leeuwen style)
+# Segment-Category Affinity Matrix 
 # Higher values = stronger preference
 SEGMENT_CATEGORY_AFFINITIES = {
     'luxury_leisure': {
@@ -122,30 +115,8 @@ def generate_preference_matrix(
     noise_scale: float = 0.1,
     seed: int = 42
 ) -> pd.DataFrame:
-    """
-    Generate segment-category preference matrix U[s, c].
-    
-    Following van Leeuwen (2024):
-    - Base affinities from segment profiles
-    - Individual variation (Gaussian noise)
-    - Normalized utilities
-    
-    Parameters
-    ----------
-    segments : list
-        Guest segments
-    categories : list
-        Advertiser categories
-    noise_scale : float
-        Standard deviation of individual variation
-    seed : int
-        Random seed
-        
-    Returns
-    -------
-    pd.DataFrame
-        Preference matrix with segments as rows, categories as columns
-    """
+    # Generate segment-category preference matrix U[s, c]
+
     rng = np.random.RandomState(seed)
     
     matrix = []
@@ -179,30 +150,8 @@ def compute_base_utility(
     advertiser_attrs: Optional[Dict] = None,
     preference_matrix: Optional[pd.DataFrame] = None
 ) -> float:
-    """
-    Compute base utility U0 for guest-advertiser pair.
-    
-    Van Leeuwen model:
-    U0 = segment_affinity + context_modifiers + attribute_match
-    
-    Parameters
-    ----------
-    guest_segment : str
-        Guest segment (e.g., 'luxury_leisure')
-    advertiser_category : str
-        Advertiser category (e.g., 'restaurant')
-    guest_context : dict, optional
-        Context: party_size, trip_purpose, time_of_day, weather, etc.
-    advertiser_attrs : dict, optional
-        Advertiser attributes: price_level, distance, rating, etc.
-    preference_matrix : pd.DataFrame, optional
-        Pre-computed preference matrix
-        
-    Returns
-    -------
-    float
-        Base utility (unnormalized, can be negative)
-    """
+    # Compute base utility U0 for guest-advertiser pair
+
     # 1. Segment-category affinity (core preference)
     if preference_matrix is not None and guest_segment in preference_matrix.index:
         if advertiser_category in preference_matrix.columns:
@@ -278,35 +227,8 @@ def compute_choice_probability(
     awareness_weight: float = 0.5,
     position_weights: Optional[Dict[int, float]] = None
 ) -> float:
-    """
-    Compute choice probability following van Leeuwen (2024).
-    
-    Model:
-    P(click) = σ(U0 + β * awareness + position_bias)
-    
-    where:
-    - U0 = base utility
-    - β = awareness weight
-    - position_bias = log(position_weight)
-    
-    Parameters
-    ----------
-    base_utility : float
-        Base utility U0
-    awareness : float
-        Awareness level ρ ∈ [0, 1]
-    position : int
-        Position in list (1 = top)
-    awareness_weight : float
-        β parameter (how much awareness boosts utility)
-    position_weights : dict, optional
-        Position-specific weights
-        
-    Returns
-    -------
-    float
-        Click probability ∈ [0, 1]
-    """
+    # Compute choice probability
+
     if position_weights is None:
         position_weights = {1: 1.0, 2: 0.7, 3: 0.5}
     
@@ -331,27 +253,8 @@ def update_awareness(
     was_exposed: bool,
     alpha: float = 0.3
 ) -> float:
-    """
-    Update awareness following van Leeuwen (2024).
-    
-    Model:
-    ρ(t+1) = ρ(t) + α * (1 - ρ(t))  if exposed
-    ρ(t+1) = ρ(t)                    if not exposed
-    
-    Parameters
-    ----------
-    current_awareness : float
-        Current awareness ρ(t) ∈ [0, 1]
-    was_exposed : bool
-        Whether ad was shown in this session
-    alpha : float
-        Growth rate ∈ (0, 1)
-        
-    Returns
-    -------
-    float
-        Updated awareness ρ(t+1)
-    """
+    # Update awareness
+
     if was_exposed:
         return current_awareness + alpha * (1 - current_awareness)
     else:
@@ -365,29 +268,7 @@ def generate_guest_advertiser_utilities(
     sample_per_guest: int = 50,
     seed: int = 42
 ) -> pd.DataFrame:
-    """
-    Generate utility matrix for all guest-advertiser pairs.
-    
-    Creates the fundamental preference structure needed for van Leeuwen simulation.
-    
-    Parameters
-    ----------
-    guests_df : pd.DataFrame
-        Guest data with segments
-    advertisers_df : pd.DataFrame
-        Advertiser data with categories
-    preference_matrix : pd.DataFrame, optional
-        Pre-computed segment-category preferences
-    sample_per_guest : int
-        How many advertisers to sample per guest (for efficiency)
-    seed : int
-        Random seed
-        
-    Returns
-    -------
-    pd.DataFrame
-        Columns: guest_id, ad_id, segment, category, base_utility, base_click_prob
-    """
+    # Generate utility matrix for all guest-advertiser pairs
     rng = np.random.RandomState(seed)
     
     # Generate preference matrix if not provided
@@ -450,19 +331,7 @@ def generate_guest_advertiser_utilities(
 
 
 def get_preference_summary(preference_matrix: pd.DataFrame) -> pd.DataFrame:
-    """
-    Summarize preference matrix for analysis.
-    
-    Parameters
-    ----------
-    preference_matrix : pd.DataFrame
-        Segment-category preference matrix
-        
-    Returns
-    -------
-    pd.DataFrame
-        Summary statistics per segment
-    """
+    # Summarize preference matrix for analysis
     summary = []
     for segment in preference_matrix.index:
         row = preference_matrix.loc[segment]

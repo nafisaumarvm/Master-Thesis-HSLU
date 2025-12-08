@@ -1,6 +1,4 @@
-"""
-Simulation framework with exposure/awareness dynamics.
-"""
+# Simulation framework with exposure/awareness dynamics
 
 import pandas as pd
 import numpy as np
@@ -13,14 +11,7 @@ from .exposure_log import filter_candidate_ads
 
 
 class AwarenessSimulator:
-    """
-    Simulate ad recommendations with exposure/awareness dynamics.
-    
-    Implements van Leeuwen-style awareness model:
-    - Awareness grows with each exposure
-    - Click probability increases with awareness
-    - Tracks intrusion costs
-    """
+    # Simulate ad recommendations with exposure/awareness dynamics
     
     def __init__(
         self,
@@ -30,14 +21,8 @@ class AwarenessSimulator:
         f_max: int = 5,
         seed: int = 42
     ):
-        """
-        Args:
-            alpha: Awareness growth rate (0 to 1)
-            gamma: Click boost from awareness
-            lambda_intrusion: Intrusion cost weight
-            f_max: Maximum acceptable frequency before intrusion penalty
-            seed: Random seed
-        """
+        # Initialize awareness simulator
+
         self.alpha = alpha
         self.gamma = gamma
         self.lambda_intrusion = lambda_intrusion
@@ -49,21 +34,18 @@ class AwarenessSimulator:
         self.frequency = {}  # (guest_id, ad_id) -> exposure count
         
     def get_awareness(self, guest_id: str, ad_id: str) -> float:
-        """Get current awareness level for guest-ad pair."""
+        # Get current awareness level for guest-ad pair
         key = (guest_id, ad_id)
         return self.awareness.get(key, 0.05)  # Small initial awareness
     
     def get_frequency(self, guest_id: str, ad_id: str) -> int:
-        """Get exposure frequency for guest-ad pair."""
+        # Get exposure frequency for guest-ad pair
         key = (guest_id, ad_id)
         return self.frequency.get(key, 0)
     
     def update_awareness(self, guest_id: str, ad_id: str):
-        """
-        Update awareness after showing an ad.
-        
-        awareness_new = awareness_old + alpha * (1 - awareness_old)
-        """
+        # Update awareness after showing an ad
+
         key = (guest_id, ad_id)
         current_awareness = self.get_awareness(guest_id, ad_id)
         
@@ -80,19 +62,10 @@ class AwarenessSimulator:
         ad_id: str,
         base_click_prob: float
     ) -> float:
-        """
-        Compute click probability with awareness boost.
+        # Compute click probability with awareness boost
+        p_click = base_click_prob * (1 + self.gamma * awareness)
         
-        p_click = base_click_prob * (1 + gamma * awareness)
-        
-        Args:
-            guest_id: Guest identifier
-            ad_id: Ad identifier
-            base_click_prob: Base click probability (intrinsic)
-            
-        Returns:
-            Boosted click probability
-        """
+        return clip_probability(p_click)
         awareness = self.get_awareness(guest_id, ad_id)
         
         # Click boost from awareness
@@ -107,22 +80,8 @@ class AwarenessSimulator:
         guest_context: pd.Series,
         ad_context: pd.Series
     ) -> float:
-        """
-        Compute intrusion cost for showing an ad.
-        
-        Intrusion increases with:
-        - Over-exposure (frequency > f_max)
-        - Category mismatch with guest preferences
-        
-        Args:
-            guest_id: Guest identifier
-            ad_id: Ad identifier
-            guest_context: Guest information
-            ad_context: Ad information
-            
-        Returns:
-            Intrusion cost (higher = more intrusive)
-        """
+        # Compute intrusion cost for showing an ad
+        awareness = self.get_awareness(guest_id, ad_id)
         freq = self.get_frequency(guest_id, ad_id)
         
         # Frequency penalty
@@ -149,7 +108,7 @@ class AwarenessSimulator:
         return intrusion
     
     def reset(self):
-        """Reset awareness and frequency state."""
+        # Reset awareness and frequency state
         self.awareness = {}
         self.frequency = {}
 
@@ -169,27 +128,9 @@ def run_simulation(
     seed: int = 42,
     policy_name: str = "policy"
 ) -> Tuple[pd.DataFrame, Dict[str, float]]:
-    """
-    Run simulation with a given policy.
+    # Run simulation with a given policy
     
-    Args:
-        policy: Policy object with select_ads(guest_context, candidate_ads, k) method
-        guests_df: Unified guest dataframe
-        ads_df: Advertiser catalogue
-        guest_ad_prefs_df: Guest-ad preferences
-        n_sessions_per_stay: Number of sessions per stay
-        alpha: Awareness growth rate
-        gamma: Awareness click boost
-        lambda_intrusion: Intrusion cost weight
-        f_max: Max frequency before penalty
-        k_ads_per_session: Ads shown per session
-        max_distance_km: Max distance for candidate filtering
-        seed: Random seed
-        policy_name: Name for logging
-        
-    Returns:
-        (simulation_log, metrics_dict)
-    """
+    return (simulation_log, metrics_dict)
     rng = set_random_seed(seed)
     
     # Initialize awareness simulator
@@ -360,22 +301,8 @@ def compare_policies(
     gamma: float = 0.5,
     seed: int = 42
 ) -> pd.DataFrame:
-    """
-    Compare multiple policies via simulation.
-    
-    Args:
-        policies: Dict mapping policy names to policy objects
-        guests_df: Guest dataframe
-        ads_df: Advertiser catalogue
-        guest_ad_prefs_df: Guest-ad preferences
-        n_sessions_per_stay: Sessions per stay
-        alpha: Awareness growth rate
-        gamma: Awareness click boost
-        seed: Random seed
-        
-    Returns:
-        Dataframe with comparison metrics
-    """
+    # Compare multiple policies via simulation
+    return pd.DataFrame(all_metrics)
     all_metrics = []
     
     for policy_name, policy in policies.items():

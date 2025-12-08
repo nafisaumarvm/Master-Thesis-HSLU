@@ -1,6 +1,4 @@
-"""
-Advanced guest segmentation for better targeting.
-"""
+# Advanced guest segmentation for better targeting.
 
 import pandas as pd
 import numpy as np
@@ -17,18 +15,8 @@ def create_guest_segments(
     n_clusters: int = 5,
     seed: int = 42
 ) -> pd.DataFrame:
-    """
-    Create meaningful guest segments.
-    
-    Args:
-        guests_df: Guest dataframe
-        method: 'rules' for rule-based, 'clustering' for ML-based
-        n_clusters: Number of clusters (for clustering method)
-        seed: Random seed
-        
-    Returns:
-        Dataframe with segment assignments
-    """
+    # Create meaningful guest segments
+
     df = guests_df.copy()
     
     if method == 'rules':
@@ -45,19 +33,8 @@ def create_guest_segments(
 
 
 def _assign_rule_based_segment(row: pd.Series) -> str:
-    """
-    Assign segment based on business rules.
-    
-    Segments:
-    - luxury_leisure: High spend, leisure, long stay
-    - budget_family: Low-mid spend, family, short-medium stay
-    - business_traveler: Business purpose, short stay, weekday
-    - weekend_explorer: Leisure, weekend, short stay
-    - extended_stay: Long stay (7+ nights)
-    - bargain_hunter: Very low spend, short stay
-    - cultural_tourist: Medium-high spend, museum/culture preferences
-    - adventure_seeker: Young demographic indicators, outdoor preferences
-    """
+    # Assign segment based on business rules
+
     price = row.get('price_per_night', 100)
     nights = row.get('nights', 2)
     is_family = row.get('is_family', False)
@@ -104,17 +81,7 @@ def _assign_cluster_based_segment(
     n_clusters: int,
     seed: int
 ) -> pd.DataFrame:
-    """
-    Assign segments using K-means clustering.
-    
-    Args:
-        df: Guest dataframe
-        n_clusters: Number of clusters
-        seed: Random seed
-        
-    Returns:
-        Dataframe with cluster assignments
-    """
+    # Assign segments using K-means clustering
     # Select features for clustering
     features = []
     feature_names = []
@@ -227,17 +194,7 @@ def apply_segment_boost(
     guest_segment: str,
     ads_df: pd.DataFrame
 ) -> Dict[str, float]:
-    """
-    Apply segment-specific boost to ad scores.
-    
-    Args:
-        ad_scores: Dict mapping ad_id to score
-        guest_segment: Guest segment
-        ads_df: Advertiser dataframe
-        
-    Returns:
-        Boosted ad scores
-    """
+    # Apply segment-specific boost to ad scores
     from .utils import parse_tags_string
     
     if guest_segment not in SEGMENT_AD_PREFERENCES:
@@ -278,15 +235,7 @@ def apply_segment_boost(
 
 
 def get_segment_summary(guests_df: pd.DataFrame) -> pd.DataFrame:
-    """
-    Get summary statistics per segment.
-    
-    Args:
-        guests_df: Guest dataframe with segments
-        
-    Returns:
-        Summary dataframe
-    """
+    # Get summary statistics per segment
     if 'segment' not in guests_df.columns:
         guests_df = create_guest_segments(guests_df)
     

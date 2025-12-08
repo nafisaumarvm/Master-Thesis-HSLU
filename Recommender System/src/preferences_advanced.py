@@ -1,13 +1,4 @@
-"""
-Advanced Preference Modeling with Critical Improvements
-
-Implements 5 key enhancements:
-1. Awareness decay (forgetting)
-2. Segment-specific learning rates
-3. Preference drift over stay
-4. Multi-objective optimization
-5. Contextual interactions (weather × time × segment)
-"""
+# Preferences modeling
 
 import pandas as pd
 import numpy as np
@@ -77,29 +68,8 @@ def update_awareness_advanced(
     segment: str,
     custom_params: Optional[Dict] = None
 ) -> float:
-    """
-    Update awareness with segment-specific parameters and decay.
-    
-    Formula:
-    - If exposed: ρ(t+1) = ρ(t) + α[segment] * (1 - ρ(t))
-    - If not exposed: ρ(t+1) = ρ(t) * (1 - δ[segment])
-    
-    Parameters
-    ----------
-    current_awareness : float
-        Current awareness ρ(t) ∈ [0, 1]
-    was_exposed : bool
-        Whether ad was shown
-    segment : str
-        Guest segment
-    custom_params : dict, optional
-        Override default params
-        
-    Returns
-    -------
-    float
-        Updated awareness ρ(t+1)
-    """
+    # Update awareness with segment-specific parameters and decay
+
     # Get segment-specific parameters
     if custom_params:
         params = custom_params
@@ -126,30 +96,8 @@ def compute_preference_drift(
     total_nights: int,
     drift_type: str = 'exploration_fatigue'
 ) -> float:
-    """
-    Model preference drift across stay duration.
-    
-    Patterns:
-    - Day 1-2: High exploration (boost novelty)
-    - Day 3-5: Routine establishment (boost familiar)
-    - Day 7+: Fatigue (reduce engagement)
-    
-    Parameters
-    ----------
-    base_affinity : float
-        Base preference for category
-    day_of_stay : int
-        Current day (1-indexed)
-    total_nights : int
-        Total stay length
-    drift_type : str
-        'exploration_fatigue' or 'linear_decline'
+    # Model preference drift across stay duration
         
-    Returns
-    -------
-    float
-        Adjusted affinity
-    """
     if drift_type == 'exploration_fatigue':
         # Early exploration, mid routine, late fatigue
         stay_fraction = day_of_stay / max(total_nights, 1)
@@ -182,39 +130,15 @@ def compute_context_interactions(
     category: str,
     day_of_stay: int = 1
 ) -> float:
-    """
-    Compute interaction effects between context dimensions.
-    
-    Examples:
-    - Rainy + Budget Family + Museum → High boost
-    - Sunny + Luxury + Spa Outdoor → High boost
-    - Evening + Weekend Explorer + Nightlife → High boost
-    
-    Parameters
-    ----------
-    segment : str
-        Guest segment
-    weather : str
-        Weather condition
-    time_of_day : str
-        Time of day
-    category : str
-        Advertiser category
-    day_of_stay : int
-        Day in stay
-        
-    Returns
-    -------
-    float
-        Interaction boost (additive to utility)
-    """
+    # Compute interaction effects between context dimension
+  
     boost = 0.0
     
     # Weather × Segment × Category interactions
     if weather == 'rainy':
         if segment in ['budget_family', 'cultural_tourist']:
             if category in ['museum', 'gallery', 'cafe']:
-                boost += 0.40  # Perfect match: indoor activities for families
+                boost += 0.40 
         
         if segment == 'luxury_leisure':
             if category == 'spa':
@@ -277,39 +201,8 @@ def compute_multi_objective_reward(
     lambda_diversity: float = 0.2,
     f_max: int = 5
 ) -> Dict[str, float]:
-    """
-    Compute multi-objective reward for Pareto optimization.
-    
-    Objectives:
-    1. Revenue maximization
-    2. Awareness building
-    3. Intrusion minimization
-    4. Diversity promotion
-    
-    Parameters
-    ----------
-    click : bool
-        Whether ad was clicked
-    revenue : float
-        Revenue from click
-    awareness_before : float
-        Awareness before exposure
-    awareness_after : float
-        Awareness after exposure
-    frequency : int
-        How many times ad shown to this guest
-    category_diversity : float
-        Diversity score (0-1, higher = more diverse)
-    lambda_* : float
-        Objective weights
-    f_max : int
-        Maximum acceptable frequency
-        
-    Returns
-    -------
-    dict
-        Individual objectives and weighted total
-    """
+    # Compute multi-objective reward for Pareto optimization
+
     # Objective 1: Revenue
     revenue_obj = click * revenue
     
@@ -346,23 +239,8 @@ def generate_pareto_frontier(
     lambda_revenue_range: List[float] = None,
     lambda_awareness_range: List[float] = None
 ) -> pd.DataFrame:
-    """
-    Generate Pareto frontier for revenue vs. awareness trade-off.
-    
-    Parameters
-    ----------
-    exposure_log : pd.DataFrame
-        Exposure log with clicks, revenue, awareness
-    lambda_revenue_range : list
-        Range of revenue weights to test
-    lambda_awareness_range : list
-        Range of awareness weights to test
-        
-    Returns
-    -------
-    pd.DataFrame
-        Pareto frontier points
-    """
+    # Generate Pareto frontier for revenue vs. awareness trade-off
+
     if lambda_revenue_range is None:
         lambda_revenue_range = np.linspace(0, 1, 11)
     
@@ -414,38 +292,8 @@ def compute_advanced_utility(
     include_drift: bool = True,
     include_interactions: bool = True
 ) -> Dict[str, float]:
-    """
-    Compute utility with all advanced features.
-    
-    Includes:
-    - Base utility (van Leeuwen)
-    - Preference drift
-    - Contextual interactions
-    
-    Parameters
-    ----------
-    guest_segment : str
-        Guest segment
-    advertiser_category : str
-        Advertiser category
-    guest_context : dict
-        Context (weather, time, etc.)
-    advertiser_attrs : dict
-        Advertiser attributes
-    day_of_stay : int
-        Current day in stay
-    total_nights : int
-        Total stay length
-    include_drift : bool
-        Whether to add preference drift
-    include_interactions : bool
-        Whether to add context interactions
-        
-    Returns
-    -------
-    dict
-        Utility components
-    """
+    # Compute utility with all advanced features
+
     # Base utility (original van Leeuwen)
     base_utility = compute_base_utility(
         guest_segment,
@@ -491,14 +339,8 @@ def compute_advanced_utility(
 
 
 def get_awareness_params_summary() -> pd.DataFrame:
-    """
-    Get summary of segment-specific awareness parameters.
-    
-    Returns
-    -------
-    pd.DataFrame
-        Summary table
-    """
+    # Get summary of segment-specific awareness parameters
+
     data = []
     for segment, params in SEGMENT_AWARENESS_PARAMS.items():
         data.append({
@@ -514,14 +356,10 @@ def get_awareness_params_summary() -> pd.DataFrame:
 
 # Example usage
 if __name__ == '__main__':
-    print("ADVANCED PREFERENCE MODEL - KEY FEATURES")
-    print("="*70)
     
-    print("\n1. SEGMENT-SPECIFIC AWARENESS PARAMETERS:")
     params_df = get_awareness_params_summary()
     print(params_df.to_string(index=False))
     
-    print("\n2. AWARENESS DYNAMICS WITH DECAY:")
     segment = 'luxury_leisure'
     awareness = 0.5
     print(f"   Initial awareness: {awareness:.3f}")
@@ -535,14 +373,12 @@ if __name__ == '__main__':
         awareness = update_awareness_advanced(awareness, False, segment)
         print(f"   After day {i+1} without exposure: {awareness:.3f}")
     
-    print("\n3. PREFERENCE DRIFT OVER STAY:")
     base_affinity = 0.7
     total_nights = 10
     for day in [1, 3, 7, 10]:
         adjusted = compute_preference_drift(base_affinity, day, total_nights)
         print(f"   Day {day:2d}: {base_affinity:.3f} → {adjusted:.3f} (drift: {adjusted-base_affinity:+.3f})")
     
-    print("\n4. CONTEXTUAL INTERACTIONS:")
     interactions = [
         ('rainy', 'budget_family', 'museum', 'morning'),
         ('sunny', 'adventure_seeker', 'tour', 'afternoon'),
@@ -552,7 +388,6 @@ if __name__ == '__main__':
         boost = compute_context_interactions(segment, weather, time, category)
         print(f"   {weather:6s} + {segment:20s} + {category:10s}: +{boost:.3f}")
     
-    print("\n5. MULTI-OBJECTIVE REWARD:")
     reward = compute_multi_objective_reward(
         click=True,
         revenue=50.0,

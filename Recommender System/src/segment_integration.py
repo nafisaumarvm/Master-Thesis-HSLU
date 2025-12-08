@@ -1,8 +1,7 @@
-"""
-Integration module: Connect data-driven guest segments to recommender system.
+# Integration module: Connect data-driven guest segments to recommender system.
 
-Replaces hard-coded segments with data-driven clusters from guest_segmentation.py.
-"""
+# Replaces hard-coded segments with data-driven clusters from guest_segmentation.py.
+
 
 import pandas as pd
 import numpy as np
@@ -14,21 +13,16 @@ RESULTS_DIR = Path(__file__).parent.parent / "results"
 
 
 class DataDrivenSegmentMapper:
-    """
-    Maps data-driven guest segments to recommender system.
-    
-    Replaces the old hard-coded segments with statistically-derived clusters.
-    """
     
     def __init__(self):
-        """Initialize with saved segmentation results."""
+        # Initialize with saved segmentation results
         self.cluster_profiles = None
         self.affinity_matrix = None
         self.segment_names = None
         self._load_segmentation_results()
     
     def _load_segmentation_results(self):
-        """Load saved cluster profiles and affinities."""
+        # Load saved cluster profiles and affinities
         profiles_path = RESULTS_DIR / "cluster_profiles.csv"
         affinity_path = RESULTS_DIR / "segment_category_affinities.csv"
         
@@ -54,48 +48,22 @@ class DataDrivenSegmentMapper:
             self.segment_names = [f"Segment {i}" for i in range(len(self.cluster_profiles))]
     
     def get_segment_names(self) -> list:
-        """Get list of data-driven segment names."""
+        # Get list of data-driven segment names
         return self.segment_names
     
     def get_preference_matrix(self) -> pd.DataFrame:
-        """
-        Get segment-category preference matrix for recommender.
-        
-        Returns:
-            DataFrame: segments × categories, values = base utility [0-1]
-        """
+        # Get segment-category preference matrix for recommender
         return self.affinity_matrix
     
     def get_segment_profile(self, segment_id: int) -> Dict:
-        """
-        Get detailed profile for a segment.
-        
-        Args:
-            segment_id: Cluster ID (0-7)
-        
-        Returns:
-            Dictionary of segment characteristics
-        """
+        # Get detailed profile for a segment
         if segment_id >= len(self.cluster_profiles):
             raise ValueError(f"Invalid segment_id {segment_id}. Valid range: 0-{len(self.cluster_profiles)-1}")
         
         return self.cluster_profiles.loc[segment_id].to_dict()
     
     def map_old_to_new_segments(self) -> Dict[str, int]:
-        """
-        Map old hard-coded segments to new data-driven segments.
-        
-        Old segments:
-        - "Luxury Leisure"
-        - "Family Group"
-        - "Bargain Hunter"
-        - "Business Traveler"
-        
-        New segments (8 data-driven clusters)
-        
-        Returns:
-            Mapping from old segment names to new cluster IDs
-        """
+        # Map old hard-coded segments to new data-driven segments
         # Analyze cluster characteristics to find best matches
         mapping = {}
         
@@ -138,15 +106,7 @@ class DataDrivenSegmentMapper:
         self, 
         n_guests: int = 1000
     ) -> pd.DataFrame:
-        """
-        Generate guest dataset with realistic segment distribution.
-        
-        Args:
-            n_guests: Number of guests to generate
-        
-        Returns:
-            DataFrame with guest_id, segment_id, segment_name
-        """
+        # Generate guest dataset with realistic segment distribution
         # Use actual segment proportions from clustering
         proportions = self.cluster_profiles['proportion'].values
         
@@ -193,12 +153,7 @@ class DataDrivenSegmentMapper:
 
 
 def create_preference_matrix_for_recommender() -> Tuple[pd.DataFrame, list]:
-    """
-    Create preference matrix in format expected by existing recommender system.
-    
-    Returns:
-        Tuple of (preference_matrix, segment_names)
-    """
+    # Create preference matrix in format expected by existing recommender system
     mapper = DataDrivenSegmentMapper()
     
     # Get data-driven preference matrix
@@ -212,40 +167,26 @@ def load_or_create_guest_dataset(
     n_guests: int = 1000,
     use_cached: bool = True
 ) -> pd.DataFrame:
-    """
-    Load or create guest dataset with data-driven segments.
-    
-    Args:
-        n_guests: Number of guests to generate
-        use_cached: If True, use cached dataset if available
-    
-    Returns:
-        Guest DataFrame with realistic segments
-    """
+    # Load or create guest dataset with data-driven segments
     cache_path = RESULTS_DIR / f"guest_dataset_{n_guests}.csv"
     
     if use_cached and cache_path.exists():
-        print(f"📂 Loading cached guest dataset from {cache_path}")
+        print(f"Loading cached guest dataset from {cache_path}")
         return pd.read_csv(cache_path)
     
-    print(f"🔨 Generating {n_guests:,} guests with data-driven segments...")
+    print(f"Generating {n_guests:,} guests with data-driven segments...")
     mapper = DataDrivenSegmentMapper()
     guests = mapper.generate_guest_dataset_with_segments(n_guests)
     
     # Cache for future use
     guests.to_csv(cache_path, index=False)
-    print(f"💾 Saved to {cache_path}")
+    print(f"Saved to {cache_path}")
     
     return guests
 
 
 def get_segment_learning_rates() -> Dict[int, Dict[str, float]]:
-    """
-    Get segment-specific awareness learning rates.
-    
-    Returns:
-        Dictionary: segment_id → {alpha, delta}
-    """
+    # Get segment-specific awareness learning rates
     mapper = DataDrivenSegmentMapper()
     
     learning_rates = {}
@@ -273,46 +214,40 @@ def get_segment_learning_rates() -> Dict[int, Dict[str, float]]:
 
 
 if __name__ == "__main__":
-    print("="*80)
-    print("DATA-DRIVEN SEGMENT INTEGRATION TEST")
-    print("="*80)
     
     # Test 1: Load segmentation results
-    print("\n1️⃣  Loading segmentation results...")
+    print("\nLoading segmentation results...")
     mapper = DataDrivenSegmentMapper()
-    print(f"   ✅ Loaded {len(mapper.segment_names)} segments")
+    print(f"Loaded {len(mapper.segment_names)} segments")
     
     # Test 2: Get preference matrix
-    print("\n2️⃣  Loading preference matrix...")
+    print("\nLoading preference matrix...")
     pref_matrix = mapper.get_preference_matrix()
-    print(f"   ✅ Matrix shape: {pref_matrix.shape}")
-    print("\n   Preview:")
+    print(f"Matrix shape: {pref_matrix.shape}")
+    print("\nPreview:")
     print(pref_matrix.head())
     
     # Test 3: Map old to new segments
-    print("\n3️⃣  Mapping old segments to new clusters...")
+    print("\nMapping old segments to new clusters...")
     old_to_new = mapper.map_old_to_new_segments()
     for old_name, new_id in old_to_new.items():
         new_name = mapper.segment_names[new_id]
         print(f"   {old_name:20s} → Cluster {new_id}: {new_name}")
     
     # Test 4: Generate guest dataset
-    print("\n4️⃣  Generating guest dataset...")
+    print("\nGenerating guest dataset...")
     guests = mapper.generate_guest_dataset_with_segments(n_guests=1000)
-    print(f"   ✅ Generated {len(guests):,} guests")
-    print("\n   Segment distribution:")
+    print(f"Generated {len(guests):,} guests")
+    print("\nSegment distribution:")
     print(guests['segment_name'].value_counts())
     
     # Test 5: Get learning rates
-    print("\n5️⃣  Getting segment-specific learning rates...")
+    print("\nGetting segment-specific learning rates...")
     learning_rates = get_segment_learning_rates()
     for seg_id, rates in learning_rates.items():
         seg_name = mapper.segment_names[seg_id]
         print(f"   {seg_name:30s}: α={rates['alpha']:.2f}, δ={rates['delta']:.2f}")
-    
-    print("\n" + "="*80)
-    print("✅ INTEGRATION TEST COMPLETE!")
-    print("="*80)
+
 
 
 
