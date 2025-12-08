@@ -1,11 +1,4 @@
-"""
-Swiss Tourism Data API Integration
-
-Fetches real restaurants, experiences, tours, and attractions from
-Switzerland Tourism's official API.
-
-API Documentation: https://www.tourismdata.ch/dataset/tourism-offers-in-switzerland/
-"""
+# Swiss Tourism Data API Integration
 
 import requests
 import pandas as pd
@@ -18,32 +11,11 @@ import warnings
 
 
 class SwissTourismAPI:
-    """
-    Interface to Swiss Tourism Data API for real advertiser catalog.
-    
-    Fetches actual:
-    - Restaurants
-    - Tours & Experiences
-    - Attractions
-    - Activities
-    - Points of Interest
-    
-    Example:
-        >>> api = SwissTourismAPI()
-        >>> restaurants = api.fetch_restaurants(location='Zurich', limit=100)
-        >>> advertisers_df = api.create_advertiser_catalog()
-    """
+    # Interface to Swiss Tourism Data API for real advertiser catalog
     
     def __init__(self, api_key: str = None):
-        """
-        Initialize Zurich Tourism API client.
-        
-        Uses the official Zurich Tourism API (zuerich.com) which provides
-        real attractions, museums, restaurants, and experiences in Zurich.
-        
-        Args:
-            api_key: Not needed for Zurich Tourism API (public)
-        """
+        # Initialize Zurich Tourism API client
+
         self.api_key = api_key  # Not used for zuerich.com API
         self.base_url = "https://www.zuerich.com/en/api/v2/data"
         self.headers = {
@@ -55,9 +27,8 @@ class SwissTourismAPI:
         
         # Known working IDs from Zurich Tourism API
         self.known_ids = {
-            'attractions': [96, 162, 97, 98, 95],  # Museums, art, landmarks
-            'activities': [71, 72],  # Tours, experiences
-            # Can expand with more IDs as discovered
+            'attractions': [96, 162, 97, 98, 95],  
+            'activities': [71, 72],
         }
         
         # Try to load discovered IDs if available
@@ -67,12 +38,12 @@ class SwissTourismAPI:
                 with open(discovered_ids_file, 'r') as f:
                     discovered_ids = json.load(f)
                     if discovered_ids:
-                        print(f"✅ Loaded {len(discovered_ids)} discovered IDs from cache")
+                        print(f"Loaded {len(discovered_ids)} discovered IDs from cache")
                         # Use all discovered IDs for attractions
                         self.known_ids['attractions'] = discovered_ids[:150]
                         self.known_ids['activities'] = discovered_ids[150:] if len(discovered_ids) > 150 else []
             except Exception as e:
-                print(f"⚠️  Could not load discovered IDs: {e}")
+                print(f"Could not load discovered IDs: {e}")
     
     def fetch_offers(
         self,
@@ -81,32 +52,21 @@ class SwissTourismAPI:
         limit: int = 100,
         use_cache: bool = True
     ) -> List[Dict]:
-        """
-        Fetch tourism offers from Zurich Tourism API.
-        
-        The zuerich.com API uses numeric IDs, so we fetch from known categories.
-        
-        Args:
-            category: Category type ('attractions', 'activities', 'restaurants')
-            location: Not used (API is Zurich-specific)
-            limit: Maximum number of results
-            use_cache: Whether to use cached data
-            
-        Returns:
-            List of offer dictionaries
-        """
+        # Fetch tourism offers from Zurich Tourism API
+        # The zuerich.com API uses numeric IDs, so we fetch from known categories
+
         # Create cache key
         cache_key = f"zurich_{category or 'all'}"
         cache_file = self.cache_dir / f"{cache_key}.json"
         
         # Check cache
         if use_cache and cache_file.exists():
-            print(f"✅ Loading cached Zurich data: {cache_file.name}")
+            print(f"Loading cached Zurich data: {cache_file.name}")
             with open(cache_file, 'r', encoding='utf-8') as f:
                 return json.load(f)
         
         # Fetch from API
-        print(f"📡 Fetching from Zurich Tourism API: {category or 'all'}")
+        print(f"Fetching from Zurich Tourism API: {category or 'all'}")
         
         try:
             # Get IDs for this category
@@ -140,10 +100,10 @@ class SwissTourismAPI:
                     time.sleep(0.2)
                     
                 except Exception as e:
-                    print(f"    ⚠️  Could not fetch ID {offer_id}: {e}")
+                    print(f"Could not fetch ID {offer_id}: {e}")
                     continue
             
-            print(f"✅ Fetched {len(offers)} offers from Zurich Tourism API")
+            print(f"Fetched {len(offers)} offers from Zurich Tourism API")
             
             # Cache results
             if offers:
@@ -153,8 +113,8 @@ class SwissTourismAPI:
             return offers
             
         except Exception as e:
-            print(f"⚠️  API fetch failed: {e}")
-            print(f"💡 Falling back to synthetic advertiser generation")
+            print(f"API fetch failed: {e}")
+            print(f"Falling back to synthetic advertiser generation")
             return []
     
     def fetch_restaurants(
@@ -162,8 +122,7 @@ class SwissTourismAPI:
         location: Optional[str] = None,
         limit: int = 50
     ) -> List[Dict]:
-        """Fetch restaurants from Zurich Tourism API."""
-        # For now, returns empty (can add restaurant IDs later)
+        # Fetch restaurants from Zurich Tourism API
         return []
     
     def fetch_activities(
@@ -171,7 +130,7 @@ class SwissTourismAPI:
         location: Optional[str] = None,
         limit: int = 50
     ) -> List[Dict]:
-        """Fetch activities/tours from Zurich Tourism API."""
+        # Fetch activities/tours from Zurich Tourism API
         return self.fetch_offers(category='activities', location=location, limit=limit)
     
     def fetch_attractions(
@@ -179,16 +138,12 @@ class SwissTourismAPI:
         location: Optional[str] = None,
         limit: int = 50
     ) -> List[Dict]:
-        """Fetch attractions from Zurich Tourism API."""
+        # Fetch attractions from Zurich Tourism API
         return self.fetch_offers(category='attractions', location=location, limit=limit)
     
     def discover_more_ids(self, start_id: int = 1, end_id: int = 200) -> List[int]:
-        """
-        Discover valid IDs from Zurich Tourism API by testing range.
-        
-        This is a helper to find more attraction IDs.
-        Use sparingly to avoid overloading the API.
-        """
+        # Discover valid IDs from Zurich Tourism API by testing range
+    
         print(f"🔍 Discovering valid IDs from {start_id} to {end_id}...")
         valid_ids = []
         
@@ -212,7 +167,7 @@ class SwissTourismAPI:
             except Exception:
                 continue
         
-        print(f"✅ Discovered {len(valid_ids)} valid IDs: {valid_ids}")
+        print(f"Discovered {len(valid_ids)} valid IDs: {valid_ids}")
         return valid_ids
     
     def create_advertiser_catalog(
@@ -221,32 +176,9 @@ class SwissTourismAPI:
         total_advertisers: int = 200,
         use_cache: bool = True
     ) -> pd.DataFrame:
-        """
-        Create complete advertiser catalog from Swiss Tourism data.
-        
-        Args:
-            location: Swiss location (e.g., 'Zurich', 'Geneva', 'Bern', 'Lucerne')
-            total_advertisers: Target number of advertisers
-            use_cache: Whether to use cached API responses
-            
-        Returns:
-            DataFrame with columns:
-            - advertiser_id
-            - name
-            - category
-            - subcategory
-            - location
-            - latitude
-            - longitude
-            - distance_km (from hotel)
-            - price_level (1-4)
-            - rating (1-5)
-            - open_hours
-            - tags
-            - source (real vs. synthetic)
-        """
-        print(f"\n🏢 Creating advertiser catalog for {location}")
-        print("=" * 60)
+        # Create complete advertiser catalog from Swiss Tourism data
+
+        print(f"\nCreating advertiser catalog for {location}")
         
         # Fetch from Zurich Tourism API using known categories
         api_categories = {
@@ -273,7 +205,7 @@ class SwissTourismAPI:
             
             if all_advertisers:
                 recent_adds = [a for a in all_advertisers[-len(offers):]]
-                print(f"  ✅ Added {len(recent_adds)} {display_name}")
+                print(f"Added {len(recent_adds)} {display_name}")
             
             # Rate limiting (be nice to API)
             time.sleep(0.3)
@@ -281,22 +213,22 @@ class SwissTourismAPI:
         # Create DataFrame
         if all_advertisers:
             df = pd.DataFrame(all_advertisers)
-            print(f"\n✅ Created catalog with {len(df)} real Swiss advertisers")
+            print(f"\nCreated catalog with {len(df)} real Swiss advertisers")
         else:
-            print(f"\n⚠️  No API data available, generating synthetic advertisers")
+            print(f"\nNo API data available, generating synthetic advertisers")
             df = self._generate_synthetic_fallback(location, total_advertisers)
         
         # Fill to target size with synthetic if needed
         if len(df) < total_advertisers:
             needed = total_advertisers - len(df)
-            print(f"💡 Adding {needed} synthetic advertisers to reach target of {total_advertisers}")
+            print(f"Adding {needed} synthetic advertisers to reach target of {total_advertisers}")
             synthetic = self._generate_synthetic_fallback(location, needed, start_id=len(df))
             df = pd.concat([df, synthetic], ignore_index=True)
         
         # Add computed fields
         df = self._enrich_advertiser_data(df)
         
-        print(f"\n📊 Final catalog statistics:")
+        print(f"\nFinal catalog statistics:")
         print(f"   Total advertisers: {len(df)}")
         print(f"   Real (from API): {(df['source'] == 'real').sum()}")
         print(f"   Synthetic: {(df['source'] == 'synthetic').sum()}")
@@ -311,11 +243,7 @@ class SwissTourismAPI:
         category: str,
         index: int
     ) -> Optional[Dict]:
-        """
-        Convert Zurich Tourism API offer (schema.org format) to advertiser format.
-        
-        The zuerich.com API uses schema.org structured data.
-        """
+        # Convert Zurich Tourism API offer (schema.org format) to advertiser format
         try:
             # Extract name (multilingual)
             name_obj = offer.get('name', {})
@@ -383,11 +311,11 @@ class SwissTourismAPI:
             }
         
         except Exception as e:
-            print(f"    ⚠️  Could not convert offer: {e}")
+            print(f"Could not convert offer: {e}")
             return None
     
     def _extract_category_from_offer(self, categories: Dict, offer_type: str) -> str:
-        """Extract main category from schema.org categories."""
+        # Extract main category from schema.org categories
         if 'Museums' in categories:
             return 'museum'
         elif 'Art' in categories or 'ArtObject' in offer_type:
@@ -404,7 +332,7 @@ class SwissTourismAPI:
             return 'attraction'
     
     def _parse_price_from_html(self, price_html: str) -> int:
-        """Extract price level from HTML price table."""
+        # Extract price level from HTML price table
         if not price_html or price_html == '':
             return 2  # Default mid-range
         
@@ -426,13 +354,11 @@ class SwissTourismAPI:
         return 2  # Default
     
     def _parse_zurich_opening_hours(self, hours_spec) -> str:
-        """Parse Zurich Tourism opening hours specification."""
-        # For now, return default
-        # In practice, would parse the hours_spec structure
+        # Parse Zurich Tourism opening hours specification
         return "09:00-18:00"
     
     def _normalize_category(self, api_category: str) -> str:
-        """Map API categories to our standard categories."""
+        # Map API categories to our standard categories
         mapping = {
             'restaurant': 'restaurant',
             'activity': 'tour',
@@ -447,14 +373,8 @@ class SwissTourismAPI:
         return mapping.get(api_category.lower(), api_category.lower())
     
     def _estimate_price_level(self, offer: Dict, category: str) -> int:
-        """
-        Estimate price level (1-4) from offer data.
-        
-        1 = Budget (€0-30)
-        2 = Mid-range (€30-70)
-        3 = Upscale (€70-150)
-        4 = Luxury (€150+)
-        """
+    # Estimate price level (1-4) from offer data
+
         # Check if price info in offer
         price = offer.get('price', {})
         if isinstance(price, dict):
@@ -485,13 +405,12 @@ class SwissTourismAPI:
         return defaults.get(category, 2)
     
     def _parse_opening_hours(self, hours: Dict) -> str:
-        """Parse opening hours from API format."""
-        # Simplified - just return typical hours
-        # In practice, you'd parse the actual hours dict
+        # Parse opening hours from API format
+ 
         return "09:00-18:00"
     
     def _generate_tags(self, description: str, category: str) -> List[str]:
-        """Generate tags from description and category."""
+        # Generate tags from description and category
         tags = [category]
         
         # Common keywords
@@ -521,14 +440,8 @@ class SwissTourismAPI:
         return tags[:5]  # Limit to 5 tags
     
     def _enrich_advertiser_data(self, df: pd.DataFrame) -> pd.DataFrame:
-        """
-        Add computed fields to advertiser catalog.
-        
-        Adds:
-        - base_utility (for preference matching)
-        - expected_revenue (for revenue optimization)
-        - daily_cap (for inventory management)
-        """
+    # Add computed fields to advertiser catalog
+
         # Base utility (random for now, should be segment-specific)
         df['base_utility'] = np.random.uniform(0.3, 0.8, len(df))
         
@@ -577,7 +490,7 @@ class SwissTourismAPI:
         lat1: float, lon1: float,
         lat2: float, lon2: float
     ) -> float:
-        """Calculate distance between two points in km."""
+        # Calculate distance between two points in km
         from math import radians, sin, cos, sqrt, atan2
         
         R = 6371  # Earth radius in km
@@ -597,9 +510,8 @@ class SwissTourismAPI:
         num_advertisers: int,
         start_id: int = 0
     ) -> pd.DataFrame:
-        """
-        Generate synthetic advertisers as fallback.
-        """
+        # Generate synthetic advertisers as fallback
+
         categories = ['restaurant', 'tour', 'attraction', 'spa', 'cafe', 'bar', 'museum']
         
         advertisers = []
@@ -632,27 +544,7 @@ def load_swiss_advertisers(
     use_cache: bool = True,
     use_real_api: bool = True
 ) -> pd.DataFrame:
-    """
-    Convenient function to load Swiss advertiser catalog.
-    
-    Uses Zurich Tourism API (zuerich.com) to fetch real attractions, museums,
-    and activities. Falls back to synthetic generation if API unavailable.
-    
-    Args:
-        location: Location (currently only 'Zurich' supported by API)
-        num_advertisers: Target number of advertisers
-        use_cache: Whether to use cached API responses
-        use_real_api: Whether to attempt real API (set False to use synthetic only)
-        
-    Returns:
-        DataFrame with Swiss advertisers (real from API + synthetic to fill)
-        
-    Example:
-        >>> advertisers = load_swiss_advertisers('Zurich', 200)
-        >>> print(f"Loaded {len(advertisers)} advertisers")
-        >>> print(f"Real: {(advertisers['source']=='real').sum()}")
-        >>> print(advertisers['category'].value_counts())
-    """
+    # Convenient function to load Swiss advertiser catalog
     if use_real_api:
         api = SwissTourismAPI()
         return api.create_advertiser_catalog(
@@ -662,22 +554,17 @@ def load_swiss_advertisers(
         )
     else:
         # Skip API, use synthetic only
-        print(f"💡 Using synthetic advertisers only (use_real_api=False)")
+        print(f"Using synthetic advertisers only (use_real_api=False)")
         api = SwissTourismAPI()
         return api._generate_synthetic_fallback(location, num_advertisers, start_id=0)
 
-
-# ============================================================================
-# EXAMPLE USAGE
-# ============================================================================
+# Example
 
 if __name__ == "__main__":
     print("Swiss Tourism Data API Integration")
-    print("=" * 60)
     
     # Example 1: Load advertisers
-    print("\n📊 Example 1: Load Real Swiss Advertisers")
-    print("-" * 60)
+    print("\nExample 1: Load Real Swiss Advertisers")
     
     try:
         advertisers_df = load_swiss_advertisers(
@@ -686,30 +573,25 @@ if __name__ == "__main__":
             use_cache=True
         )
         
-        print(f"\n✅ Loaded {len(advertisers_df)} advertisers")
-        print(f"\n📋 Sample (first 10):")
+        print(f"\nLoaded {len(advertisers_df)} advertisers")
+        print(f"\nSample (first 10):")
         print(advertisers_df[['name', 'category', 'price_level', 'rating', 'distance_km', 'source']].head(10).to_string(index=False))
         
-        print(f"\n📈 Statistics:")
+        print(f"\nStatistics:")
         print(f"   Real (from API): {(advertisers_df['source'] == 'real').sum()}")
         print(f"   Synthetic: {(advertisers_df['source'] == 'synthetic').sum()}")
         print(f"   Average rating: {advertisers_df['rating'].mean():.2f}")
         print(f"   Average distance: {advertisers_df['distance_km'].mean():.2f} km")
         
-        print(f"\n📊 By category:")
+        print(f"\nBy category:")
         print(advertisers_df['category'].value_counts().to_string())
         
         # Save to file
         output_path = 'data/processed/swiss_advertisers.csv'
         advertisers_df.to_csv(output_path, index=False)
-        print(f"\n💾 Saved to: {output_path}")
+        print(f"\nSaved to: {output_path}")
         
     except Exception as e:
-        print(f"❌ Error: {e}")
+        print(f"Error: {e}")
         import traceback
         traceback.print_exc()
-    
-    print("\n✅ Example complete!")
-    print("\n💡 Integration tip:")
-    print("   Use load_swiss_advertisers() in your simulation for real Swiss data!")
-

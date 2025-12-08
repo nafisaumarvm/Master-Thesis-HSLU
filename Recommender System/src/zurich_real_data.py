@@ -1,16 +1,4 @@
-"""
-Zurich Real Data Loader
-
-Loads and parses real Zurich data from JSON files (616 entries total, hotels excluded):
-- Tourist Attractions (107)
-- Shopping (177)
-- Spa & Wellness (28)
-- Nightlife (69)
-- Cultural Activities (135)
-- Restaurants (100 from Lucerne)
-
-This replaces synthetic advertiser data with 100% real data!
-"""
+# Zurich Real Data Loader
 
 import json
 import pandas as pd
@@ -21,23 +9,14 @@ import warnings
 
 
 class ZurichDataLoader:
-    """Load and parse real Zurich advertiser data from JSON files."""
+    # Load and parse real Zurich advertiser data from JSON files
     
     def __init__(self, data_dir: Optional[Path] = None):
-        """
-        Initialize Zurich data loader.
-        
-        Args:
-            data_dir: Directory containing JSON files (defaults to project root)
-        """
+        # Initialize Zurich data loader
         if data_dir is None:
-            # Default to project root
             data_dir = Path(__file__).parent.parent
         
         self.data_dir = Path(data_dir)
-        
-        # JSON file mapping
-        # NOTE: Hotels excluded - hotels shouldn't show competitor hotel ads
         self.json_files = {
             # 'hotels': 'Hotels Zurich.json',  # EXCLUDED: Hotels shouldn't advertise competing hotels
             'attractions': 'Tourist Attractions Zurich.json',
@@ -48,7 +27,6 @@ class ZurichDataLoader:
             'gastro_luzern': 'Gastro Luzern.json'  # Lucerne restaurants
         }
         
-        # Category mapping to our system's categories
         self.category_mapping = {
             # Experiences & Culture
             'Museums': 'Experiences',
@@ -90,12 +68,11 @@ class ZurichDataLoader:
         }
     
     def _extract_text(self, field: Dict, lang: str = 'en') -> str:
-        """Extract text from multilingual field, with fallback."""
+        # Extract text from multilingual field, with fallback
         if field is None:
             return ""
         
         if isinstance(field, dict):
-            # Try requested language, then fallback to en, de, fr, it
             for try_lang in [lang, 'en', 'de', 'fr', 'it']:
                 if try_lang in field and field[try_lang]:
                     return field[try_lang]
@@ -104,16 +81,14 @@ class ZurichDataLoader:
         return str(field)
     
     def _map_category(self, category_dict: Dict) -> str:
-        """Map JSON categories to our system's categories."""
+        # Map JSON categories to our system's categories
         if not category_dict:
             return 'Experiences'  # Default
         
-        # Try to match any category in the dict
         for cat_name in category_dict.keys():
             if cat_name in self.category_mapping:
                 return self.category_mapping[cat_name]
         
-        # Default based on most common category types
         if 'Culture' in category_dict or 'Museums' in category_dict:
             return 'Experiences'
         elif 'Gastronomy' in category_dict:
@@ -125,10 +100,10 @@ class ZurichDataLoader:
         elif 'Hotels' in category_dict:
             return 'Accommodation'
         
-        return 'Experiences'  # Final fallback
+        return 'Experiences'
     
     def _parse_price(self, price_dict: Dict, lang: str = 'en') -> float:
-        """Extract price from price field."""
+        # Extract price from price field
         if not price_dict:
             return np.nan
         
@@ -136,11 +111,9 @@ class ZurichDataLoader:
         if not price_text:
             return np.nan
         
-        # Try to extract numeric price from text like "CHF 25" or "CHF 10-30"
         import re
         numbers = re.findall(r'\d+\.?\d*', price_text)
         if numbers:
-            # Take first number or average if range
             try:
                 prices = [float(n) for n in numbers[:2]]
                 return np.mean(prices)
@@ -150,12 +123,11 @@ class ZurichDataLoader:
         return np.nan
     
     def _parse_luzern_entry(self, entry: Dict, source_category: str) -> Dict:
-        """Parse a Gastro Luzern entry (different format)."""
+        # Parse a Gastro Luzern entry (different format)
         # Extract basic info
         advertiser_id = entry.get('id', '')
         name = entry.get('title', 'Unknown')
         
-        # Description (from texts array)
         description = ''
         texts = entry.get('texts', [])
         for text in texts:
@@ -163,10 +135,8 @@ class ZurichDataLoader:
                 description = text.get('value', '')
                 break
         
-        # Category (always restaurants for Luzern gastro)
         category = 'Restaurants'
         
-        # Location
         geo = entry.get('geo', {}).get('main', {})
         latitude = geo.get('latitude', np.nan)
         longitude = geo.get('longitude', np.nan)
@@ -204,7 +174,7 @@ class ZurichDataLoader:
         }
     
     def _parse_entry(self, entry: Dict, source_category: str) -> Dict:
-        """Parse a single JSON entry into our advertiser format."""
+        # Parse a single JSON entry into our advertiser format
         # Extract basic info
         advertiser_id = entry.get('identifier', '')
         name_en = self._extract_text(entry.get('name'), 'en')
@@ -268,25 +238,17 @@ class ZurichDataLoader:
         }
     
     def load_all_data(self, max_per_category: Optional[int] = None) -> pd.DataFrame:
-        """
-        Load all Zurich data from JSON files.
-        
-        Args:
-            max_per_category: Maximum entries per category (None = all)
-        
-        Returns:
-            DataFrame with all parsed advertisers
-        """
+        # Load all Zurich data from JSON files
+
         all_advertisers = []
         
-        print("🔍 Loading Real Zurich Data from JSON Files")
-        print("=" * 70)
+        print("Loading Real Zurich Data from JSON Files")
         
         for source_key, filename in self.json_files.items():
             filepath = self.data_dir / filename
             
             if not filepath.exists():
-                print(f"⚠️  File not found: {filename}")
+                print(f"File not found: {filename}")
                 continue
             
             try:
@@ -302,7 +264,7 @@ class ZurichDataLoader:
                     # Zurich format (direct list)
                     entries = data
                 else:
-                    print(f"⚠️  Unexpected format in {filename}: {type(data)}")
+                    print(f"Unexpected format in {filename}: {type(data)}")
                     continue
                 
                 # Parse entries
@@ -323,32 +285,30 @@ class ZurichDataLoader:
                         # Skip problematic entries
                         continue
                 
-                print(f"✅ {filename:40s}: {count:4d} entries loaded")
+                print(f"{filename:40s}: {count:4d} entries loaded")
             
             except Exception as e:
-                print(f"❌ Error loading {filename}: {e}")
+                print(f"Error loading {filename}: {e}")
                 continue
         
         # Convert to DataFrame
         df = pd.DataFrame(all_advertisers)
         
         if len(df) == 0:
-            print("❌ No data loaded!")
+            print("No data loaded!")
             return df
         
         # Enrich with additional features
         df = self._enrich_data(df)
         
-        print("=" * 70)
-        print(f"✅ TOTAL LOADED: {len(df)} real Zurich advertisers")
-        print(f"\n📊 Breakdown by Category:")
+        print(f"TOTAL LOADED: {len(df)} real Zurich advertisers")
         for cat, count in df['category'].value_counts().items():
             print(f"   {cat:20s}: {count:4d}")
         
         return df
     
     def _enrich_data(self, df: pd.DataFrame) -> pd.DataFrame:
-        """Add derived features to advertiser data."""
+        # Add derived features to advertiser data
         # Budget tier (based on price)
         df['budget_tier'] = 'medium'
         df.loc[df['price_chf'] < 20, 'budget_tier'] = 'low'
@@ -432,20 +392,7 @@ def load_zurich_advertisers(
     data_dir: Optional[Path] = None,
     seed: int = 42
 ) -> pd.DataFrame:
-    """
-    Load real Swiss advertisers for recommendation system.
-    
-    NOTE: Hotels are excluded - hotels shouldn't show competitor hotel ads.
-    Total available: 616 advertisers (Zurich: 516, Lucerne restaurants: 100)
-    
-    Args:
-        n_advertisers: Number of advertisers to load (None = all 616)
-        data_dir: Directory containing JSON files
-        seed: Random seed for sampling
-    
-    Returns:
-        DataFrame with n_advertisers real Swiss establishments (all 616 if n_advertisers=None)
-    """
+    # Load real Swiss advertisers for recommendation system
     loader = ZurichDataLoader(data_dir)
     
     # Load all data
@@ -456,55 +403,42 @@ def load_zurich_advertisers(
     
     # Use all data if n_advertisers is None, otherwise sample
     if n_advertisers is None:
-        print(f"\n✅ Using ALL {len(df)} real Swiss establishments")
+        print(f"\nUsing ALL {len(df)} real Swiss establishments")    
     elif len(df) > n_advertisers:
         df = df.sample(n=n_advertisers, random_state=seed).reset_index(drop=True)
-        print(f"\n✂️  Sampled {n_advertisers} advertisers from {len(loader.load_all_data())} available")
+        print(f"\nSampled {n_advertisers} advertisers from {len(loader.load_all_data())} available")
     elif len(df) < n_advertisers:
-        print(f"\n⚠️  Only {len(df)} advertisers available (requested {n_advertisers})")
+        print(f"\nOnly {len(df)} advertisers available (requested {n_advertisers})")
     
     # Add advertiser index
     df['advertiser_idx'] = range(len(df))
-    
-    print(f"\n✅ Final dataset: {len(df)} real Swiss advertisers")
-    print(f"   Source: Zurich (616, hotels excluded) + Lucerne (100) = {len(df)} total")
-    print(f"   Note: Hotels excluded - hotels shouldn't show competitor hotel ads")
-    print(f"   100% real data, 0% synthetic!")
     
     return df
 
 
 if __name__ == "__main__":
     # Test loading
-    print("="*70)
-    print("ZURICH REAL DATA LOADER - TEST")
-    print("="*70)
-    
     # Load all data
     loader = ZurichDataLoader()
     df = loader.load_all_data()
     
-    print(f"\n📊 Dataset Shape: {df.shape}")
-    print(f"\n📋 Columns: {list(df.columns)}")
+    print(f"\nDataset Shape: {df.shape}")
+    print(f"\nColumns: {list(df.columns)}")
     
-    print(f"\n🏆 Sample Entries:")
+    print(f"\nSample Entries:")
     for i, row in df.head(5).iterrows():
         print(f"   {row['name'][:50]:50s} | {row['category']:15s} | {row['city']}")
     
-    print(f"\n📍 GPS Coverage:")
+    print(f"\nGPS Coverage:")
     print(f"   Valid coordinates: {(~df['latitude'].isna()).sum()} / {len(df)}")
     
-    print(f"\n💰 Price Coverage:")
+    print(f"\nPrice Coverage:")
     print(f"   Valid prices: {(~df['price_chf'].isna()).sum()} / {len(df)}")
     print(f"   Average price: CHF {df['price_chf'].mean():.2f}")
     
-    print(f"\n🎯 Target Segments:")
+    print(f"\nTarget Segments:")
     all_segments = set()
     for segments in df['target_segments'].str.split(', '):
         all_segments.update(segments)
     print(f"   Unique segments: {sorted(all_segments)}")
     
-    print("\n" + "="*70)
-    print("✅ Zurich Real Data Loader working perfectly!")
-    print("="*70)
-

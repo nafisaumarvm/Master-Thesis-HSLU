@@ -1,12 +1,4 @@
-"""
-Real Weather Data Integration for In-Room TV Advertising
-
-Integrates actual 2024 weather data from Swiss MeteoSwiss climate data.
-Falls back to synthetic generation if real data is unavailable.
-
-Data Source: Swiss Federal Office of Meteorology and Climatology (MeteoSwiss)
-API: https://data.geo.admin.ch/api/stac/v1/
-"""
+# Real Weather Data Integration for In-Room TV Advertising
 
 import numpy as np
 import pandas as pd
@@ -27,25 +19,11 @@ except ImportError:
 
 
 class MeteoSwissWeatherLoader:
-    """
-    Load real 2024 weather data from MeteoSwiss API.
-    
-    Example Usage:
-        >>> loader = MeteoSwissWeatherLoader()
-        >>> weather_df = loader.load_weather_data(
-        ...     station='zwk',  # Zwischbergen
-        ...     start_date='2024-01-01',
-        ...     end_date='2024-12-31'
-        ... )
-    """
+    # Load real 2024 weather data from MeteoSwiss API
+
     
     def __init__(self, cache_dir: str = 'data/raw/weather'):
-        """
-        Initialize weather data loader.
-        
-        Args:
-            cache_dir: Directory to cache downloaded weather data
-        """
+        # Initialize weather data loader
         self.cache_dir = Path(cache_dir)
         self.cache_dir.mkdir(parents=True, exist_ok=True)
         
@@ -59,27 +37,8 @@ class MeteoSwissWeatherLoader:
         end_date: str = '2024-12-31',
         use_cache: bool = True
     ) -> pd.DataFrame:
-        """
-        Load real weather data from MeteoSwiss.
-        
-        Args:
-            station: MeteoSwiss station code (e.g., 'zwk' for Zwischbergen)
-            start_date: Start date in YYYY-MM-DD format
-            end_date: End date in YYYY-MM-DD format
-            use_cache: Whether to use cached data if available
-            
-        Returns:
-            DataFrame with columns:
-            - date: Date
-            - temperature: Average temperature (°C)
-            - precipitation: Precipitation amount (mm)
-            - weather: Category ('sunny', 'partly_cloudy', 'rainy', 'stormy')
-            - precipitation_prob: Probability of precipitation [0, 1]
-            
-        Raises:
-            ImportError: If pystac-client is not installed
-            ConnectionError: If API is unavailable
-        """
+        # Load real weather data from MeteoSwiss
+
         if not PYSTAC_AVAILABLE:
             raise ImportError(
                 "pystac-client is required for real weather data. "
@@ -90,11 +49,11 @@ class MeteoSwissWeatherLoader:
         # Check cache
         cache_file = self.cache_dir / f"weather_{station}_{start_date}_{end_date}.csv"
         if use_cache and cache_file.exists():
-            print(f"✅ Loading cached weather data from {cache_file}")
+            print(f"Loading cached weather data from {cache_file}")
             return pd.read_csv(cache_file, parse_dates=['date'])
         
         # Fetch from API
-        print(f"📡 Fetching weather data from MeteoSwiss API...")
+        print(f"Fetching weather data from MeteoSwiss API...")
         try:
             catalog = Client.open(self.catalog_url)
             collection = catalog.get_collection(self.collection_id)
@@ -111,13 +70,13 @@ class MeteoSwissWeatherLoader:
             if not hits:
                 raise ValueError(f"No data found for station '{station}'")
             
-            print(f"✅ Found {len(hits)} data files for station {station}")
+            print(f"Found {len(hits)} data files for station {station}")
             
             # Download relevant files
             dfs = []
             for hit in hits:
                 if '_pr_' in hit or '_tas_' in hit:  # Precipitation or temperature
-                    print(f"  Downloading: {hit}")
+                    print(f"Downloading: {hit}")
                     url = assets_dict[hit].href
                     
                     # Download to cache
@@ -130,7 +89,7 @@ class MeteoSwissWeatherLoader:
                         df = pd.read_csv(local_file)
                         dfs.append(df)
                     except Exception as e:
-                        print(f"  ⚠️  Could not read {hit}: {e}")
+                        print(f"Could not read {hit}: {e}")
             
             if not dfs:
                 raise ValueError(f"Could not load any data files for station {station}")
@@ -140,13 +99,13 @@ class MeteoSwissWeatherLoader:
             
             # Cache processed data
             weather_df.to_csv(cache_file, index=False)
-            print(f"✅ Cached weather data to {cache_file}")
+            print(f"Cached weather data to {cache_file}")
             
             return weather_df
             
         except Exception as e:
-            print(f"❌ Error fetching real weather data: {e}")
-            print(f"💡 Falling back to synthetic weather generation")
+            print(f"Error fetching real weather data: {e}")
+            print(f"Falling back to synthetic weather generation")
             return self._generate_synthetic_fallback(start_date, end_date)
     
     def _process_meteoswiss_data(
@@ -155,23 +114,11 @@ class MeteoSwissWeatherLoader:
         start_date: str,
         end_date: str
     ) -> pd.DataFrame:
-        """
-        Process raw MeteoSwiss data into our weather schema.
-        
-        Expected MeteoSwiss format:
-        - Date column
-        - Temperature or precipitation values
-        - May have multiple scenarios/models
-        """
-        # Combine dataframes (this is simplified - adjust based on actual data format)
-        # MeteoSwiss data typically has: date, value, scenario, model, etc.
-        
-        # For now, create a simplified version
-        # In practice, you'd parse the actual CSV structure
+        # Process raw MeteoSwiss data into our weather schema
+
         date_range = pd.date_range(start=start_date, end=end_date, freq='D')
         
         # Extract precipitation and temperature data
-        # (This is a placeholder - adjust based on actual MeteoSwiss CSV format)
         temp_data = []
         precip_data = []
         
@@ -207,15 +154,7 @@ class MeteoSwissWeatherLoader:
         return weather_df
     
     def _classify_weather(self, row: pd.Series) -> str:
-        """
-        Classify weather based on precipitation and temperature.
-        
-        Classification:
-        - Sunny: precipitation < 1mm
-        - Partly cloudy: precipitation 1-5mm
-        - Rainy: precipitation 5-20mm
-        - Stormy: precipitation > 20mm or extreme conditions
-        """
+        # Classify weather based on precipitation and temperature
         precip = row['precipitation']
         temp = row['temperature']
         
@@ -229,7 +168,7 @@ class MeteoSwissWeatherLoader:
             return 'stormy'
     
     def _precipitation_probability(self, weather: str) -> float:
-        """Map weather category to precipitation probability."""
+        # Map weather category to precipitation probability
         probs = {
             'sunny': 0.05,
             'partly_cloudy': 0.25,
@@ -243,11 +182,8 @@ class MeteoSwissWeatherLoader:
         start_date: str,
         end_date: str
     ) -> pd.DataFrame:
-        """
-        Generate synthetic weather data as fallback.
-        
-        Uses realistic distributions based on Swiss alpine climate.
-        """
+        # Generate synthetic weather data as fallback
+ 
         try:
             from src.tv_advertising_enhancements import generate_weather_distribution
         except ImportError:
@@ -287,9 +223,7 @@ class MeteoSwissWeatherLoader:
         start_date: str,
         end_date: str
     ) -> pd.DataFrame:
-        """
-        Simple weather generation (final fallback).
-        """
+        # Simple weather generation (final fallback)
         date_range = pd.date_range(start=start_date, end=end_date, freq='D')
         rng = np.random.default_rng()
         
@@ -328,22 +262,8 @@ def load_real_weather_for_simulation(
     station: str = 'zwk',
     use_cache: bool = True
 ) -> pd.DataFrame:
-    """
-    Convenient function to load real weather data for simulation.
-    
-    Args:
-        start_date: Start date in YYYY-MM-DD format
-        num_days: Number of days to load
-        station: MeteoSwiss station code
-        use_cache: Whether to use cached data
-        
-    Returns:
-        DataFrame with weather data
-        
-    Example:
-        >>> weather = load_real_weather_for_simulation('2024-01-01', 365)
-        >>> print(weather.head())
-    """
+    # Convenient function to load real weather data for simulation
+
     loader = MeteoSwissWeatherLoader()
     
     start = pd.to_datetime(start_date)
@@ -357,7 +277,7 @@ def load_real_weather_for_simulation(
             use_cache=use_cache
         )
         
-        print(f"\n✅ Loaded real weather data:")
+        print(f"\nLoaded real weather data:")
         print(f"   Period: {start_date} to {end.strftime('%Y-%m-%d')}")
         print(f"   Days: {len(weather_df)}")
         print(f"   Weather distribution:")
@@ -368,8 +288,8 @@ def load_real_weather_for_simulation(
         return weather_df
         
     except Exception as e:
-        print(f"⚠️  Could not load real weather data: {e}")
-        print(f"💡 Using synthetic weather data instead")
+        print(f"Could not load real weather data: {e}")
+        print(f"Using synthetic weather data instead")
         
         # Try to import synthetic weather generator
         try:
@@ -407,9 +327,8 @@ def load_real_weather_for_simulation(
 
 
 def _generate_simple_inline_weather(start_date: str, num_days: int) -> pd.DataFrame:
-    """
-    Simple inline weather generation (final fallback).
-    """
+    # Simple inline weather generation (final fallback)
+
     date_range = pd.date_range(start=start_date, periods=num_days, freq='D')
     rng = np.random.default_rng()
     
@@ -446,21 +365,7 @@ def get_weather_for_date(
     weather_df: pd.DataFrame,
     date: pd.Timestamp
 ) -> Dict[str, any]:
-    """
-    Get weather data for a specific date.
-    
-    Args:
-        weather_df: Weather DataFrame
-        date: Target date
-        
-    Returns:
-        Dictionary with weather data for that date
-        
-    Example:
-        >>> weather_df = load_real_weather_for_simulation('2024-01-01', 365)
-        >>> weather = get_weather_for_date(weather_df, pd.Timestamp('2024-06-15'))
-        >>> print(weather['weather'])  # 'sunny', 'rainy', etc.
-    """
+
     # Find matching date
     mask = weather_df['date'] == date.normalize()
     
@@ -483,46 +388,28 @@ def get_weather_for_date(
             'precipitation_prob': 0.25
         }
 
-
-# ============================================================================
-# AVAILABLE METEOSWISS STATIONS
-# ============================================================================
-
+# Available MeteoSwiss stations
 METEOSWISS_STATIONS = {
     # Major Swiss cities (hotel locations)
     'zwk': 'Zwischbergen (Valais, alpine)',
     'gsb': 'Gösgen-Däniken (Solothurn, lowland)',
     'kop': 'Koppl (near Salzburg, alpine)',
     
-    # Add more stations as needed
     # Full list available at: https://www.meteoswiss.admin.ch/
 }
 
 
 def list_available_stations() -> None:
-    """Print available MeteoSwiss weather stations."""
-    print("\n📍 Available MeteoSwiss Weather Stations:")
-    print("=" * 60)
+    # Print available MeteoSwiss weather stations
+    print("\n Available MeteoSwiss Weather Stations:")
     for code, description in METEOSWISS_STATIONS.items():
         print(f"  {code:5s} - {description}")
-    print("=" * 60)
     print("\nUsage: load_real_weather_for_simulation(station='zwk')")
 
 
-# ============================================================================
-# EXAMPLE USAGE
-# ============================================================================
-
-if __name__ == "__main__":
-    print("MeteoSwiss Real Weather Data Integration")
-    print("=" * 60)
-    
+if __name__ == "__main__":    
     # List available stations
     list_available_stations()
-    
-    # Example 1: Load real weather data
-    print("\n\n📊 Example 1: Load Real 2024 Weather Data")
-    print("-" * 60)
     
     try:
         weather_df = load_real_weather_for_simulation(
@@ -533,11 +420,9 @@ if __name__ == "__main__":
         )
         
         # Show sample
-        print("\n📋 Sample data:")
         print(weather_df.head(10).to_string(index=False))
         
         # Statistics
-        print("\n📈 Weather Statistics (2024):")
         print(f"  Total days: {len(weather_df)}")
         print(f"  Sunny days: {(weather_df['weather'] == 'sunny').sum()} ({(weather_df['weather'] == 'sunny').sum() / len(weather_df) * 100:.1f}%)")
         print(f"  Rainy days: {(weather_df['weather'] == 'rainy').sum()} ({(weather_df['weather'] == 'rainy').sum() / len(weather_df) * 100:.1f}%)")
@@ -546,13 +431,12 @@ if __name__ == "__main__":
         print(f"  Max temperature: {weather_df['temperature'].max():.1f}°C")
         
     except Exception as e:
-        print(f"❌ Error: {e}")
-        print("\n💡 To use real weather data, install pystac-client:")
+        print(f"Error: {e}")
+        print("\nTo use real weather data, install pystac-client:")
         print("   pip install pystac-client")
     
     # Example 2: Get weather for specific date
-    print("\n\n📅 Example 2: Get Weather for Specific Date")
-    print("-" * 60)
+    print("\n\nExample 2: Get Weather for Specific Date")
     
     try:
         weather_df = load_real_weather_for_simulation('2024-01-01', 365)
@@ -586,13 +470,8 @@ if __name__ == "__main__":
                 print(f"    Museum: {boost_museum:.2f}× ({'good' if boost_museum > 1 else 'bad'} match)")
                 print(f"    Outdoor tour: {boost_tour:.2f}× ({'good' if boost_tour > 1 else 'bad'} match)")
             except ImportError:
-                print("\n  ⚠️  Weather-ad boost module not available (skipping)")
+                print("\nWeather-ad boost module not available (skipping)")
         
     except Exception as e:
-        print(f"❌ Error: {e}")
-    
-    print("\n✅ All examples complete!")
-    print("\n💡 Integration tip:")
-    print("   In your simulation, replace synthetic weather with:")
-    print("   weather_df = load_real_weather_for_simulation('2024-01-01', 365)")
+        print(f"Error: {e}")
 

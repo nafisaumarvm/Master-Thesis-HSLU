@@ -1,13 +1,5 @@
-"""
-TV Viewing Pattern Modeling for In-Room Hotel Advertising
+# TV Viewing Pattern Modeling for In-Room Hotel Advertising
 
-Implements realistic TV usage rhythms per guest segment, time-of-day patterns,
-and day-of-stay dynamics. Based on hospitality industry research.
-
-References:
-- Hotel TV usage patterns (STR Global, 2022)
-- Guest viewing behavior studies (Cornell Hospitality Research, 2021)
-"""
 
 import numpy as np
 import pandas as pd
@@ -15,9 +7,7 @@ from typing import Dict, Tuple, Optional
 from datetime import datetime, time
 
 
-# ============================================================================
-# 1. TV USAGE PROBABILITY BY SEGMENT, TIME, AND DAY-OF-STAY
-# ============================================================================
+# Calculate probability that guest is watching TV
 
 def get_tv_viewing_probability(
     segment: str,
@@ -25,24 +15,6 @@ def get_tv_viewing_probability(
     day_of_stay: int,
     is_weekend: bool = False
 ) -> float:
-    """
-    Calculate probability that guest is watching TV.
-    
-    Essential Enhancement #1: Realistic TV usage rhythms per segment
-    
-    Args:
-        segment: Guest segment (e.g., 'Luxury Leisure', 'Business Traveler')
-        time_of_day: Time period ('morning', 'afternoon', 'evening', 'late_night')
-        day_of_stay: Which day of stay (1 = arrival, 2+)
-        is_weekend: Whether it's a weekend day
-        
-    Returns:
-        Probability in [0, 1] that guest is watching TV
-        
-    Example:
-        >>> get_tv_viewing_probability('Extended Stay', 'evening', 5, False)
-        0.78  # High TV usage for extended stay guests in evening
-    """
     
     # Base TV usage rates by segment (from industry benchmarks)
     base_rates = {
@@ -108,7 +80,7 @@ def get_tv_viewing_probability(
 
 
 def get_time_of_day_from_hour(hour: int) -> str:
-    """Convert hour (0-23) to time-of-day category."""
+    # Convert hour (0-23) to time-of-day category
     if 6 <= hour < 11:
         return 'morning'
     elif 11 <= hour < 18:
@@ -120,12 +92,7 @@ def get_time_of_day_from_hour(hour: int) -> str:
 
 
 def simulate_tv_session_duration(segment: str, time_of_day: str, rng: np.random.Generator) -> int:
-    """
-    Simulate TV viewing session duration in minutes.
-    
-    Returns:
-        Duration in minutes
-    """
+    # Simulate TV viewing session duration in minutes
     # Average durations by time of day (in minutes)
     avg_durations = {
         'morning': 25,
@@ -157,42 +124,13 @@ def simulate_tv_session_duration(segment: str, time_of_day: str, rng: np.random.
     return int(np.clip(duration, 5, 120))
 
 
-# ============================================================================
-# 2. INTRUSION / ANNOYANCE COST FUNCTION
-# ============================================================================
+# Calculate guest annoyance/intrusion cost
 
 def compute_intrusion_cost(
     frequency_per_guest: float,
     optimal_frequency: float = 5.0,
     penalty_weight: float = 0.05
 ) -> float:
-    """
-    Calculate guest annoyance/intrusion cost.
-    
-    Essential Enhancement #2: Explicit intrusion cost function
-    
-    Guests tolerate 3-7 exposures optimally (marketing literature).
-    Beyond this, ads become intrusive and harm experience.
-    
-    Args:
-        frequency_per_guest: Actual number of ad exposures
-        optimal_frequency: Sweet spot (default: 5.0, middle of 3-7 range)
-        penalty_weight: Cost per excess exposure
-        
-    Returns:
-        Intrusion cost in [0, 1], where 0 = no intrusion, 1 = severe
-        
-    Theory:
-        - Below 3 exposures: No annoyance (under-exposed)
-        - 3-7 exposures: Optimal range (minimal cost)
-        - Above 7 exposures: Increasing annoyance (quadratic penalty)
-        
-    Example:
-        >>> compute_intrusion_cost(4.2)  # Optimal
-        0.04
-        >>> compute_intrusion_cost(10.0)  # Over-exposed
-        0.45
-    """
     if frequency_per_guest <= 3.0:
         # Under-exposed: minimal cost
         return 0.0
@@ -214,15 +152,7 @@ def compute_segment_specific_intrusion_cost(
     frequency_per_guest: float,
     segment: str
 ) -> float:
-    """
-    Segment-specific intrusion tolerance.
-    
-    Some guests tolerate more ads than others:
-    - Business travelers: Low tolerance (focused, time-constrained)
-    - Luxury guests: Medium-low tolerance (expect premium experience)
-    - Budget families: Higher tolerance (value-focused)
-    """
-    # Segment-specific optimal frequencies and penalties
+    # Segment-specific intrusion tolerance
     segment_params = {
         'Business Traveler': {'optimal': 3.0, 'penalty': 0.08},  # Low tolerance
         'Luxury Leisure': {'optimal': 4.5, 'penalty': 0.06},
@@ -241,49 +171,15 @@ def compute_segment_specific_intrusion_cost(
     )
 
 
-# ============================================================================
-# 3. AWARENESS ELASTICITY ANALYSIS
-# ============================================================================
+# Measure awareness elasticity
 
 def compute_awareness_elasticity(
     exposures: np.ndarray,
     awareness: np.ndarray,
     segment: Optional[str] = None
 ) -> Dict[str, float]:
-    """
-    Measure awareness elasticity: Δρ / Δexposures
-    
-    Essential Enhancement #3: Awareness response elasticity
-    
-    This quantifies how responsive awareness is to additional exposures,
-    proving that α parameters are empirically grounded (not arbitrary).
-    
-    Args:
-        exposures: Array of exposure counts
-        awareness: Corresponding awareness levels
-        segment: Optional segment name for reporting
-        
-    Returns:
-        Dictionary with elasticity metrics:
-        - 'marginal_elasticity': Δρ / Δexposures at each point
-        - 'average_elasticity': Mean elasticity
-        - 'elasticity_at_1': Response to first exposure
-        - 'elasticity_at_5': Response at 5th exposure (diminishing returns)
-        
-    Theory:
-        Elasticity should decrease with exposures (diminishing returns):
-        - First exposure: High elasticity (α effect)
-        - 5th+ exposure: Lower elasticity (ρ approaching saturation)
-        
-    Example:
-        >>> exposures = np.array([0, 1, 2, 3, 4, 5])
-        >>> awareness = np.array([0, 0.3, 0.51, 0.66, 0.76, 0.82])
-        >>> compute_awareness_elasticity(exposures, awareness)
-        {'marginal_elasticity': [0.30, 0.21, 0.15, 0.10, 0.06],
-         'average_elasticity': 0.164,
-         'elasticity_at_1': 0.30,
-         'elasticity_at_5': 0.06}
-    """
+    # Measure awareness elasticity
+
     # Sort by exposures
     sorted_idx = np.argsort(exposures)
     exp_sorted = exposures[sorted_idx]
@@ -322,43 +218,15 @@ def compute_awareness_elasticity(
     return result
 
 
-# ============================================================================
-# 4. THEORETICAL MODEL ALIGNMENT (ADSTOCK & FORGETTING CURVES)
-# ============================================================================
+# Adstock advertising model
 
 def adstock_model(
     exposures: np.ndarray,
     decay_rate: float = 0.7,
     saturation: float = 0.9
 ) -> np.ndarray:
-    """
-    Adstock advertising model (Broadbent, 1984).
-    
-    Essential Enhancement #4: Theoretical grounding
-    
-    Adstock models cumulative advertising effect with decay:
-        A_t = E_t + λ * A_{t-1}
-        
-    Where:
-    - E_t: Current exposure
-    - λ: Decay/carryover rate
-    - A_t: Adstock (cumulative awareness)
-    
-    This is the classical advertising response model, validating our
-    awareness dynamics approach.
-    
-    Args:
-        exposures: Binary exposure sequence [0, 1, 0, 1, 1, ...]
-        decay_rate: Memory decay (λ in Broadbent model)
-        saturation: Maximum awareness level
-        
-    Returns:
-        Adstock values over time
-        
-    References:
-        - Broadbent, S. (1984). "Modeling with Adstock"
-        - Hanssens et al. (2001). Market Response Models
-    """
+    # Adstock advertising model (Broadbent, 1984)
+
     adstock = np.zeros(len(exposures))
     
     for t in range(len(exposures)):
@@ -379,28 +247,8 @@ def ebbinghaus_forgetting_curve(
     initial_awareness: float = 1.0,
     decay_constant: float = 1.25
 ) -> np.ndarray:
-    """
-    Ebbinghaus forgetting curve (1885).
-    
-    Essential Enhancement #4: Theoretical grounding
-    
-    Memory retention decays logarithmically:
-        R(t) = R_0 / (1 + k*t)
-        
-    This validates our awareness decay model (δ parameter).
-    
-    Args:
-        time_since_exposure: Days since last exposure
-        initial_awareness: Awareness immediately after exposure
-        decay_constant: Forgetting rate
-        
-    Returns:
-        Retained awareness over time
-        
-    References:
-        - Ebbinghaus, H. (1885). "Memory: A Contribution to Experimental Psychology"
-        - Wixted & Ebbesen (1991). "On the form of forgetting"
-    """
+    # Ebbinghaus forgetting curve (1885)
+
     retention = initial_awareness / (1 + decay_constant * time_since_exposure)
     return retention
 
@@ -411,15 +259,8 @@ def compare_with_theory(
     alpha: float,
     delta: float
 ) -> Dict[str, float]:
-    """
-    Compare our awareness model with classical advertising theory.
-    
-    Shows that our model aligns with:
-    1. Adstock model (exposure accumulation with decay)
-    2. Ebbinghaus curve (forgetting dynamics)
-    
-    Returns goodness-of-fit metrics.
-    """
+    # Compare our awareness model with classical advertising theory
+
     # Fit Adstock model
     # Map our α, δ to Adstock parameters
     decay_rate = 1 - delta  # Our decay → Adstock carryover
@@ -441,9 +282,7 @@ def compare_with_theory(
     }
 
 
-# ============================================================================
-# INTEGRATION HELPERS
-# ============================================================================
+# Generate realistic TV viewing schedule
 
 def generate_tv_viewing_schedule(
     guest_segment: str,
@@ -451,15 +290,6 @@ def generate_tv_viewing_schedule(
     arrival_date: pd.Timestamp,
     rng: np.random.Generator
 ) -> pd.DataFrame:
-    """
-    Generate realistic TV viewing schedule for a guest stay.
-    
-    Returns DataFrame with columns:
-    - datetime: When TV session occurs
-    - time_of_day: Category (morning, afternoon, evening, late_night)
-    - duration_min: Session duration in minutes
-    - tv_on_prob: Probability TV was on (for logging)
-    """
     schedule = []
     
     for day in range(stay_nights):
@@ -493,12 +323,9 @@ def generate_tv_viewing_schedule(
 
 
 if __name__ == "__main__":
-    # Quick test
-    print("TV Viewing Pattern Module - Essential Enhancements")
-    print("=" * 60)
-    
+
     # Test 1: TV viewing probability
-    print("\n1. TV Viewing Probabilities:")
+    print("\n TV Viewing Probabilities:")
     segments = ['Business Traveler', 'Luxury Leisure', 'Extended Stay']
     times = ['morning', 'evening']
     
@@ -508,22 +335,21 @@ if __name__ == "__main__":
             print(f"  {seg:20s} | {t:10s} | Day 3: {prob:.2%}")
     
     # Test 2: Intrusion cost
-    print("\n2. Intrusion Cost Function:")
+    print("\n Intrusion Cost Function:")
     for freq in [2.0, 4.2, 7.5, 10.0]:
         cost = compute_intrusion_cost(freq)
         print(f"  Frequency {freq:4.1f} → Intrusion cost: {cost:.3f}")
     
     # Test 3: Awareness elasticity
-    print("\n3. Awareness Elasticity:")
+    print("\n Awareness Elasticity:")
     exp = np.array([0, 1, 2, 3, 4, 5])
     awa = np.array([0.0, 0.30, 0.51, 0.66, 0.76, 0.82])
     elasticity = compute_awareness_elasticity(exp, awa, segment='Luxury Leisure')
-    print(f"  Average elasticity: {elasticity['average_elasticity']:.3f}")
-    print(f"  Elasticity at 1st exposure: {elasticity.get('elasticity_at_1', 0):.3f}")
-    print(f"  Elasticity at 5th exposure: {elasticity.get('elasticity_at_5', 0):.3f}")
-    print(f"  Diminishing returns ratio: {elasticity.get('diminishing_returns_ratio', 0):.2f}×")
+    print(f"Average elasticity: {elasticity['average_elasticity']:.3f}")
+    print(f"Elasticity at 1st exposure: {elasticity.get('elasticity_at_1', 0):.3f}")
+    print(f"Elasticity at 5th exposure: {elasticity.get('elasticity_at_5', 0):.3f}")
+    print(f"Diminishing returns ratio: {elasticity.get('diminishing_returns_ratio', 0):.2f}×")
     
-    print("\n✅ All essential enhancements implemented!")
 
 
 

@@ -1,6 +1,4 @@
-"""
-Weather-based targeting and contextual features.
-"""
+# Weather-based targeting and contextual features
 
 import pandas as pd
 import numpy as np
@@ -43,17 +41,8 @@ def generate_weather_context(
     location: str = 'generic',
     seed: int = 42
 ) -> pd.Series:
-    """
-    Generate weather conditions for given dates.
-    
-    Args:
-        dates: Series of datetime objects
-        location: Location identifier (for future seasonality)
-        seed: Random seed
-        
-    Returns:
-        Series of weather conditions
-    """
+    # Generate weather conditions for given dates
+
     rng = set_random_seed(seed)
     
     # Simple weather generation based on month
@@ -83,17 +72,8 @@ def apply_weather_boost(
     ads_df: pd.DataFrame,
     weather: str
 ) -> pd.Series:
-    """
-    Apply weather-based boost to ad scores.
-    
-    Args:
-        ad_scores: Current ad scores (indexed by ad_id)
-        ads_df: Advertiser dataframe
-        weather: Current weather condition
-        
-    Returns:
-        Boosted ad scores
-    """
+    # Apply weather-based boost to ad scores
+
     from .utils import parse_tags_string
     
     if weather not in WEATHER_PREFERENCES:
@@ -127,17 +107,8 @@ def filter_ads_by_weather(
     weather: str,
     min_relevance: float = 0.5
 ) -> pd.DataFrame:
-    """
-    Filter ads suitable for current weather.
-    
-    Args:
-        ads_df: Advertiser catalogue
-        weather: Current weather condition
-        min_relevance: Minimum relevance threshold
-        
-    Returns:
-        Filtered advertiser dataframe
-    """
+    # Filter ads suitable for current weather
+
     if weather not in WEATHER_PREFERENCES:
         return ads_df
     
@@ -171,17 +142,8 @@ def add_weather_features(
     weather_by_session: Optional[Dict[str, str]] = None,
     seed: int = 42
 ) -> pd.DataFrame:
-    """
-    Add weather features to exposure log.
-    
-    Args:
-        exposure_log: Exposure log
-        weather_by_session: Optional dict mapping session_id to weather
-        seed: Random seed
-        
-    Returns:
-        Exposure log with weather features
-    """
+    # Add weather features to exposure log
+
     rng = set_random_seed(seed)
     
     log = exposure_log.copy()

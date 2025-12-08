@@ -1,13 +1,4 @@
-"""
-Statistical Rigor - Final Polish for Thesis
-
-Implements:
-A. Confidence intervals (bootstrap)
-B. BH-corrected significance tests (FDR control)
-C. Hyperparameter search/optimization
-D. Two-stage model selection
-E. Explainability (permutation importance)
-"""
+# Additional statistics
 
 import pandas as pd
 import numpy as np
@@ -17,9 +8,7 @@ from scipy.stats import bootstrap
 from statsmodels.stats.multitest import multipletests
 
 
-# ============================================================================
-# A. CONFIDENCE INTERVALS (Bootstrap)
-# ============================================================================
+# Confidence intervals (bootstrap)
 
 def compute_bootstrap_ci(
     data: np.ndarray,
@@ -28,29 +17,15 @@ def compute_bootstrap_ci(
     n_resamples: int = 10000,
     random_state: int = 42
 ) -> Dict[str, float]:
-    """
-    Compute bootstrap confidence interval for any statistic.
+    # Compute bootstrap confidence interval for any statistic
     
-    Uses scipy.stats.bootstrap for robust CI estimation.
-    
-    Parameters
-    ----------
-    data : np.ndarray
-        Data array
-    statistic : callable
-        Statistic function (default: np.mean)
-    confidence_level : float
-        Confidence level (default: 0.95 for 95% CI)
-    n_resamples : int
-        Number of bootstrap samples
-    random_state : int
-        Random seed
-        
-    Returns
-    -------
-    dict
-        Point estimate, lower bound, upper bound, standard error
-    """
+    return {
+        'point_estimate': point_estimate,
+        'lower_bound': result.confidence_interval.low,
+        'upper_bound': result.confidence_interval.high,
+        'std_error': std_error,
+        'confidence_level': confidence_level
+    }
     # Point estimate
     point_estimate = statistic(data)
     
@@ -86,21 +61,14 @@ def compute_ctr_ci(
     clicks: np.ndarray,
     confidence_level: float = 0.95
 ) -> Dict[str, float]:
-    """
-    Compute CTR with confidence interval.
-    
-    Parameters
-    ----------
-    clicks : np.ndarray
-        Binary array (0/1) of clicks
-    confidence_level : float
-        Confidence level
-        
-    Returns
-    -------
-    dict
-        CTR with CI
-    """
+    # Compute CTR with confidence interval
+    return {
+        'ctr': ctr,
+        'lower_bound': max(0, center - margin),
+        'upper_bound': min(1, center + margin),
+        'confidence_level': confidence_level,
+        'n': n
+    }
     ctr = clicks.mean()
     n = len(clicks)
     
@@ -122,19 +90,8 @@ def compute_ctr_ci(
 def add_cis_to_results(
     exposure_log: pd.DataFrame
 ) -> pd.DataFrame:
-    """
-    Add confidence intervals to all key metrics.
-    
-    Parameters
-    ----------
-    exposure_log : pd.DataFrame
-        Exposure log
-        
-    Returns
-    -------
-    pd.DataFrame
-        Summary with CIs
-    """
+    # Add confidence intervals to all key metrics
+    return pd.DataFrame(results)
     results = []
     
     # Overall CTR
@@ -183,31 +140,14 @@ def add_cis_to_results(
     return pd.DataFrame(results)
 
 
-# ============================================================================
-# B. BENJAMINI-HOCHBERG FDR CORRECTION
-# ============================================================================
+# Benjamin-Hochberg FDR correction
 
 def compute_segment_category_significance(
     exposure_log: pd.DataFrame,
     alpha: float = 0.05
 ) -> pd.DataFrame:
-    """
-    Test significance of segment-category effects with FDR correction.
-    
-    Uses Benjamini-Hochberg procedure to control false discovery rate.
-    
-    Parameters
-    ----------
-    exposure_log : pd.DataFrame
-        Exposure log
-    alpha : float
-        Family-wise error rate
-        
-    Returns
-    -------
-    pd.DataFrame
-        Test results with corrected p-values
-    """
+    # Test significance of segment-category effects with FDR correction
+    return pd.DataFrame(results)
     results = []
     
     # For each segment-category pair, test if CTR differs from baseline
@@ -269,21 +209,16 @@ def report_fdr_summary(
     significance_results: pd.DataFrame,
     alpha: float = 0.05
 ) -> Dict:
-    """
-    Generate FDR correction summary report.
-    
-    Parameters
-    ----------
-    significance_results : pd.DataFrame
-        Results from compute_segment_category_significance
-    alpha : float
-        Significance level
-        
-    Returns
-    -------
-    dict
-        Summary statistics
-    """
+    # Generate FDR correction summary report
+    return {
+        'n_tests': n_tests,
+        'n_significant_uncorrected': int(n_significant_uncorrected),
+        'n_significant_corrected': int(n_significant_corrected),
+        'false_positive_rate_uncorrected': n_significant_uncorrected / n_tests if n_tests > 0 else 0,
+        'false_discovery_rate_controlled': alpha,
+        'expected_false_discoveries': observed_false_positives_estimate,
+        'reduction_pct': (n_significant_uncorrected - n_significant_corrected) / n_significant_uncorrected * 100 if n_significant_uncorrected > 0 else 0
+    }
     n_tests = len(significance_results)
     n_significant_uncorrected = (significance_results['p_value'] < alpha).sum()
     n_significant_corrected = significance_results['significant'].sum()
@@ -302,9 +237,7 @@ def report_fdr_summary(
     }
 
 
-# ============================================================================
-# C. HYPERPARAMETER SEARCH
-# ============================================================================
+# Hyperparameter search
 
 def grid_search_awareness_params(
     exposure_log: pd.DataFrame,
@@ -313,27 +246,9 @@ def grid_search_awareness_params(
     gamma_range: List[float] = None,
     metric: str = 'ctr'
 ) -> pd.DataFrame:
-    """
-    Grid search for optimal awareness parameters.
+    # Grid search for optimal awareness parameters
     
-    Parameters
-    ----------
-    exposure_log : pd.DataFrame
-        Exposure log (validation set)
-    alpha_range : list
-        Awareness growth rates to test
-    beta_range : list
-        Awareness effect strengths to test
-    gamma_range : list
-        Position bias decay rates to test
-    metric : str
-        Optimization metric ('ctr', 'revenue', 'calibration')
-        
-    Returns
-    -------
-    pd.DataFrame
-        Grid search results
-    """
+    return pd.DataFrame(results)
     if alpha_range is None:
         alpha_range = [0.2, 0.3, 0.4]
     
@@ -392,19 +307,15 @@ def grid_search_awareness_params(
 def report_best_hyperparams(
     grid_results: pd.DataFrame
 ) -> Dict:
-    """
-    Report best hyperparameters from grid search.
-    
-    Parameters
-    ----------
-    grid_results : pd.DataFrame
-        Results from grid_search_awareness_params
-        
-    Returns
-    -------
-    dict
-        Best parameters and performance
-    """
+    # Report best hyperparameters from grid search.
+    return {
+        'alpha_optimal': best['alpha'],
+        'beta_optimal': best['beta'],
+        'gamma_optimal': best['gamma'],
+        'score': best['score'],
+        'metric_optimized': best['metric'],
+        'n_configurations_tested': len(grid_results)
+    }
     best = grid_results.iloc[0]
     
     return {
@@ -417,35 +328,15 @@ def report_best_hyperparams(
     }
 
 
-# ============================================================================
-# D. TWO-STAGE MODEL SELECTION
-# ============================================================================
+# Two-stage model selection
 
 def two_stage_model_selection(
     models_performance: pd.DataFrame,
     auc_threshold: float = 0.70,
     ece_threshold: float = 0.10
 ) -> pd.DataFrame:
-    """
-    Two-stage model selection: AUC for ranking, then ECE for calibration.
-    
-    Stage 1: Filter by AUC (ranking quality)
-    Stage 2: Select best by ECE (calibration quality)
-    
-    Parameters
-    ----------
-    models_performance : pd.DataFrame
-        DataFrame with columns: model, auc, ece
-    auc_threshold : float
-        Minimum acceptable AUC
-    ece_threshold : float
-        Maximum acceptable ECE
-        
-    Returns
-    -------
-    pd.DataFrame
-        Selected models with selection criteria
-    """
+    # Two-stage model selection: AUC for ranking, then ECE for calibration.
+
     # Stage 1: Filter by AUC
     stage1_pass = models_performance[models_performance['auc'] >= auc_threshold].copy()
     stage1_pass['stage1_pass'] = True
@@ -470,9 +361,7 @@ def two_stage_model_selection(
     return models_performance
 
 
-# ============================================================================
-# E. EXPLAINABILITY (Permutation Importance)
-# ============================================================================
+# Explainability (Permutation Importance)
 
 def compute_permutation_importance(
     X: np.ndarray,
@@ -482,29 +371,8 @@ def compute_permutation_importance(
     n_repeats: int = 10,
     random_state: int = 42
 ) -> pd.DataFrame:
-    """
-    Compute permutation importance for interpretability.
-    
-    Parameters
-    ----------
-    X : np.ndarray
-        Feature matrix
-    y : np.ndarray
-        Target vector
-    model : object
-        Fitted model with predict method
-    feature_names : list
-        Feature names
-    n_repeats : int
-        Number of permutation repeats
-    random_state : int
-        Random seed
-        
-    Returns
-    -------
-    pd.DataFrame
-        Feature importances
-    """
+    # Compute permutation importance for interpretability
+
     from sklearn.metrics import log_loss
     
     # Baseline score
@@ -548,29 +416,21 @@ def compute_permutation_importance(
     return importance_df.sort_values('importance_mean', ascending=False)
 
 
-# ============================================================================
-# COMPREHENSIVE REPORT
-# ============================================================================
+# Comprehensive report
 
 def generate_statistical_rigor_report(
     exposure_log: pd.DataFrame,
     models_performance: Optional[pd.DataFrame] = None
 ) -> Dict:
-    """
-    Generate comprehensive statistical rigor report.
+    # Generate comprehensive statistical rigor report
     
-    Parameters
-    ----------
-    exposure_log : pd.DataFrame
-        Exposure log
-    models_performance : pd.DataFrame, optional
-        Model performance metrics
-        
-    Returns
-    -------
-    dict
-        Complete statistical report
-    """
+    return {
+        'confidence_intervals': add_cis_to_results(exposure_log),
+        'significance_tests': compute_segment_category_significance(exposure_log),
+        'hyperparameter_search': grid_search_awareness_params(exposure_log),
+        'best_hyperparams': report_best_hyperparams(grid_search_awareness_params(exposure_log)),
+        'model_selection': two_stage_model_selection(models_performance)
+    }
     report = {}
     
     # A. Confidence intervals
@@ -595,8 +455,6 @@ def generate_statistical_rigor_report(
 
 # Example usage
 if __name__ == '__main__':
-    print("STATISTICAL RIGOR - DEMONSTRATION")
-    print("="*70)
     
     # Simulate data
     np.random.seed(42)
@@ -617,25 +475,21 @@ if __name__ == '__main__':
     exposure_log['revenue'] = exposure_log['click'] * exposure_log['revenue']
     
     # A. Confidence intervals
-    print("\n1. CONFIDENCE INTERVALS:")
     cis = add_cis_to_results(exposure_log)
     print(cis.to_string(index=False))
     
     # B. FDR correction
-    print("\n2. FDR-CORRECTED SIGNIFICANCE:")
     sig_results = compute_segment_category_significance(exposure_log, alpha=0.05)
     print(f"\nTests performed: {len(sig_results)}")
     print(f"Significant (uncorrected): {(sig_results['p_value'] < 0.05).sum()}")
     print(f"Significant (FDR-corrected): {sig_results['significant'].sum()}")
     
     # C. Hyperparameter search
-    print("\n3. HYPERPARAMETER SEARCH:")
     grid = grid_search_awareness_params(exposure_log)
     print(f"\nConfigurations tested: {len(grid)}")
     print(f"\nTop 3 configurations:")
     print(grid[['alpha', 'beta', 'gamma', 'score']].head(3).to_string(index=False))
     
-    print("\n" + "="*70)
 
 
 
