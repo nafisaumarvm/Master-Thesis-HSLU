@@ -21,14 +21,12 @@ class PopularityBaseline:
         
     def compute_impression_popularity(self) -> pd.Series:
         # Naive popularity: proportion of total impressions
-        U_pop(c) = Impressions(c) / Σ_c' Impressions(c')
         category_counts = self.impressions['category'].value_counts()
         self.baselines['impression_popularity'] = category_counts / category_counts.sum()
         return self.baselines['impression_popularity']
     
     def compute_engagement_popularity(self) -> pd.Series:
         # Observed scan rate per category
-        U_pop(c) = E[scan_i | c] = (Scans in c) / (Impressions in c)
         category_engagement = self.impressions.groupby('category').agg({
             'scanned': ['sum', 'count']
         })
@@ -39,7 +37,6 @@ class PopularityBaseline:
     
     def compute_corrected_popularity(self, propensity_weights: pd.Series) -> pd.Series:
         # Inverse propensity weighted popularity
-        U_pop_IPW(c) = Σ_i (w_i * scan_i * 1[c_i = c]) / Σ_i (w_i * 1[c_i = c])
         df = self.impressions.copy()
         df['weight'] = propensity_weights
         df['weighted_scan'] = df['scanned'] * df['weight']
