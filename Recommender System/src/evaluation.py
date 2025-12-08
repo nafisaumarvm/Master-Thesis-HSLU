@@ -1,6 +1,4 @@
-"""
-Evaluation metrics and counterfactual estimation.
-"""
+# Initial Evaluation metrics and counterfactual estimation.
 
 import pandas as pd
 import numpy as np
@@ -10,15 +8,8 @@ import warnings
 
 
 def compute_ctr(exposure_log: pd.DataFrame) -> float:
-    """
-    Compute Click-Through Rate.
-    
-    Args:
-        exposure_log: Exposure log with 'click' column
-        
-    Returns:
-        CTR (clicks / impressions)
-    """
+    # Compute Click-Through Rate
+
     if len(exposure_log) == 0:
         return 0.0
     
@@ -26,15 +17,8 @@ def compute_ctr(exposure_log: pd.DataFrame) -> float:
 
 
 def compute_rpm(exposure_log: pd.DataFrame) -> float:
-    """
-    Compute Revenue Per Mille (per 1000 impressions).
-    
-    Args:
-        exposure_log: Exposure log with 'revenue' column
-        
-    Returns:
-        RPM
-    """
+    # Compute Revenue Per Mille (per 1000 impressions)
+
     if len(exposure_log) == 0:
         return 0.0
     
@@ -50,16 +34,8 @@ def compute_revenue_per_stay(
     exposure_log: pd.DataFrame,
     n_stays: Optional[int] = None
 ) -> float:
-    """
-    Compute average revenue per stay.
-    
-    Args:
-        exposure_log: Exposure log
-        n_stays: Number of stays (if None, infer from unique stay_ids)
-        
-    Returns:
-        Revenue per stay
-    """
+    # Compute average revenue per stay
+
     total_revenue = exposure_log['revenue'].sum()
     
     if n_stays is None:
@@ -75,18 +51,8 @@ def compute_guest_experience_index(
     exposure_log: pd.DataFrame,
     intrusion_col: str = 'intrusion_cost'
 ) -> float:
-    """
-    Compute guest experience index (negative intrusion).
-    
-    Lower intrusion = better experience (higher index).
-    
-    Args:
-        exposure_log: Exposure log
-        intrusion_col: Column name for intrusion cost
-        
-    Returns:
-        Guest experience index
-    """
+    # Compute guest experience index (negative intrusion)   
+
     if intrusion_col not in exposure_log.columns:
         return 0.0
     
@@ -101,17 +67,8 @@ def precision_at_k(
     relevant_ads: List[str],
     k: int
 ) -> float:
-    """
-    Compute Precision@k.
-    
-    Args:
-        recommended_ads: List of recommended ad_ids (ranked)
-        relevant_ads: List of relevant ad_ids
-        k: Cutoff
-        
-    Returns:
-        Precision@k
-    """
+    # Compute Precision@k
+
     if k == 0 or len(recommended_ads) == 0:
         return 0.0
     
@@ -128,17 +85,7 @@ def recall_at_k(
     relevant_ads: List[str],
     k: int
 ) -> float:
-    """
-    Compute Recall@k.
-    
-    Args:
-        recommended_ads: List of recommended ad_ids (ranked)
-        relevant_ads: List of relevant ad_ids
-        k: Cutoff
-        
-    Returns:
-        Recall@k
-    """
+    # Compute Recall@k
     if len(relevant_ads) == 0:
         return 0.0
     
@@ -155,17 +102,7 @@ def ndcg_at_k(
     ad_scores: Dict[str, float],
     k: int
 ) -> float:
-    """
-    Compute NDCG@k.
-    
-    Args:
-        recommended_ads: List of recommended ad_ids (ranked)
-        ad_scores: Dict mapping ad_id to relevance score
-        k: Cutoff
-        
-    Returns:
-        NDCG@k
-    """
+    # Compute NDCG@k
     if k == 0 or len(recommended_ads) == 0:
         return 0.0
     
@@ -207,21 +144,8 @@ def evaluate_ranking(
     n_samples: int = 100,
     seed: int = 42
 ) -> Dict[str, float]:
-    """
-    Evaluate ranking quality using ground-truth preferences.
-    
-    Args:
-        model: Model with rank() or predict_proba() method
-        guests_df: Guest dataframe
-        ads_df: Advertiser catalogue
-        guest_ad_prefs_df: Ground-truth preferences
-        k: Cutoff
-        n_samples: Number of guest samples to evaluate
-        seed: Random seed
-        
-    Returns:
-        Dict of metrics
-    """
+    # Evaluate ranking quality using ground-truth preferences
+
     rng = np.random.default_rng(seed)
     
     # Sample guests
@@ -297,18 +221,8 @@ def inverse_propensity_score(
     target_policy_fn: Callable,
     reward_col: str = 'click'
 ) -> float:
-    """
-    Compute IPS estimate of expected reward for a target policy.
-    
-    Args:
-        exposure_log: Logged data with propensities
-        target_policy_fn: Function that takes (guest_id, ad_id) and returns
-                          probability that target policy would select that ad
-        reward_col: Column name for reward
-        
-    Returns:
-        IPS estimate of expected reward
-    """
+    # Compute IPS estimate of expected reward for a target policy
+
     if len(exposure_log) == 0:
         return 0.0
     
@@ -340,21 +254,8 @@ def doubly_robust_estimator(
     outcome_model,
     reward_col: str = 'click'
 ) -> float:
-    """
-    Doubly-robust estimator for counterfactual evaluation.
-    
-    DR = E[w * (r - r_hat) + r_hat]
-    where w = target_prob / logging_prob, r = observed reward, r_hat = predicted reward
-    
-    Args:
-        exposure_log: Logged data with propensities
-        target_policy_fn: Target policy probability function
-        outcome_model: Model with predict_proba() for estimating r_hat
-        reward_col: Column name for reward
-        
-    Returns:
-        DR estimate of expected reward
-    """
+    # Doubly-robust estimator for counterfactual evaluation
+
     if len(exposure_log) == 0:
         return 0.0
     
@@ -370,10 +271,7 @@ def doubly_robust_estimator(
         target_prob = target_policy_fn(guest_id, ad_id)
         
         # Predicted reward from outcome model
-        # (This is simplified; in practice you'd need to call the model properly)
         try:
-            # Placeholder: just use observed reward as estimate for now
-            # In real implementation, call outcome_model.predict_proba(features)
             r_hat = reward  # Simplified
         except:
             r_hat = 0.0
@@ -392,15 +290,8 @@ def doubly_robust_estimator(
 
 
 def evaluate_exposure_log(exposure_log: pd.DataFrame) -> Dict[str, float]:
-    """
-    Compute standard metrics from exposure log.
-    
-    Args:
-        exposure_log: Exposure log
-        
-    Returns:
-        Dict of metrics
-    """
+    # Compute standard metrics from exposure log
+
     metrics = {
         'ctr': compute_ctr(exposure_log),
         'rpm': compute_rpm(exposure_log),
@@ -426,20 +317,8 @@ def compare_models(
     guest_ad_prefs_df: pd.DataFrame,
     k: int = 3
 ) -> pd.DataFrame:
-    """
-    Compare multiple models on ranking metrics.
-    
-    Args:
-        models: Dict mapping model names to model objects
-        exposure_log: Training exposure log
-        guests_df: Guest dataframe
-        ads_df: Advertiser catalogue
-        guest_ad_prefs_df: Ground-truth preferences
-        k: Cutoff
-        
-    Returns:
-        Comparison dataframe
-    """
+    # Compare multiple models on ranking metrics
+
     results = []
     
     for model_name, model in models.items():

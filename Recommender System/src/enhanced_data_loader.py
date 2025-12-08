@@ -1,13 +1,4 @@
-"""
-Enhanced Data Loader - Combines All Three Datasets
-
-Integrates:
-1. hotel_guests_dataset.csv (4K guests) - baseline
-2. hotel_booking 2.csv (119K bookings) - main training data  
-3. Dataset_Ads.csv (10K ads) - CTR calibration
-
-Provides 30× more training data for improved model performance.
-"""
+# Enhanced Data Loader - Combines All Three Datasets
 
 import pandas as pd
 import numpy as np
@@ -20,32 +11,8 @@ def load_hotel_booking_large(
     sample_frac: float = 1.0,
     random_state: int = 42
 ) -> pd.DataFrame:
-    """
-    Load and preprocess large hotel booking dataset.
-    
-    Features extracted:
-    - guest_id (synthesized from booking)
-    - stay_nights (weekend + week nights)
-    - adults, children (party composition)
-    - is_business (from customer_type)
-    - country, market_segment, distribution_channel
-    - lead_time, is_repeated_guest
-    - price (ADR)
-    
-    Parameters
-    ----------
-    filepath : str
-        Path to hotel_booking 2.csv
-    sample_frac : float
-        Fraction to sample (1.0 = all data, 0.1 = 10%)
-    random_state : int
-        Random seed
-        
-    Returns
-    -------
-    pd.DataFrame
-        Processed guest data (119K rows)
-    """
+    # Load and preprocess large hotel booking dataset
+
     print(f"Loading {filepath}...")
     df = pd.read_csv(filepath)
     
@@ -143,26 +110,8 @@ def load_ads_dataset(
     filepath: str = 'Dataset_Ads.csv',
     random_state: int = 42
 ) -> pd.DataFrame:
-    """
-    Load online ads dataset for CTR calibration.
-    
-    Features:
-    - Age, Gender, Income, Location
-    - Ad Type, Ad Topic, Ad Placement
-    - Clicks, CTR, Conversion Rate
-    
-    Parameters
-    ----------
-    filepath : str
-        Path to Dataset_Ads.csv
-    random_state : int
-        Random seed
-        
-    Returns
-    -------
-    pd.DataFrame
-        Ads data (10K rows)
-    """
+    # Load online ads dataset for CTR calibration.
+
     print(f"Loading {filepath}...")
     df = pd.read_csv(filepath)
     print(f"  Loaded {len(df):,} ad records")
@@ -178,21 +127,8 @@ def load_ads_dataset(
 
 
 def extract_ctr_calibration(ads_df: pd.DataFrame) -> Dict:
-    """
-    Extract CTR statistics from ads dataset for calibration.
-    
-    Returns position bias estimates, CTR distributions, etc.
-    
-    Parameters
-    ----------
-    ads_df : pd.DataFrame
-        Ads dataset
-        
-    Returns
-    -------
-    dict
-        Calibration parameters
-    """
+    # Extract CTR statistics from ads dataset for calibration.
+
     calibration = {}
     
     # Overall CTR statistics
@@ -252,28 +188,7 @@ def combine_guest_datasets(
     guests_large: pd.DataFrame,
     weight_large: float = 0.9
 ) -> pd.DataFrame:
-    """
-    Combine small and large guest datasets with sampling.
-    
-    Strategy:
-    - Use 90% from large dataset (119K → ~107K)
-    - Use 10% from small dataset (4K → ~4K)
-    - Total: ~111K guests
-    
-    Parameters
-    ----------
-    guests_small : pd.DataFrame
-        Small dataset (4K)
-    guests_large : pd.DataFrame
-        Large dataset (119K)
-    weight_large : float
-        Fraction from large dataset
-        
-    Returns
-    -------
-    pd.DataFrame
-        Combined dataset
-    """
+    # Combine small and large guest datasets with sampling
     # Sample from large
     n_large = int(len(guests_large) * weight_large)
     large_sampled = guests_large.sample(n=min(n_large, len(guests_large)), random_state=42)
@@ -291,9 +206,9 @@ def combine_guest_datasets(
     ], ignore_index=True)
     
     print(f"\nCombined Guest Data:")
-    print(f"  From large dataset: {len(large_sampled):,}")
-    print(f"  From small dataset: {len(small_used):,}")
-    print(f"  Total: {len(combined):,} guests")
+    print(f"From large dataset: {len(large_sampled):,}")
+    print(f"From small dataset: {len(small_used):,}")
+    print(f"Total: {len(combined):,} guests")
     
     return combined
 
@@ -303,62 +218,39 @@ def load_all_datasets(
     use_ads_calibration: bool = True,
     hotel_sample_frac: float = 1.0
 ) -> Tuple[pd.DataFrame, pd.DataFrame, Dict]:
-    """
-    Load all available datasets.
-    
-    Parameters
-    ----------
-    use_large_hotel_data : bool
-        Whether to include hotel_booking 2.csv
-    use_ads_calibration : bool
-        Whether to load Dataset_Ads.csv for calibration
-    hotel_sample_frac : float
-        Fraction of large dataset to use (1.0 = all 119K)
-        
-    Returns
-    -------
-    tuple
-        (guests_df, ads_df, calibration_params)
-    """
+    # Load all available datasets
+
     from .data_loading import load_hotel_guests
     
-    print("="*70)
-    print("ENHANCED DATA LOADING - ALL DATASETS")
-    print("="*70)
-    
     # 1. Load small guest dataset (baseline)
-    print("\n1. Loading baseline guest dataset...")
+    print("Loading baseline guest dataset...")
     guests_small = load_hotel_guests('hotel_guests_dataset.csv')
     
     # 2. Load large hotel booking dataset
     guests_df = guests_small
     if use_large_hotel_data and os.path.exists('hotel_booking 2.csv'):
-        print("\n2. Loading large hotel booking dataset...")
+        print("Loading large hotel booking dataset...")
         guests_large = load_hotel_booking_large('hotel_booking 2.csv', sample_frac=hotel_sample_frac)
         
         # Combine datasets
         guests_df = combine_guest_datasets(guests_small, guests_large)
     else:
-        print("\n2. Skipping large dataset (not found or disabled)")
+        print("Skipping large dataset (not found or disabled)")
     
     # 3. Load ads dataset for calibration
     ads_df = None
     calibration_params = {}
     
     if use_ads_calibration and os.path.exists('Dataset_Ads.csv'):
-        print("\n3. Loading ads dataset for CTR calibration...")
+        print("Loading ads dataset for CTR calibration...")
         ads_df = load_ads_dataset('Dataset_Ads.csv')
         calibration_params = extract_ctr_calibration(ads_df)
     else:
-        print("\n3. Skipping ads dataset (not found or disabled)")
+        print("Skipping ads dataset (not found or disabled)")
     
-    print("\n" + "="*70)
-    print("DATA LOADING COMPLETE")
-    print("="*70)
     print(f"Final guest dataset: {len(guests_df):,} stays")
     if ads_df is not None:
         print(f"Ads dataset: {len(ads_df):,} records")
-    print("="*70)
     
     return guests_df, ads_df, calibration_params
 
@@ -372,17 +264,17 @@ if __name__ == '__main__':
         hotel_sample_frac=1.0  # Use all 119K bookings
     )
     
-    print("\nGuest Data Summary:")
+    print("Guest Data Summary:")
     print(guests.describe())
     
-    print("\nGuest Data Columns:")
+    print("Guest Data Columns:")
     print(guests.columns.tolist())
     
     if ads is not None:
-        print("\nAds Data Summary:")
+        print("Ads Data Summary:")
         print(ads.describe())
     
-    print("\nCTR Calibration Parameters:")
+    print("CTR Calibration Parameters:")
     for key, value in calibration.items():
         if isinstance(value, dict):
             print(f"  {key}: {value}")

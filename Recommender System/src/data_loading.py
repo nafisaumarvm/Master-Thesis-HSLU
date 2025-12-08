@@ -1,6 +1,4 @@
-"""
-Data loading and preprocessing for hotel guests dataset.
-"""
+# Data loading and preprocessing for hotel guests dataset
 
 import pandas as pd
 import numpy as np
@@ -14,17 +12,8 @@ def load_hotel_guests(
     drop_missing: bool = True,
     seed: int = 42
 ) -> pd.DataFrame:
-    """
-    Load and clean the Kaggle Hotel Guests Dataset.
-    
-    Args:
-        path: Path to the CSV file
-        drop_missing: Whether to drop rows with missing critical values
-        seed: Random seed for reproducibility
-        
-    Returns:
-        Cleaned dataframe with engineered features
-    """
+    # Load and clean the Kaggle Hotel Guests Dataset
+
     # Load raw data
     df = pd.read_csv(path)
     
@@ -291,15 +280,7 @@ def load_hotel_guests(
 
 
 def get_dataset_statistics(df: pd.DataFrame) -> dict:
-    """
-    Compute summary statistics for a guest dataset.
-    
-    Args:
-        df: Guest dataframe
-        
-    Returns:
-        Dictionary of statistics
-    """
+    # Compute summary statistics for a guest dataset
     stats = {
         'n_guests': len(df),
         'n_unique_countries': df['country'].nunique() if 'country' in df.columns else 0,

@@ -1,13 +1,4 @@
-"""
-Advanced Evaluation Metrics & Methods
-
-Implements feasible add-ons with high academic payoff:
-1. Advanced off-policy estimators (SNIPS, weighted IPS)
-2. Calibration metrics (Brier, ECE, reliability diagrams)
-3. Diversity & fairness metrics
-4. Long-term value metrics
-5. Distribution shift analysis
-"""
+# Advanced Evaluation Metrics & Methods
 
 import pandas as pd
 import numpy as np
@@ -15,10 +6,7 @@ from typing import Dict, List, Tuple, Optional
 from scipy import stats
 from scipy.spatial.distance import jensenshannon
 
-
-# ============================================================================
-# 1. ADVANCED OFF-POLICY ESTIMATORS
-# ============================================================================
+# Advanced Off-Policy Estimators
 
 def self_normalized_ips(
     exposure_log: pd.DataFrame,
@@ -27,36 +15,9 @@ def self_normalized_ips(
     rewards: np.ndarray,
     clip_weights: float = 10.0
 ) -> Dict[str, float]:
-    """
-    Self-Normalized Inverse Propensity Scoring (SNIPS).
-    
-    Reduces variance compared to standard IPS, especially for skewed propensities.
-    
-    Formula:
-    SNIPS = (Σ w_i * r_i) / (Σ w_i)
-    where w_i = π(a_i|x_i) / π_0(a_i|x_i)
-    
-    References:
-    - Joachims et al. (2017) - Unbiased Learning-to-Rank with Biased Feedback
-    
-    Parameters
-    ----------
-    exposure_log : pd.DataFrame
-        Exposure log
-    target_policy_probs : np.ndarray
-        Probabilities under target policy
-    logging_policy_probs : np.ndarray
-        Probabilities under logging policy
-    rewards : np.ndarray
-        Observed rewards
-    clip_weights : float
-        Maximum importance weight (prevents extreme variance)
-        
-    Returns
-    -------
-    dict
-        SNIPS estimate, variance, and diagnostics
-    """
+    # Self-Normalized Inverse Propensity Scoring (SNIPS)
+    # Reduces variance compared to standard IPS, especially for skewed propensities
+
     # Importance weights
     weights = target_policy_probs / (logging_policy_probs + 1e-10)
     
@@ -92,23 +53,8 @@ def weighted_ips(
     weights: np.ndarray,
     clip_weights: float = 10.0
 ) -> Dict[str, float]:
-    """
-    Weighted IPS with variance reduction.
-    
-    Parameters
-    ----------
-    rewards : np.ndarray
-        Observed rewards
-    weights : np.ndarray
-        Importance weights
-    clip_weights : float
-        Maximum weight
-        
-    Returns
-    -------
-    dict
-        IPS estimate and diagnostics
-    """
+    # Weighted IPS with variance reduction
+
     weights_clipped = np.clip(weights, 0, clip_weights)
     
     ips_estimate = np.mean(weights_clipped * rewards)
@@ -125,35 +71,13 @@ def weighted_ips(
     }
 
 
-# ============================================================================
-# 2. CALIBRATION METRICS
-# ============================================================================
+# Calibration Metrics
 
 def compute_brier_score(
     predicted_probs: np.ndarray,
     observed_outcomes: np.ndarray
 ) -> float:
-    """
-    Brier Score - measures calibration quality.
-    
-    Formula:
-    BS = (1/N) * Σ (p_i - y_i)^2
-    
-    Range: [0, 1], lower is better
-    Perfect calibration: BS = 0
-    
-    Parameters
-    ----------
-    predicted_probs : np.ndarray
-        Predicted click probabilities
-    observed_outcomes : np.ndarray
-        Observed clicks (0 or 1)
-        
-    Returns
-    -------
-    float
-        Brier score
-    """
+    # Brier Score - measures calibration quality.
     return np.mean((predicted_probs - observed_outcomes)**2)
 
 
@@ -162,29 +86,9 @@ def compute_ece(
     observed_outcomes: np.ndarray,
     n_bins: int = 10
 ) -> Dict[str, float]:
-    """
-    Expected Calibration Error (ECE).
+    # Expected Calibration Error (ECE).
+    # Measures the expected difference between predicted probability and observed frequency across bins
     
-    Measures the expected difference between predicted probability and
-    observed frequency across bins.
-    
-    Formula:
-    ECE = Σ (|B_i| / N) * |acc(B_i) - conf(B_i)|
-    
-    Parameters
-    ----------
-    predicted_probs : np.ndarray
-        Predicted probabilities
-    observed_outcomes : np.ndarray
-        Observed outcomes
-    n_bins : int
-        Number of bins
-        
-    Returns
-    -------
-    dict
-        ECE, bin statistics, and reliability data
-    """
     # Create bins
     bins = np.linspace(0, 1, n_bins + 1)
     bin_indices = np.digitize(predicted_probs, bins) - 1
@@ -233,23 +137,8 @@ def compute_reliability_diagram_data(
     observed_outcomes: np.ndarray,
     n_bins: int = 10
 ) -> pd.DataFrame:
-    """
-    Generate data for reliability diagram.
-    
-    Parameters
-    ----------
-    predicted_probs : np.ndarray
-        Predicted probabilities
-    observed_outcomes : np.ndarray
-        Observed outcomes
-    n_bins : int
-        Number of bins
-        
-    Returns
-    -------
-    pd.DataFrame
-        Reliability data for plotting
-    """
+    # Generate data for reliability diagram.
+
     bins = np.linspace(0, 1, n_bins + 1)
     bin_indices = np.digitize(predicted_probs, bins) - 1
     bin_indices = np.clip(bin_indices, 0, n_bins - 1)
@@ -275,34 +164,14 @@ def compute_reliability_diagram_data(
     return pd.DataFrame(reliability_data)
 
 
-# ============================================================================
-# 3. DIVERSITY & FAIRNESS METRICS
-# ============================================================================
+# Diversity & Fairness Metrics
 
 def compute_diversity_metrics(
     exposure_log: pd.DataFrame,
     category_column: str = 'advertiser_type'
 ) -> Dict[str, float]:
-    """
-    Compute diversity metrics for shown ads.
-    
-    Metrics:
-    - Entropy (higher = more diverse)
-    - Gini coefficient (0 = perfect equality, 1 = perfect inequality)
-    - Coverage (fraction of categories shown)
-    
-    Parameters
-    ----------
-    exposure_log : pd.DataFrame
-        Exposure log
-    category_column : str
-        Column with category labels
-        
-    Returns
-    -------
-    dict
-        Diversity metrics
-    """
+    # Compute diversity metrics for shown ads
+
     # Category distribution
     category_counts = exposure_log[category_column].value_counts()
     category_probs = category_counts / len(exposure_log)
@@ -342,26 +211,8 @@ def compute_advertiser_fairness(
     exposure_log: pd.DataFrame,
     ad_id_column: str = 'ad_id'
 ) -> Dict[str, float]:
-    """
-    Compute fairness metrics for advertiser exposure.
-    
-    Measures:
-    - Share-of-voice inequality
-    - Exposure concentration
-    - Fairness indices
-    
-    Parameters
-    ----------
-    exposure_log : pd.DataFrame
-        Exposure log
-    ad_id_column : str
-        Column with advertiser IDs
-        
-    Returns
-    -------
-    dict
-        Fairness metrics
-    """
+    # Compute fairness metrics for advertiser exposure
+
     ad_exposures = exposure_log[ad_id_column].value_counts()
     
     # Share of voice
@@ -392,39 +243,15 @@ def compute_advertiser_fairness(
     }
 
 
-# ============================================================================
-# 4. LONG-TERM VALUE METRICS
-# ============================================================================
+# Long-Term Value Metrics
 
 def compute_ltv_proxy(
     exposure_log: pd.DataFrame,
     gamma: float = 0.95,
     awareness_column: str = 'awareness_after'
 ) -> Dict[str, float]:
-    """
-    Compute Long-Term Value (LTV) proxy.
-    
-    LTV accounts for future value from awareness building.
-    
-    Formula:
-    LTV = Σ γ^t * expected_revenue_t
-    
-    where expected_revenue_t depends on awareness_t
-    
-    Parameters
-    ----------
-    exposure_log : pd.DataFrame
-        Exposure log with awareness
-    gamma : float
-        Discount factor (0-1)
-    awareness_column : str
-        Column with awareness values
-        
-    Returns
-    -------
-    dict
-        LTV metrics
-    """
+    # Compute Long-Term Value (LTV) proxy
+
     # Group by guest
     guest_groups = exposure_log.groupby('guest_id')
     
@@ -466,37 +293,15 @@ def compute_ltv_proxy(
     }
 
 
-# ============================================================================
-# 5. DISTRIBUTION SHIFT ANALYSIS
-# ============================================================================
+# Distribution Shift Analysis
 
 def compute_distribution_shift(
     dist1: np.ndarray,
     dist2: np.ndarray,
     bins: int = 50
 ) -> Dict[str, float]:
-    """
-    Measure distribution shift using multiple metrics.
-    
-    Metrics:
-    - KL divergence
-    - Jensen-Shannon divergence
-    - Earth Mover's Distance (Wasserstein)
-    
-    Parameters
-    ----------
-    dist1 : np.ndarray
-        First distribution (e.g., early stays)
-    dist2 : np.ndarray
-        Second distribution (e.g., late stays)
-    bins : int
-        Number of bins for histograms
-        
-    Returns
-    -------
-    dict
-        Distribution shift metrics
-    """
+    # Measure distribution shift using multiple metrics.
+
     # Create histograms
     range_min = min(dist1.min(), dist2.min())
     range_max = max(dist1.max(), dist2.max())
@@ -541,23 +346,8 @@ def analyze_temporal_drift(
     metric_column: str = 'base_utility',
     time_column: str = 'day_of_stay'
 ) -> pd.DataFrame:
-    """
-    Analyze how a metric drifts over time.
-    
-    Parameters
-    ----------
-    exposure_log : pd.DataFrame
-        Exposure log
-    metric_column : str
-        Column to analyze
-    time_column : str
-        Time dimension
-        
-    Returns
-    -------
-    pd.DataFrame
-        Drift analysis by time period
-    """
+    # Analyze how a metric drifts over time.
+
     drift_results = []
     
     time_periods = sorted(exposure_log[time_column].unique())
@@ -582,32 +372,15 @@ def analyze_temporal_drift(
     return pd.DataFrame(drift_results)
 
 
-# ============================================================================
-# 6. COMPREHENSIVE EVALUATION REPORT
-# ============================================================================
+# Comprehensive Evaluation Report
 
 def generate_comprehensive_report(
     exposure_log: pd.DataFrame,
     target_policy_probs: Optional[np.ndarray] = None,
     logging_policy_probs: Optional[np.ndarray] = None
 ) -> Dict:
-    """
-    Generate comprehensive evaluation report with all advanced metrics.
+    # Generate comprehensive evaluation report with all advanced metrics.
     
-    Parameters
-    ----------
-    exposure_log : pd.DataFrame
-        Exposure log
-    target_policy_probs : np.ndarray, optional
-        Target policy probabilities (for off-policy eval)
-    logging_policy_probs : np.ndarray, optional
-        Logging policy probabilities
-        
-    Returns
-    -------
-    dict
-        Complete evaluation report
-    """
     report = {}
     
     # 1. Calibration metrics
@@ -654,41 +427,35 @@ def generate_comprehensive_report(
 
 # Example usage
 if __name__ == '__main__':
-    print("ADVANCED EVALUATION METRICS - DEMO")
-    print("="*70)
-    
     # Simulate some data
     n = 1000
     predicted_probs = np.random.beta(2, 5, n)
     observed_outcomes = (np.random.random(n) < predicted_probs).astype(int)
     
     # 1. Calibration
-    print("\n1. CALIBRATION METRICS:")
     brier = compute_brier_score(predicted_probs, observed_outcomes)
     ece_result = compute_ece(predicted_probs, observed_outcomes)
-    print(f"   Brier Score: {brier:.4f}")
-    print(f"   ECE: {ece_result['ece']:.4f}")
+    print(f"Brier Score: {brier:.4f}")
+    print(f"ECE: {ece_result['ece']:.4f}")
     
     # 2. SNIPS
-    print("\n2. SELF-NORMALIZED IPS:")
     target_probs = np.random.beta(3, 3, n)
     logging_probs = np.random.beta(2, 5, n)
-    rewards = observed_outcomes * np.random.lognormal(3, 1, n)
+    rewards = observed_outcomes * np.random.lognormal(3, 1, n) 
     
     snips_result = self_normalized_ips(
         None, target_probs, logging_probs, rewards
     )
-    print(f"   SNIPS Estimate: {snips_result['snips_estimate']:.4f}")
-    print(f"   Effective Sample Size: {snips_result['effective_sample_size']:.1f}")
+    print(f"SNIPS Estimate: {snips_result['snips_estimate']:.4f}")
+    print(f"Effective Sample Size: {snips_result['effective_sample_size']:.1f}")
     
     # 3. Diversity
-    print("\n3. DIVERSITY METRICS:")
     categories = np.random.choice(['A', 'B', 'C', 'D', 'E'], n, p=[0.4, 0.25, 0.2, 0.1, 0.05])
     df = pd.DataFrame({'advertiser_type': categories})
     diversity = compute_diversity_metrics(df)
-    print(f"   Normalized Entropy: {diversity['normalized_entropy']:.4f}")
-    print(f"   Gini Coefficient: {diversity['gini_coefficient']:.4f}")
-    print(f"   Jain's Index: {diversity['jains_fairness_index']:.4f}")
+    print(f"Normalized Entropy: {diversity['normalized_entropy']:.4f}")
+    print(f"Gini Coefficient: {diversity['gini_coefficient']:.4f}")
+    print(f"Jain's Index: {diversity['jains_fairness_index']:.4f}")
 
 
 

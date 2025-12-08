@@ -1,12 +1,4 @@
-"""
-Exposure log generation with logging policies and position bias.
-
-Van Leeuwen (2024) methodology:
-- Utility-based choice model
-- Counterfactual logging (full candidate sets)
-- Awareness dynamics
-- Position bias
-"""
+# Exposure log generation with logging policies and position bias
 
 import pandas as pd
 import numpy as np
@@ -34,17 +26,8 @@ def popularity_policy(
     k: int = 3,
     **kwargs
 ) -> List[str]:
-    """
-    Popularity-based policy: rank by base_utility.
-    
-    Args:
-        guest_id: Guest identifier (unused but kept for interface consistency)
-        candidate_ads_df: Dataframe of candidate ads
-        k: Number of ads to select
-        
-    Returns:
-        List of selected ad_ids
-    """
+    # Popularity-based policy: rank by base_utility.
+
     if len(candidate_ads_df) == 0:
         return []
     
@@ -64,18 +47,8 @@ def random_policy(
     seed: Optional[int] = None,
     **kwargs
 ) -> List[str]:
-    """
-    Random uniform policy.
-    
-    Args:
-        guest_id: Guest identifier
-        candidate_ads_df: Dataframe of candidate ads
-        k: Number of ads to select
-        seed: Random seed
-        
-    Returns:
-        List of selected ad_ids
-    """
+    # Random uniform policy.
+
     if len(candidate_ads_df) == 0:
         return []
     
@@ -97,19 +70,8 @@ def epsilon_greedy_policy(
     seed: Optional[int] = None,
     **kwargs
 ) -> List[str]:
-    """
-    Epsilon-greedy policy: explore with probability epsilon.
-    
-    Args:
-        guest_id: Guest identifier
-        candidate_ads_df: Dataframe of candidate ads
-        k: Number of ads to select
-        epsilon: Exploration probability
-        seed: Random seed
-        
-    Returns:
-        List of selected ad_ids
-    """
+    # Epsilon-greedy policy: explore with probability epsilon.
+
     if len(candidate_ads_df) == 0:
         return []
     
@@ -128,17 +90,7 @@ def filter_candidate_ads(
     time_of_day: str,
     max_distance_km: float = 8.0
 ) -> pd.DataFrame:
-    """
-    Filter ads by time of day and distance.
-    
-    Args:
-        ads_df: Full advertiser catalogue
-        time_of_day: One of 'morning', 'afternoon', 'evening', 'late_night'
-        max_distance_km: Maximum distance threshold
-        
-    Returns:
-        Filtered dataframe
-    """
+    # Filter ads by time of day and distance.
     # Filter by distance
     filtered = ads_df[ads_df['distance_km'] <= max_distance_km].copy()
     
@@ -163,26 +115,7 @@ def generate_exposure_log(
     max_distance_km: float = 8.0,
     seed: int = 42
 ) -> pd.DataFrame:
-    """
-    Generate exposure log with logging policy and position bias.
-    
-    Args:
-        guests_df: Unified guest dataframe
-        ads_df: Advertiser catalogue
-        guest_ad_prefs_df: Guest-ad preferences (intrinsic scores)
-        n_sessions_per_stay: Number of TV sessions per guest stay
-        logging_policy: 'popularity', 'random', or 'epsilon_greedy'
-        k_ads_per_session: Number of ads to show per session
-        beta_position: Position bias strength
-        max_distance_km: Maximum distance for candidate ads
-        seed: Random seed
-        
-    Returns:
-        Exposure log dataframe with columns:
-        - guest_id, stay_id, session_id, ad_id, position
-        - logging_policy, propensity, click, revenue
-        - time_of_day, day_of_stay, source
-    """
+    # Generate exposure log with logging policy and position bias
     rng = set_random_seed(seed)
     
     # Select policy function
@@ -315,17 +248,8 @@ def add_additional_context_to_log(
     guests_df: pd.DataFrame,
     ads_df: pd.DataFrame
 ) -> pd.DataFrame:
-    """
-    Enrich exposure log with additional guest and ad features.
-    
-    Args:
-        exposure_log: Exposure log
-        guests_df: Guest dataframe
-        ads_df: Advertiser dataframe
-        
-    Returns:
-        Enriched exposure log
-    """
+    # Enrich exposure log with additional guest and ad features
+
     # Merge guest features
     guest_features = guests_df[[
         'guest_id', 'purpose_of_stay', 'is_family', 
@@ -358,48 +282,8 @@ def generate_exposure_log_van_leeuwen(
     temperature: float = 1.0,
     seed: int = 42
 ) -> tuple:
-    """
-    Generate exposure log following van Leeuwen (2024) methodology.
-    
-    Key features:
-    - Utility-based choice model
-    - Full counterfactual logging (candidate sets)
-    - Awareness dynamics (ρ grows with exposure)
-    - Position bias
-    - Logging policy probabilities for IPS
-    
-    Parameters
-    ----------
-    guests_df : pd.DataFrame
-        Guest data with segments and context
-    advertisers_df : pd.DataFrame
-        Advertiser catalogue
-    utility_matrix : pd.DataFrame
-        Pre-computed base utilities (guest_id, ad_id, base_utility)
-    n_sessions_per_stay : int
-        Sessions per guest stay
-    k_ads_per_session : int
-        How many ads to show per session
-    logging_policy : str
-        'softmax' (contextual), 'epsilon-greedy', or 'uniform'
-    alpha_awareness : float
-        Awareness growth rate α ∈ (0,1)
-    beta_awareness : float
-        Awareness effect on utility β
-    position_weights : dict, optional
-        Position bias weights
-    temperature : float
-        Softmax temperature (higher = more random)
-    seed : int
-        Random seed
-        
-    Returns
-    -------
-    exposure_log : pd.DataFrame
-        Impression-level logs (one row per shown ad)
-    counterfactual_log : pd.DataFrame
-        Session-level logs with full candidate sets
-    """
+    # Generate exposure log 
+
     rng = set_random_seed(seed)
     
     if position_weights is None:
